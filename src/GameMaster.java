@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -5,13 +6,25 @@ import java.util.Comparator;
 public class GameMaster {
 
     private ArrayList<Player> listOfPlayers;
+    private Round round;
 
-    GameMaster(ArrayList<Player> listOfPlayers) {
+    public GameMaster(ArrayList<Player> listOfPlayers) {
         this.listOfPlayers = listOfPlayers;
+        this.round = new Round(listOfPlayers);
     }
 
     public ArrayList<Player> getListOfPlayers() {
         return listOfPlayers;
+    }
+
+    public void gameStart() {
+
+        // Loop as long as game has not ended
+        while (!gameEnd()) {
+            round.roundStart();
+        }
+
+        this.listOfPlayers = ranking(this.listOfPlayers);
     }
 
     // Checks if game has ended by checking if
@@ -24,7 +37,6 @@ public class GameMaster {
 
             // If the current player's score exceeds the maximum allowed, game will end
             if (currentPlayer.getPoints() >= MAXIMUMPOINTS) {
-
                 return true;
             }
         }
@@ -34,10 +46,11 @@ public class GameMaster {
     }
 
     // This method returns the list of players according to the rankings
-    ArrayList<Player> ranking(ArrayList<Player> listOfPlayers) {
+    public ArrayList<Player> ranking(ArrayList<Player> listOfPlayers) {
         Comparator<Player> playerComparator = new PlayerCompare();
         Collections.sort(listOfPlayers, playerComparator);
 
         return listOfPlayers;
     }
+
 }

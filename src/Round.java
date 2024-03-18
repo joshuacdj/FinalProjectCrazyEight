@@ -2,8 +2,15 @@ import java.util.ArrayList;
 
 public class Round {
     private ArrayList<Player> playerPosition;
-
+    private DrawPile drawPile;
+    private DiscardPile discardPile;
     private int round = 1;
+
+    public Round(ArrayList<Player> playerPosition) {
+        this.playerPosition = playerPosition;
+        this.drawPile = new DrawPile();
+        this.discardPile = new DiscardPile();
+    }
 
     // setter for player position
     public void setPlayerPosition(ArrayList<Player> playerPosition) {
@@ -45,22 +52,10 @@ public class Round {
         }
     }
 
-    public Round(ArrayList<Player> playerPosition) {
-        this.playerPosition = playerPosition;
-
-        // create new deck
-        DrawPile drawPile = new DrawPile();
-
-        // Store the list of cards from drawPile
-        ArrayList<Card> cardList = drawPile.getListOfCards();
-
+    public void roundStart() {
 
         // shuffle deck
         drawPile.shuffleDeck();
-
-
-        // create new discard pile
-        DiscardPile discardPile = new DiscardPile();
 
         // set the first playing card of the game
         setFirstCard(drawPile, discardPile);
@@ -86,7 +81,7 @@ public class Round {
 //                    discardPile.addCard(cardPlayed);
 //                }
 
-                // check if player's hand is 0
+                // check if player's hand is 0 to break out of the for loop
                 if (roundEnd()) {
                     break;
                 }
@@ -112,15 +107,31 @@ public class Round {
         setPlayerPosition(playerPosition);
 
     }
-
     public boolean roundEnd() {
+
+        // Initialise round end to be false
+        boolean shouldRoundEnd = false;
+
+        // Loop through every player's hand and check if it is empty
+        // If it is empty, set round end to true and break out of loop
         for (Player p : playerPosition) {
             if (p.getHand().isEmpty()) {
-                clearPlayerHand();
                 round++;
-                return true;
+                shouldRoundEnd = true;
+                break;
             }
         }
-        return false;
+
+        // If the round ends, clear every player's hand and reset the draw and discard pile
+        if (shouldRoundEnd) {
+            for (Player p : playerPosition) {
+                p.clearHand();
+            }
+
+            this.drawPile = new DrawPile();
+            this.discardPile = new DiscardPile();
+        }
+
+        return shouldRoundEnd;
     }
 }
