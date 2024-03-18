@@ -1,3 +1,7 @@
+package main.java;
+
+import main.java.Player;
+
 import java.util.Comparator;
 
 public class PlayerCompare implements Comparator<Player> {

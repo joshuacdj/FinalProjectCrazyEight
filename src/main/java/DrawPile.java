@@ -1,8 +1,12 @@
-import java.awt.*;
+package main.java;
+
+import main.java.Card;
+import main.java.Deck;
+
 import java.util.*;
 import java.util.Collections;
 
-public class DrawPile implements Deck{
+public class DrawPile implements Deck {
     private ArrayList<Card> listOfCards;
 
     public DrawPile() {
