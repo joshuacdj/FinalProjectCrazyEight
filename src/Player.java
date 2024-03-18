@@ -1,3 +1,4 @@
+
 import java.util.*;
 
 public abstract class Player {
@@ -23,6 +24,11 @@ public abstract class Player {
     public void addPoints(int points) {
         this.points += points;
     }
+
+    //set points to a value - use for tieBreaker()
+//    public void setPoints(int points) {
+//        this.points = points;
+//    }
 
     // Calculate the points in player's hand
     public int calculatePoints() {
