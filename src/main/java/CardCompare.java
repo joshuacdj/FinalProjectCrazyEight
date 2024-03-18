@@ -1,3 +1,6 @@
+package main.java;
+
+import main.java.Card;
 
 import java.util.Comparator;
 

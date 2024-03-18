@@ -1,3 +1,7 @@
+package main.java;
+
+import main.java.Card;
+import main.java.DrawPile;
 
 import java.util.*;
 
