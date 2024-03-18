@@ -1,3 +1,6 @@
+package GUI;
+import GUI.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -163,6 +166,17 @@ public class WelcomeScreen extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 buttonPanel.setBackground(new Color(255, 255, 255, 255));
             }
+
+            public void mouseClicked(MouseEvent e) {
+                if (text.equals("Play")) {
+                    // Assuming this code is inside an ActionListener in your WelcomeScreen
+                      getContentPane().removeAll();
+                      add(new GUI.InGameScreen());
+                      revalidate();
+                      repaint();
+                }
+            }
+
         });
 
         return buttonPanel;
