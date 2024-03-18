@@ -1,5 +1,6 @@
+package main.java;
+
 import java.awt.*;
-import java.util.*;
 
 public class Card {
     /**

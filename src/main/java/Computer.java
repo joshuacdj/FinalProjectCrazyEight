@@ -1,3 +1,8 @@
+package main.java;
+
+import main.java.Card;
+import main.java.CardCompare;
+
 import java.util.*;
 
 public class Computer extends Player {
