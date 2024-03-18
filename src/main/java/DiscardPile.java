@@ -1,10 +1,15 @@
+package main.java;
+
+import main.java.Card;
+import main.java.Deck;
+
 import java.util.*;
 
-public class DiscardPile implements Deck{
+public class DiscardPile implements Deck {
     private ArrayList<Card> listOfCards = new ArrayList<>();
     private Card topCard;
 
-//    [Card, DesiredSuit]
+    //    [Card, DesiredSuit]
     public void addCard(Card c){
         listOfCards.add(c);
         if(c.getValue() != 8){

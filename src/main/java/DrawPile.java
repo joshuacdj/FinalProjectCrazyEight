@@ -1,19 +1,25 @@
+package main.java;
+
+import main.java.Card;
+import main.java.Deck;
+
 import java.util.*;
 import java.util.Collections;
 
-public class DrawPile implements Deck{
+public class DrawPile implements Deck {
     private ArrayList<Card> listOfCards;
 
     public DrawPile() {
         listOfCards = new ArrayList<>();
-
         for (int i = 1; i <= 13; i++) {
-
             for (Suit suit : Suit.values()) {
-
-                listOfCards.add(new Card(i, suit));
+                Card cardToAdd = new Card(i, suit);
             }
         }
+    }
+
+    public Card getCard(){
+        return listOfCards.getFirst();
     }
 
     public void add(Card c){

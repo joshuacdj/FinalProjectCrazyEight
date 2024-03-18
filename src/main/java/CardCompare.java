@@ -1,3 +1,7 @@
+package main.java;
+
+import main.java.Card;
+
 import java.util.Comparator;
 
 public class CardCompare implements Comparator<Card> {
