@@ -18,6 +18,10 @@ public class DrawPile implements Deck {
         }
     }
 
+    public ArrayList<Card> getListOfCards() {
+        return listOfCards;
+    }
+
     public Card getCard(){
         return listOfCards.getFirst();
     }
@@ -41,9 +45,5 @@ public class DrawPile implements Deck {
 
     public int getNoOfCardsRemaining(){
         return listOfCards.size();
-    }
-
-    public ArrayList<Card> getListOfCards() {
-        return listOfCards;
     }
 }

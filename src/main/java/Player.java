@@ -8,16 +8,39 @@ import java.util.*;
 public abstract class Player {
 
     // Each player will have a hand, a name and their total points for a game
-    private ArrayList<Card> hand = new ArrayList<>();
-    private ArrayList<Card> playableCards = new ArrayList<>();
+    private ArrayList<Card> hand;
+    private ArrayList<Card> playableCards;
     private String name;
     private int points;
 
-    public Player(ArrayList<Card> hand, String name) {
-        this.hand = hand;
+    public Player(String name) {
+
+        this.hand = new ArrayList<>();
+
+        this.playableCards = new ArrayList<>();
+
         this.name = name;
         // All players should have 0 points initially
         this.points = 0;
+    }
+
+    // Return the current hand of the player
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
+    public ArrayList<Card> getPlayableCards() {
+        return playableCards;
+    }
+
+    // Return the points accumulated by the player in total for that game
+    public int getPoints() {
+        return points;
+    }
+
+    // Return name of player
+    public String getName() {
+        return name;
     }
 
     // [card, desiredSuit]
@@ -42,6 +65,7 @@ public abstract class Player {
         }
         return points;
     }
+
     public void clearHand() {
         hand.clear();
     }
@@ -51,26 +75,8 @@ public abstract class Player {
         hand.add(card);
     }
 
-    // Return the current hand of the player
-    public ArrayList<Card> getHand() {
-        return hand;
-    }
-
-    public ArrayList<Card> getPlayableCards() {
-        return playableCards;
-    }
-
-    // Return the points accumulated by the player in total for that game
-    public int getPoints() {
-        return points;
-    }
-
-    // Return name of player
-    public String getName() {
-        return name;
-    }
-
     // How card is deemed playable
+
     public boolean isPlayable (Card currCard, Card lastPlayedCard) {
         if (currCard.getValue() == lastPlayedCard.getValue()) {
             return true;
@@ -86,7 +92,11 @@ public abstract class Player {
 
     //    Create playable cards list
     public void setPlayableCards (Card lastPlayedCard) {
-        for (Card card : getHand()) {
+
+        // Clear the previous list of playable cards. Basically clear it for each start of the new turn
+        playableCards.clear();
+
+        for (Card card : hand) {
             if (isPlayable(card, lastPlayedCard)) {
                 playableCards.add(card);
             }

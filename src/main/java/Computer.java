@@ -8,8 +8,8 @@ import java.util.*;
 public class Computer extends Player {
 
 
-    public Computer(ArrayList<Card> hand, String name) {
-        super(hand, name);
+    public Computer(String name) {
+        super(name);
     }
 
     public ArrayList<Object> action(Card lastPlayedCard, DrawPile deck) {

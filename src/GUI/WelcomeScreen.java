@@ -1,21 +1,26 @@
 package GUI;
-import GUI.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
+import java.awt.geom.AffineTransform;
 import java.text.AttributedString;
 
 public class WelcomeScreen extends JFrame {
 
-    private Color lightGreen = new Color(119, 221, 119); // Light green
-    private Color darkGreen = new Color(0, 153, 76); // Dark green for contrast
+    private Color darkGreen= new Color(0x00512C); // Light green
+    private Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
+    private Color orange = new Color(0xFF4C29);
     private Font titleFont = new Font("Segoe Script", Font.BOLD, 60); // Elegant font
     private Font buttonFont = new Font("Segoe UI Symbol", Font.BOLD, 22); // Modern, readable font
     private Font symbolFont = new Font("Segoe UI Symbol", Font.PLAIN, 100); // For card symbols
+
     private class TitlePanel extends JPanel {
+        private Font buttonFont = new Font("Segoe UI Symbol", Font.BOLD, 22); // Modern, readable font
+        private Font symbolFont = new Font("Segoe UI Symbol", Font.PLAIN, 100); // For card symbols
         private String titleText;
         private Font titleFont;
         private Color shadowColor;
@@ -48,7 +53,7 @@ public class WelcomeScreen extends JFrame {
             // Draw the shadow
             g2d.drawString(attributedString.getIterator(), x + shadowOffset, y + shadowOffset);
             // Draw the actual text
-            attributedString.addAttribute(TextAttribute.FOREGROUND, Color.RED, 0, titleText.length());
+            attributedString.addAttribute(TextAttribute.FOREGROUND, orange, 0, titleText.length());
             g2d.drawString(attributedString.getIterator(), x, y);
 
             g2d.dispose();
@@ -66,7 +71,7 @@ public class WelcomeScreen extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                GradientPaint gradientPaint = new GradientPaint(0, 0, lightGreen, 0, getHeight(), darkGreen);
+                GradientPaint gradientPaint = new GradientPaint(0, 0, darkGreen, 0, getHeight(), lightGreen);
                 g2d.setPaint(gradientPaint);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
@@ -74,14 +79,17 @@ public class WelcomeScreen extends JFrame {
         getContentPane().add(backgroundPanel, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
+//        gbc.gridwidth = GridBagConstraints.REMAINDER; // commented this out and managed to place cards at the side
+//        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(10, 0, 10, 0);
 
         // Replace the old titleLabel with the new custom TitlePanel
         TitlePanel titlePanel = new TitlePanel("Crazy Eights", new Font("Serif", Font.BOLD | Font.ITALIC, 60), Color.BLACK, 2);
         titlePanel.setPreferredSize(new Dimension(800, 100)); // Set your preferred size
+        gbc.gridx = 1;
+        gbc.gridy = 0;
         backgroundPanel.add(titlePanel, gbc);
+
         // Title label with a shadow effect
 //        JLabel titleLabel = new JLabel("Crazy Eights") {
 //            @Override
@@ -106,31 +114,44 @@ public class WelcomeScreen extends JFrame {
 //        symbolsLabel.setFont(symbolFont);
 //        symbolsLabel.setForeground(Color.WHITE);
 //        backgroundPanel.add(symbolsLabel, gbc);
+
         // Card images
-//        JLabel cardLabel1 = new JLabel(new ImageIcon("/Users/jeremaine/Documents/GitHub/CS102ProjectCrazyEightsSwing/cards/8_of_diamonds.png"));
-//        gbc.gridwidth = 1;
-//        gbc.gridx = 0;
-//        gbc.gridy = 1;
-//        gbc.insets = new Insets(10, 10, 10, 10);
-//        backgroundPanel.add(cardLabel1, gbc);
+        ImageIcon icon1 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_clubs.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+        JLabel cardLabel1 = new JLabel(icon1);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        backgroundPanel.add(cardLabel1, gbc);
 
-//        JLabel cardLabel2 = new JLabel(new ImageIcon("path/to/8_hearts_image.jpg"));
-//        gbc.gridx = 1;
-//        gbc.gridy = 1;
-//        add(cardLabel2, gbc);
-//
-//        JLabel cardLabel3 = new JLabel(new ImageIcon("path/to/8_diamonds_image.jpg"));
-//        gbc.gridx = 0;
-//        gbc.gridy = 2;
-//        add(cardLabel3, gbc);
-//
-//        JLabel cardLabel4 = new JLabel(new ImageIcon("path/to/8_spades_image.jpg"));
-//        gbc.gridx = 1;
-//        gbc.gridy = 2;
-//        add(cardLabel4, gbc);
+        ImageIcon icon2 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_spades.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+//        Test cardLabel2 = new Test(icon2, 45);
+        JLabel cardLabel2 = new JLabel(icon2);
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        backgroundPanel.add(cardLabel2, gbc);
 
+        ImageIcon icon3 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_hearts.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+        JLabel cardLabel3 = new JLabel(icon3);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        backgroundPanel.add(cardLabel3, gbc);
+
+        ImageIcon icon4 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_diamonds.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+        JLabel cardLabel4 = new JLabel(icon4);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        backgroundPanel.add(cardLabel4, gbc);
+
+        // action buttons
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         backgroundPanel.add(createButton("Play", 300, 60), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
         backgroundPanel.add(createButton("Help", 300, 60), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
         backgroundPanel.add(createButton("Exit", 300, 60), gbc);
 
         pack();
@@ -176,9 +197,7 @@ public class WelcomeScreen extends JFrame {
                       repaint();
                 }
             }
-
         });
-
         return buttonPanel;
     }
 

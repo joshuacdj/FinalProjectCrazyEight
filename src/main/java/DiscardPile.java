@@ -9,7 +9,11 @@ public class DiscardPile implements Deck {
     private ArrayList<Card> listOfCards = new ArrayList<>();
     private Card topCard;
 
+    public ArrayList<Card> getCards(){
+        return listOfCards;
+    }
     //    [Card, DesiredSuit]
+
     public void addCard(Card c){
         listOfCards.add(c);
         if(c.getValue() != 8){
@@ -31,10 +35,6 @@ public class DiscardPile implements Deck {
 
     public Card getTopCard(){
         return topCard;
-    }
-
-    public ArrayList<Card> getCards(){
-        return listOfCards;
     }
 
     @Override

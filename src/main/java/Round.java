@@ -11,24 +11,11 @@ public class Round {
     private ArrayList<Player> playerPosition;
     private DrawPile drawPile;
     private DiscardPile discardPile;
-    private int round = 1;
 
     public Round(ArrayList<Player> playerPosition) {
         this.playerPosition = playerPosition;
         this.drawPile = new DrawPile();
         this.discardPile = new DiscardPile();
-    }
-
-    // setter for player position
-    public void setPlayerPosition(ArrayList<Player> playerPosition) {
-        // Get the player who went first
-        Player first = playerPosition.getFirst();
-
-        // Remove that player from the arraylist
-        playerPosition.removeFirst();
-
-        // Move the player to the end
-        playerPosition.add(first);
     }
 
     // set the first card of the round
@@ -53,15 +40,15 @@ public class Round {
         }
     }
 
-    public void clearPlayerHand() {
+    public void clearAllPlayerHands() {
         for (Player p : playerPosition) {
-            p.getHand().clear();
+            p.clearHand();
         }
     }
 
     public void roundStart() {
 
-        // shuffle deck
+        // shuffle a new deck
         drawPile.shuffleDeck();
 
         // set the first playing card of the game
@@ -95,25 +82,18 @@ public class Round {
             }
         }
 
-        // At the end of the round, we sum up the points of each player
+        // At the end of the round, we sum up the points of each player and clear their hand
         // Loop through each player
         for (Player p : playerPosition) {
-            int totalPointsForRound = 0;
-
-            // Loop through each card, add the point of each card into totalPointsForRound
-            for (Card c : p.getHand()) {
-
-                totalPointsForRound += c.calculatePoints();
-            }
 
             // Sum up the total points for each player
-            p.addPoints(totalPointsForRound);
+            p.addPoints(p.calculatePoints());
         }
 
-        // player positions change
-        setPlayerPosition(playerPosition);
-
+        //This will clear every player's hand at the end of the round
+        clearAllPlayerHands();
     }
+
     public boolean roundEnd() {
 
         // Initialise round end to be false
@@ -123,7 +103,6 @@ public class Round {
         // If it is empty, set round end to true and break out of loop
         for (Player p : playerPosition) {
             if (p.getHand().isEmpty()) {
-                round++;
                 shouldRoundEnd = true;
                 break;
             }
