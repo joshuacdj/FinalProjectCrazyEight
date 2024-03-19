@@ -139,7 +139,7 @@ public class InGameScreen extends JPanel {
         JPanel computer1Panel = new JPanel(null) { // Use null layout for absolute positioning
             @Override
             public void doLayout() {
-                positionCardButtons(this, orientation);
+                positionCardLabel(this, orientation);
             }
         };
         computer1Panel.setOpaque(false);
@@ -149,12 +149,12 @@ public class InGameScreen extends JPanel {
         computer1Panel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                positionCardButtons(computer1Panel, orientation);
+                positionCardLabel(computer1Panel, orientation);
             }
         });
 
         // Initial card buttons setup
-        setupCardButtons(computer1Panel);
+        setupCardLabel(computer1Panel);
 
         return computer1Panel;
     }
@@ -227,15 +227,26 @@ public class InGameScreen extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     if (isCardRaised) {
                         // Card is already raised, lower it back down
-                        cardButton.setLocation(cardButton.getX(), cardButton.getY() - 20);
+                        cardButton.setLocation(cardButton.getX(), cardButton.getY() - 40);
                     } else {
                         // Card is not raised, raise it up
-                        cardButton.setLocation(cardButton.getX(), cardButton.getY() + 20);
+                        cardButton.setLocation(cardButton.getX(), cardButton.getY() + 40);
                         showPlayCardButton();
                     }
                     isCardRaised = !isCardRaised;
                 }
             });
+        }
+    }
+
+    private void setupCardLabel(JPanel panel) {
+        int numCards = 5; // The number of cards to display
+
+        for (int i = 0; i < numCards; i++) {
+            JLabel cardLabel = new JLabel(); // Create button without icon initially
+
+            // Add the card button to the panel
+            panel.add(cardLabel);
         }
     }
 //    private void positionCardButtons(JPanel panel, String orientation) {
@@ -285,8 +296,8 @@ public class InGameScreen extends JPanel {
 //        panel.repaint();
 //    }
 
-
     private void positionCardButtons(JPanel panel, String orientation) {
+
         int numCards = panel.getComponentCount();
         if (numCards == 0) return;
 
@@ -300,24 +311,15 @@ public class InGameScreen extends JPanel {
         int cardHeight = isVertical ? panelWidth - 20 : panelHeight - 20;
         int overlap = cardWidth / 2;
 
-        if ("South".equals(orientation)) {
-            cardWidth = panelWidth / 5;
-            cardHeight = panelHeight - 20;
+        if ("South".equals(orientation) || "North".equals(orientation)) {
+            cardWidth = 110;
+            cardHeight = 160;
         }
-        if ("East".equals(orientation)) {
-            cardWidth = panelWidth - 20;
-            cardHeight = panelHeight / 5;
-        }
-
-        if ("West".equals(orientation)) {
-            cardWidth = panelWidth - 20;
-            cardHeight = panelWidth / 2;
+        if ("East".equals(orientation) || "West".equals(orientation)) {
+            cardWidth = 160;
+            cardHeight = 110;
         }
 
-        if("North".equals(orientation)) {
-            cardWidth = panelWidth / 5;
-            cardHeight = panelHeight - 20;
-        }
 
         // For vertical panels, adjust the height for stacking with overlap
         if (isVertical) {
@@ -329,35 +331,95 @@ public class InGameScreen extends JPanel {
         int xOffset = 0;
         int yOffset = panelHeight - cardHeight;
 
-        for (int i = 0; i < numCards; i++) {
-            JButton cardButton = (JButton) panel.getComponent(i);
-            ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/1_of_clubs.png", cardWidth, cardHeight, isVertical);
+        if ("South".equals(orientation)) {
+            for (int i = 0; i < numCards; i++) {
+                JButton cardButton = (JButton) panel.getComponent(i);
+                ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/1_of_clubs.png", cardWidth, cardHeight, isVertical);
+
+                cardButton.setIcon(icon);
+                cardButton.setBorderPainted(false);
+                cardButton.setContentAreaFilled(false);
+                cardButton.setFocusPainted(false);
+                cardButton.setOpaque(false);
+
+            // Position the cards with proper offset
+                xOffset = (cardWidth - (cardWidth / numCards) - 55) * i;
+
+
+            // Set the bounds for the button based on the orientation
+            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+            }
+        }
+
+        panel.revalidate();
+        panel.repaint();
+        }
+
+    private void positionCardLabel(JPanel panel, String orientation) {
+
+        int numCards = panel.getComponentCount();
+        if (numCards == 0) return;
+
+        boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
+
+        int panelWidth = panel.getWidth();
+        int panelHeight = panel.getHeight();
+
+        // Adjust the card dimensions based on the orientation
+        int cardWidth = isVertical ? panelHeight/5 : panelWidth / 8;
+        int cardHeight = isVertical ? panelWidth - 20 : panelHeight - 20;
+        int overlap = cardWidth / 2;
+
+        if ("South".equals(orientation) || "North".equals(orientation)) {
+            cardWidth = 110;
+            cardHeight = 160;
+        }
+        if ("East".equals(orientation) || "West".equals(orientation)) {
+            cardWidth = 160;
+            cardHeight = 110;
+        }
+
+
+        // For vertical panels, adjust the height for stacking with overlap
+        if (isVertical) {
+            overlap = cardHeight / 2;
+//            cardHeight = (panelHeight + (overlap * (5 - 1))) / numCards;
+        }
+
+        // Set the initial offset for the first card
+        int xOffset = 0;
+        int yOffset = panelHeight - cardHeight;
+
+            for ( int i = 0; i < numCards; i++) {
+                JLabel back_card = (JLabel) panel.getComponent(i);
+                ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/back_card.png", cardWidth, cardHeight, isVertical);
+                back_card.setIcon(icon);
+
+                if (!isVertical) {
+                    xOffset = (cardWidth - (cardWidth / numCards) - 55) * i;
+                } else {
+                    yOffset = (cardHeight - (cardHeight / numCards) - 55) * i;
+                }
+
+
+                // Set the bounds for the button based on the orientation
+                back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+        }
+
+
+        panel.revalidate();
+        panel.repaint();
+    }
+
+
 
             // If the panel is vertical, the cards need to be rotated 90 degrees
 //            if (isVertical) {
 //                icon = rotateImageIcon(icon.getImage(), 90);  // Assuming rotateImageIcon method is defined to rotate the image
 //            }
 
-            cardButton.setIcon(icon);
-            cardButton.setBorderPainted(false);
-            cardButton.setContentAreaFilled(false);
-            cardButton.setFocusPainted(false);
-            cardButton.setOpaque(false);
 
-            // Position the cards with proper offset
-            if (isVertical) {
-                yOffset = (cardHeight - overlap - 10) * i;
-            } else {
-                xOffset = (cardWidth - (cardWidth / numCards) - 55) * i;
-            }
 
-            // Set the bounds for the button based on the orientation
-            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
-        }
-
-        panel.revalidate();
-        panel.repaint();
-    }
 
     private void showPlayCardButton() {
         // Method to show the "Play card?" button within the layeredPane

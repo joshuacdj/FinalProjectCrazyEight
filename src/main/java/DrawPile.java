@@ -3,6 +3,8 @@ package main.java;
 import main.java.Card;
 import main.java.Deck;
 
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
 import java.util.*;
 import java.util.Collections;
 
@@ -14,6 +16,7 @@ public class DrawPile implements Deck {
         for (int i = 1; i <= 13; i++) {
             for (Suit suit : Suit.values()) {
                 Card cardToAdd = new Card(i, suit);
+                String filename = "src/main/resources/images/" + cardToAdd.getValue() + "_of_" + cardToAdd.getSuit().toString().toLowerCase() + ".png";
             }
         }
     }

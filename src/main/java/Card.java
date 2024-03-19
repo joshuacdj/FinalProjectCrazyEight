@@ -8,9 +8,9 @@ public class Card {
      */
     private final int value;
     private final Suit suit;
+    private String filepath;
     // Instance of value and suit
 
-    private Image image;
 
     public Card(int value, Suit suit) {
         // 11 -> J ; 12 -> Q ; 13 -> K
@@ -19,8 +19,9 @@ public class Card {
     }
     // Card constructor
 
-    public void setImage(Image image) {
-        this.image = image;
+
+    public String getFilepath() {
+        return filepath;
     }
 
     public int getValue() {
