@@ -19,18 +19,6 @@ public class Round {
         this.discardPile = new DiscardPile();
     }
 
-    // setter for player position
-    public void setPlayerPosition(ArrayList<Player> playerPosition) {
-        // Get the player who went first
-        Player first = playerPosition.getFirst();
-
-        // Remove that player from the arraylist
-        playerPosition.removeFirst();
-
-        // Move the player to the end
-        playerPosition.add(first);
-    }
-
     // set the first card of the round
     public void setFirstCard(DrawPile drawPile, DiscardPile discardPile) {
 
@@ -61,7 +49,8 @@ public class Round {
 
     public void roundStart() {
 
-        // shuffle deck
+        // shuffle a new deck
+        drawPile = new DrawPile();
         drawPile.shuffleDeck();
 
         // set the first playing card of the game
@@ -102,11 +91,8 @@ public class Round {
             // Sum up the total points for each player
             p.addPoints(p.calculatePoints());
         }
-
-        // player positions change
-        setPlayerPosition(playerPosition);
-
     }
+
     public boolean roundEnd() {
 
         // Initialise round end to be false
