@@ -291,6 +291,7 @@ public class InGameScreen extends JPanel {
         if (numCards == 0) return;
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
+
         int panelWidth = panel.getWidth();
         int panelHeight = panel.getHeight();
 
@@ -345,9 +346,9 @@ public class InGameScreen extends JPanel {
 
             // Position the cards with proper offset
             if (isVertical) {
-                yOffset = (cardHeight - overlap) * i;
+                yOffset = (cardHeight - overlap - 10) * i;
             } else {
-                xOffset = (cardWidth - (cardWidth / numCards)) * i;
+                xOffset = (cardWidth - (cardWidth / numCards) - 55) * i;
             }
 
             // Set the bounds for the button based on the orientation
