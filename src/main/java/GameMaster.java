@@ -18,6 +18,10 @@ public class GameMaster {
         return listOfPlayers;
     }
 
+    public Round getRound() {
+        return round;
+    }
+
     public void gameStart() {
 
         // Loop as long as game has not ended

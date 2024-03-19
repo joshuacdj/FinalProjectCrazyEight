@@ -86,8 +86,8 @@ public abstract class Player {
 
     //    Create playable cards list
     public void setPlayableCards (Card lastPlayedCard) {
-        for (Card card : getHand()) {
-            if (isPlayable(card, lastPlayedCard)) {
+        for (Card card : hand) {
+            if (this.isPlayable(card, lastPlayedCard)) {
                 playableCards.add(card);
             }
         }
