@@ -98,16 +98,9 @@ public class Round {
         // At the end of the round, we sum up the points of each player
         // Loop through each player
         for (Player p : playerPosition) {
-            int totalPointsForRound = 0;
-
-            // Loop through each card, add the point of each card into totalPointsForRound
-            for (Card c : p.getHand()) {
-
-                totalPointsForRound += c.calculatePoints();
-            }
 
             // Sum up the total points for each player
-            p.addPoints(totalPointsForRound);
+            p.addPoints(p.calculatePoints());
         }
 
         // player positions change

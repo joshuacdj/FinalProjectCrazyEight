@@ -7,10 +7,9 @@ import java.util.*;
 
 public class Human extends Player {
 
-    public Human(ArrayList<Card> hand, String name) {
-        super(hand, name);
+    public Human(String name) {
+        super(name);
     }
-
 
     public ArrayList action(Card topCard, DrawPile deck) {
         // Take in user input
