@@ -16,9 +16,9 @@ public class Card {
         // 11 -> J ; 12 -> Q ; 13 -> K
         this.value = value;
         this.suit = suit;
+        this.filepath = "src/main/resources/images/" + value + "_of_" + suit.toString().toLowerCase() + ".png";
     }
     // Card constructor
-
 
     public String getFilepath() {
         return filepath;

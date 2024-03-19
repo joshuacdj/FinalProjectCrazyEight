@@ -1,5 +1,9 @@
 package GUI;
 
+import main.java.*;
+
+
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -10,6 +14,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class InGameScreen extends JPanel {
@@ -18,6 +23,7 @@ public class InGameScreen extends JPanel {
 
 
     public InGameScreen() {
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -113,10 +119,10 @@ public class InGameScreen extends JPanel {
 
     private JPanel createPlayerPanel(String orientation) {
         JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
-            @Override
-            public void doLayout() {
-                positionCardButtons(this, orientation);
-            }
+//            @Override
+//            public void doLayout() {
+//                positionCardButtons(this, orientation);
+//            }
         };
         playerPanel.setOpaque(false);
         playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
@@ -145,13 +151,6 @@ public class InGameScreen extends JPanel {
         computer1Panel.setOpaque(false);
         computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
-        // Add a component listener to resize the card buttons when the panel is resized
-        computer1Panel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                positionCardLabel(computer1Panel, orientation);
-            }
-        });
 
         // Initial card buttons setup
         setupCardLabel(computer1Panel);
@@ -161,21 +160,13 @@ public class InGameScreen extends JPanel {
 
     private JPanel createComputer2Panel(String orientation) {
         JPanel computer2Panel = new JPanel(null) { // Use null layout for absolute positioning
-            @Override
-            public void doLayout() {
-                positionCardButtons(this, orientation);
-            }
+//            @Override
+//            public void doLayout() {
+//                positionCardButtons(this, orientation);
+//            }
         };
         computer2Panel.setOpaque(false);
         computer2Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
-
-        // Add a component listener to resize the card buttons when the panel is resized
-        computer2Panel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                positionCardButtons(computer2Panel, orientation);
-            }
-        });
 
         // Initial card buttons setup
         setupCardButtons(computer2Panel);
@@ -185,21 +176,21 @@ public class InGameScreen extends JPanel {
 
     private JPanel createComputer3Panel(String orientation) {
         JPanel computer3Panel = new JPanel(null) { // Use null layout for absolute positioning
-            @Override
-            public void doLayout() {
-                positionCardButtons(this, orientation);
-            }
+//            @Override
+//            public void doLayout() {
+//                positionCardButtons(this, orientation);
+//            }
         };
         computer3Panel.setOpaque(false);
         computer3Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
         // Add a component listener to resize the card buttons when the panel is resized
-        computer3Panel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                positionCardButtons(computer3Panel, orientation);
-            }
-        });
+//        computer3Panel.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                positionCardButtons(computer3Panel, orientation);
+//            }
+//        });
 
         // Initial card buttons setup
         setupCardButtons(computer3Panel);
@@ -221,19 +212,42 @@ public class InGameScreen extends JPanel {
             panel.add(cardButton);
 
             cardButton.addMouseListener(new MouseAdapter() {
-                private boolean isCardRaised = false;
 
                 @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (isCardRaised) {
+                public void mouseExited(MouseEvent e) {
+                    cardButton.setLocation(cardButton.getX(), cardButton.getY() + 40);
+                    // Card is not raised, raise it up
+
+                }
+
+                @Override
+                public void mouseEntered (MouseEvent e) {
                         // Card is already raised, lower it back down
                         cardButton.setLocation(cardButton.getX(), cardButton.getY() - 40);
-                    } else {
-                        // Card is not raised, raise it up
-                        cardButton.setLocation(cardButton.getX(), cardButton.getY() + 40);
-                        showPlayCardButton();
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                    List<Card> temp = new ArrayList<>();
+                    temp.add(new Card(1, Suit.DIAMONDS));
+                    temp.add(new Card(11, Suit.HEARTS));
+                    temp.add(new Card(1, Suit.HEARTS));
+                    temp.add(new Card(13, Suit.CLUBS));
+                    temp.add(new Card(8, Suit.SPADES));
+
+                    DiscardPile test = new DiscardPile();
+                    String [] s = cardButton.getName().split("_");
+                    int value = Integer.parseInt(s[0]);
+                    Suit suit = Suit.valueOf(s[1]);
+                    Card tempcard = new Card(value, suit);
+
+                    for (Card c : temp){
+                        if (c.equals(tempcard)){
+                            temp.remove(c);
+                            test.addCard(c);
+                        }
                     }
-                    isCardRaised = !isCardRaised;
                 }
             });
         }
@@ -298,7 +312,15 @@ public class InGameScreen extends JPanel {
 
     private void positionCardButtons(JPanel panel, String orientation) {
 
-        int numCards = panel.getComponentCount();
+        List<Card> temp = new ArrayList<>();
+        temp.add(new Card(1, Suit.DIAMONDS));
+        temp.add(new Card(11, Suit.HEARTS));
+        temp.add(new Card(1, Suit.HEARTS));
+        temp.add(new Card(13, Suit.CLUBS));
+        temp.add(new Card(8, Suit.SPADES));
+
+
+        int numCards = temp.size();
         if (numCards == 0) return;
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
@@ -332,9 +354,11 @@ public class InGameScreen extends JPanel {
         int yOffset = panelHeight - cardHeight;
 
         if ("South".equals(orientation)) {
-            for (int i = 0; i < numCards; i++) {
+            for (int i = 0; i < temp.size(); i++) {
+                //TODO! Figure out why there are 2x print
                 JButton cardButton = (JButton) panel.getComponent(i);
-                ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/1_of_clubs.png", cardWidth, cardHeight, isVertical);
+                cardButton.setName("" + temp.get(i).getValue() + "_" + temp.get(i).getSuit());
+                ImageIcon icon = loadAndScaleCardImage(temp.get(i).getFilepath(), cardWidth, cardHeight, isVertical);
 
                 cardButton.setIcon(icon);
                 cardButton.setBorderPainted(false);
@@ -343,7 +367,7 @@ public class InGameScreen extends JPanel {
                 cardButton.setOpaque(false);
 
             // Position the cards with proper offset
-                xOffset = (cardWidth - (cardWidth / numCards) - 55) * i;
+                xOffset = (cardWidth - (cardWidth / temp.size()) - 55) * i;
 
 
             // Set the bounds for the button based on the orientation
@@ -411,85 +435,6 @@ public class InGameScreen extends JPanel {
         panel.repaint();
     }
 
-
-
-            // If the panel is vertical, the cards need to be rotated 90 degrees
-//            if (isVertical) {
-//                icon = rotateImageIcon(icon.getImage(), 90);  // Assuming rotateImageIcon method is defined to rotate the image
-//            }
-
-
-
-
-    private void showPlayCardButton() {
-        // Method to show the "Play card?" button within the layeredPane
-        JButton playButton = new JButton("Play card?");
-        playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30); // Position at bottom-right
-        playButton.addActionListener(e -> {
-            // Your action logic
-            layeredPane.remove(playButton);
-            layeredPane.repaint();
-        });
-
-        // Ensure any existing play button is removed before adding a new one
-        for (Component comp : layeredPane.getComponents()) {
-            if (comp instanceof JButton && "Play card?".equals(((JButton) comp).getText())) {
-                layeredPane.remove(comp);
-            }
-        }
-
-        layeredPane.add(playButton, Integer.valueOf(2)); // Add playButton above centerPanel
-        layeredPane.moveToFront(playButton);
-        layeredPane.revalidate();
-        layeredPane.repaint();
-    }
-
-
-//    private ImageIcon rotateImageIcon(Image img, double angle) {
-//        // We need to determine the new width and height of the container to accommodate the rotated image
-//        int width = img.getWidth(null);
-//        int height = img.getHeight(null);
-//
-//        // Create a new image with enough space to hold the rotated image
-//        // For a 90 degree rotation, the image's width becomes the height, and vice versa
-//        BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D g2d = rotatedImage.createGraphics();
-//
-//        // Translate the graphics context to the center of the container
-//        g2d.translate(height / 2.0, width / 2.0);
-//        // Rotate the graphics context, converting the angle to radians
-//        g2d.rotate(Math.toRadians(angle));
-//        // Translate back from the center
-//        g2d.translate(-width / 2.0, -height / 2.0);
-//        // Draw the image which will now be rotated
-//        g2d.drawImage(img, 0, 0, null);
-//        g2d.dispose();
-//
-//        return new ImageIcon(rotatedImage);
-//    }
-//
-//    private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
-//        try {
-//            // Load the original image from the specified path
-//            BufferedImage originalImage = ImageIO.read(new File(imagePath));
-//
-//            // For vertical panels (East and West), we expect the image to be rotated,
-//            // so we swap the target dimensions because the image will be rotated 90 degrees later.
-//            int imageWidth = isVertical ? targetHeight : targetWidth;
-//            int imageHeight = isVertical ? targetWidth : targetHeight;
-//
-//            // Scale the original image to the new dimensions
-//            Image scaledImage = originalImage.getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
-//
-//            // Return the scaled image as an ImageIcon
-//            return new ImageIcon(scaledImage);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            // Return a placeholder if the image fails to load
-//            return new ImageIcon(new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB));
-//        }
-//    }
-
     private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
         try {
             // Load the original image from the specified path
@@ -551,30 +496,6 @@ public class InGameScreen extends JPanel {
     }
 
 
-//    private JPanel createCenterPanel() {
-//        JPanel centerPanel = new JPanel(new GridLayout(1, 4, 0, 0)); // 1 row, 2 columns with a gap of 10px
-//        centerPanel.setOpaque(false); // If you want the background to show through
-//
-//        // Create buttons with image icons
-//        ImageIcon icon1 = new ImageIcon(new ImageIcon("/Users/jeremaine/Documents/GitHub/CS102ProjectCrazyEightsSwing/cards/8_of_diamonds.png").getImage().getScaledInstance(-1, 200, Image.SCALE_SMOOTH));
-//        ImageIcon icon2 = new ImageIcon(new ImageIcon("/Users/jeremaine/Documents/GitHub/CS102ProjectCrazyEightsSwing/cards/2_of_diamonds.png").getImage().getScaledInstance(-1, 200, Image.SCALE_SMOOTH));
-//
-//        JButton button1 = new JButton(icon1);
-//        JButton button2 = new JButton(icon2);
-//
-//        // Make buttons transparent
-//        button1.setBorder(BorderFactory.createEmptyBorder());
-//        button1.setContentAreaFilled(false);
-//        button2.setBorder(BorderFactory.createEmptyBorder());
-//        button2.setContentAreaFilled(false);
-//
-//        // Add buttons to the center panel
-//        centerPanel.add(button1);
-//        centerPanel.add(button2);
-//
-//        return centerPanel;
-//    }
-
     private JPanel createCenterPanel() {
 //        JPanel centerPanel = new JPanel(new GridBagLayout()); // Using GridBagLayout for flexibility
 //        centerPanel.setOpaque(false); // Set based on your UI design
@@ -589,8 +510,8 @@ public class InGameScreen extends JPanel {
 
         // Example of adding a component to the centerPanel
         // You can add more components similarly, adjusting the gridx, gridy, weightx, weighty as needed
-        ImageIcon icon1 = new ImageIcon(new ImageIcon("/Users/jinjunchia/Documents/GitHub/FinalProjectCrazyEight/src/main/resources/images/8_of_diamonds.png").getImage().getScaledInstance(-1, 200, Image.SCALE_SMOOTH));
-        ImageIcon icon2 = new ImageIcon(new ImageIcon("/Users/jinjunchia/Documents/GitHub/FinalProjectCrazyEight/src/main/resources/images/2_of_diamonds.png").getImage().getScaledInstance(-1, 200, Image.SCALE_SMOOTH));
+        ImageIcon icon1 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_diamonds.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
+        ImageIcon icon2 = new ImageIcon(new ImageIcon("src/main/resources/images/2_of_diamonds.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
 
         JButton button1 = new JButton(icon1);
         JButton button2 = new JButton(icon2);
@@ -616,6 +537,7 @@ public class InGameScreen extends JPanel {
 
         return centerPanel;
     }
+
 
 
     // Main method to test the InGameScreen layout

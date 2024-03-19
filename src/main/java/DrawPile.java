@@ -15,8 +15,8 @@ public class DrawPile implements Deck {
         listOfCards = new ArrayList<>();
         for (int i = 1; i <= 13; i++) {
             for (Suit suit : Suit.values()) {
-                Card cardToAdd = new Card(i, suit);
-                String filename = "src/main/resources/images/" + cardToAdd.getValue() + "_of_" + cardToAdd.getSuit().toString().toLowerCase() + ".png";
+                Card temp = new Card(i, suit);
+                listOfCards.add(temp);
             }
         }
     }
