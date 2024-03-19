@@ -11,7 +11,6 @@ public class Round {
     private ArrayList<Player> playerPosition;
     private DrawPile drawPile;
     private DiscardPile discardPile;
-    private int round = 1;
 
     public Round(ArrayList<Player> playerPosition) {
         this.playerPosition = playerPosition;
@@ -41,16 +40,15 @@ public class Round {
         }
     }
 
-    public void clearPlayerHand() {
+    public void clearAllPlayerHands() {
         for (Player p : playerPosition) {
-            p.getHand().clear();
+            p.clearHand();
         }
     }
 
     public void roundStart() {
 
         // shuffle a new deck
-        drawPile = new DrawPile();
         drawPile.shuffleDeck();
 
         // set the first playing card of the game
@@ -84,13 +82,16 @@ public class Round {
             }
         }
 
-        // At the end of the round, we sum up the points of each player
+        // At the end of the round, we sum up the points of each player and clear their hand
         // Loop through each player
         for (Player p : playerPosition) {
 
             // Sum up the total points for each player
             p.addPoints(p.calculatePoints());
         }
+
+        //This will clear every player's hand at the end of the round
+        clearAllPlayerHands();
     }
 
     public boolean roundEnd() {
@@ -102,7 +103,6 @@ public class Round {
         // If it is empty, set round end to true and break out of loop
         for (Player p : playerPosition) {
             if (p.getHand().isEmpty()) {
-                round++;
                 shouldRoundEnd = true;
                 break;
             }
