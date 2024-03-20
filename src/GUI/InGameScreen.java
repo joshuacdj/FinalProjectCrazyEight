@@ -4,8 +4,7 @@ import main.java.*;
 
 
 import java.sql.SQLOutput;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -16,23 +15,22 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 
 public class InGameScreen extends JPanel {
     private JPanel centerPanel; // Instance variable for the center panel
     private JLayeredPane layeredPane;
-
-    private DiscardPile discardPile = new DiscardPile();
-
     private Round round = new Round();
+    private DiscardPile discardPile = round.getDiscardPile();
 
+    private Map<String, JPanel> panelMap = new HashMap<>();
 
     public InGameScreen() {
 
         round.roundStart();
-
-
+        System.out.println("-----------");
+        System.out.println(discardPile.getCards());
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -50,6 +48,7 @@ public class InGameScreen extends JPanel {
         gbc.gridheight = 1;
         JPanel northPanel = createComputer1Panel("North");
         add(northPanel, gbc);
+        panelMap.put("North", northPanel);
 
         // South player panel
         gbc.gridx = 1;
@@ -58,6 +57,7 @@ public class InGameScreen extends JPanel {
         gbc.gridheight = 1;
         JPanel southPanel = createPlayerPanel("South");
         add(southPanel, gbc);
+        panelMap.put("South", southPanel);
 
         // East player panel
         gbc.gridx = 2;
@@ -66,6 +66,7 @@ public class InGameScreen extends JPanel {
         gbc.gridheight = 1;
         JPanel eastPanel = createComputer1Panel("East");
         add(eastPanel, gbc);
+        panelMap.put("East", eastPanel);
 
         // West player panel
         gbc.gridx = 0;
@@ -74,6 +75,7 @@ public class InGameScreen extends JPanel {
         gbc.gridheight = 1;
         JPanel westPanel = createComputer1Panel("West");
         add(westPanel, gbc);
+        panelMap.put("West", westPanel);
 
         // Initialize the layered pane
         layeredPane = new JLayeredPane();
@@ -164,7 +166,6 @@ public class InGameScreen extends JPanel {
         };
         computer1Panel.setOpaque(false);
         computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
-
 
         // Initial card buttons setup
         setupCardLabel(computer1Panel);
@@ -279,6 +280,10 @@ public class InGameScreen extends JPanel {
                                 if (tempcard.equals(c)) {
                                     currentHand.remove(c);
                                     discardPile.addCard(c);
+//                                    panelMap.get("South").removeAll();
+                                    positionCardButtons(panelMap.get("South"), "South");
+
+                                    //DEBUGGING PRINT STATEMENTS
                                     System.out.println("top card is " + discardPile.getTopCard());
                                     System.out.println("after adding card");
                                     System.out.println(currentHand);
@@ -288,7 +293,6 @@ public class InGameScreen extends JPanel {
                     if (tempcard.getValue() == 8) {
                         System.out.println("tempcard before " + discardPile.getTopCard());
                         showSuitsButton();
-
                     }
                     System.out.println("tempcard after " + discardPile.getTopCard());
 
@@ -404,15 +408,14 @@ public class InGameScreen extends JPanel {
 
     private void positionCardButtons(JPanel panel, String orientation) {
 
-        List<Card> temp = new ArrayList<>();
-        temp.add(new Card(8, Suit.DIAMONDS));
-        temp.add(new Card(11, Suit.HEARTS));
-        temp.add(new Card(1, Suit.HEARTS));
-        temp.add(new Card(13, Suit.CLUBS));
-        temp.add(new Card(8, Suit.SPADES));
+        //Initialise a listofcards to be a hand
+        /*
+        * NOTE HUMAN MAY NOT ALWAYS BE FIRST PLAYER IN LIST OF PLAYERS
+        * The index will change after every round
+        */
+        List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
 
-
-        int numCards = temp.size();
+        int numCards = humanHand.size();
         if (numCards == 0) return;
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
@@ -446,11 +449,11 @@ public class InGameScreen extends JPanel {
         int yOffset = panelHeight - cardHeight;
 
         if ("South".equals(orientation)) {
-            for (int i = 0; i < temp.size(); i++) {
+            for (int i = 0; i < humanHand.size(); i++) {
                 //TODO! Figure out why there are 2x print
                 JButton cardButton = (JButton) panel.getComponent(i);
-                cardButton.setName("" + temp.get(i).getValue() + "_" + temp.get(i).getSuit());
-                ImageIcon icon = loadAndScaleCardImage(temp.get(i).getFilepath(), cardWidth, cardHeight, isVertical);
+                cardButton.setName("" + humanHand.get(i).getValue() + "_" + humanHand.get(i).getSuit());
+                ImageIcon icon = loadAndScaleCardImage(humanHand.get(i).getFilepath(), cardWidth, cardHeight, isVertical);
 
                 cardButton.setIcon(icon);
                 cardButton.setBorderPainted(false);
@@ -459,7 +462,7 @@ public class InGameScreen extends JPanel {
                 cardButton.setOpaque(false);
 
             // Position the cards with proper offset
-                xOffset = (cardWidth - (cardWidth / temp.size()) - 55) * i;
+                xOffset = (cardWidth - (cardWidth / humanHand.size()) - 55) * i;
 
 
             // Set the bounds for the button based on the orientation
@@ -473,7 +476,15 @@ public class InGameScreen extends JPanel {
 
     private void positionCardLabel(JPanel panel, String orientation) {
 
-        int numCards = panel.getComponentCount();
+        //numCards is dependent on the panel
+        //East is 1, north is 2 and west is 3
+        int numCards = switch (orientation) {
+            case "East" -> round.getListOfPlayers().get(1).getHand().size();
+            case "North" -> round.getListOfPlayers().get(2).getHand().size();
+            case "West" -> round.getListOfPlayers().get(3).getHand().size();
+            default -> 0;
+        };
+
         if (numCards == 0) return;
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
@@ -602,11 +613,14 @@ public class InGameScreen extends JPanel {
 
         // Example of adding a component to the centerPanel
         // You can add more components similarly, adjusting the gridx, gridy, weightx, weighty as needed
-        ImageIcon icon1 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_diamonds.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
-        ImageIcon icon2 = new ImageIcon(new ImageIcon("src/main/resources/images/2_of_diamonds.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
+        ImageIcon drawPileIcon = new ImageIcon(new ImageIcon("src/main/resources/images/back_card.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
 
-        JButton button1 = new JButton(icon1);
-        JButton button2 = new JButton(icon2);
+        //Get the filepath of the first discarded card at the start of the round
+        String filePath = discardPile.getCards().getFirst().getFilepath();
+        ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
+
+        JButton button1 = new JButton(drawPileIcon);
+        JButton button2 = new JButton(discardPileIcon);
         centerPanel.add(button1);
         centerPanel.add(button2);
 
@@ -630,8 +644,6 @@ public class InGameScreen extends JPanel {
         return centerPanel;
     }
 
-
-
     // Main method to test the InGameScreen layout
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -643,5 +655,11 @@ public class InGameScreen extends JPanel {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
+    }
+
+    //This method is to update the image of the discardPile
+    public void updateDiscardPileImage() {
+        String filePath = discardPile.getCards().getLast().getFilepath();
+
     }
 }
