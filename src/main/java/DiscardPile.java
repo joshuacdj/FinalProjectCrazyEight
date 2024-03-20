@@ -35,6 +35,10 @@ public class DiscardPile implements Deck {
 //        }
     }
 
+    public void setTopCard(Card topCard) {
+        this.topCard = topCard;
+    }
+
     public Card getTopCard(){
         return topCard;
     }
