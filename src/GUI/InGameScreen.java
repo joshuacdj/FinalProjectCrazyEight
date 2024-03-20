@@ -3,6 +3,7 @@ package GUI;
 import main.java.*;
 
 
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
@@ -101,20 +102,32 @@ public class InGameScreen extends JPanel {
 
     private void adjustPlayCardButtonPosition() {
         // Find the "Play card?" button and adjust its position
-        JButton playButton = findPlayCardButton(layeredPane);
-        if (playButton != null) {
-            playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
+
+
+        for (Component comp : layeredPane.getComponents()) {
+            if (comp instanceof JButton) {
+                JButton playButton = (JButton) comp;
+                if ("♦".equals(((JButton) comp).getText())) {
+                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
+                } else if ("♣".equals(((JButton) comp).getText())) {
+                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
+                } else if ("♥".equals(((JButton) comp).getText())) {
+                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
+                } else if ("♠".equals(((JButton) comp).getText())) {
+                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
+                }
+            }
         }
     }
 
-    private JButton findPlayCardButton(JLayeredPane layeredPane) {
-        for (Component comp : layeredPane.getComponents()) {
-            if (comp instanceof JButton && "Play card?".equals(((JButton) comp).getText())) {
-                return (JButton) comp;
-            }
-        }
-        return null;
-    }
+//    private JButton findPlayCardButton(JLayeredPane layeredPane) {
+//        for (Component comp : layeredPane.getComponents()) {
+//            if (comp instanceof JButton && "\uFE0E".equals(((JButton) comp).getText())) {
+//                return (JButton) comp;
+//            }
+//        }
+//        return null;
+//    }
 
 
     private JPanel createPlayerPanel(String orientation) {
@@ -226,11 +239,80 @@ public class InGameScreen extends JPanel {
                         cardButton.setLocation(cardButton.getX(), cardButton.getY() - 40);
                 }
 
+                private void showSuitsButton() {
+                    // Method to show the "Play card?" button within the layeredPane
+                    JButton playButton = new JButton("♦");
+                    playButton.setFont(new Font("♦", Font.BOLD, 30));
+                    playButton.setBounds(layeredPane.getWidth() - 670, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
+                    playButton.addActionListener(e -> {
+                        // Your action logic
+                        layeredPane.remove(playButton);
+                        layeredPane.repaint();
+                    });
+
+                    JButton play2Button = new JButton("♣");
+                    play2Button.setFont(new Font("♣", Font.BOLD, 30));
+                    play2Button.setBounds(layeredPane.getWidth() - 530, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
+                    play2Button.addActionListener(e -> {
+                        // Your action logic
+                        layeredPane.remove(play2Button);
+                        layeredPane.repaint();
+                    });
+
+                    JButton play3Button = new JButton("♥");
+                    play3Button.setFont(new Font("♥", Font.BOLD, 30));
+                    play3Button.setBounds(layeredPane.getWidth() - 390, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
+                    play3Button.addActionListener(e -> {
+                        // Your action logic
+                        layeredPane.remove(play3Button);
+                        layeredPane.repaint();
+                    });
+
+                    JButton play4Button = new JButton("♠");
+                    play4Button.setFont(new Font("♠", Font.BOLD, 30));
+                    play4Button.setBounds(layeredPane.getWidth() - 250, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
+                    play4Button.addActionListener(e -> {
+                        // Your action logic
+                        layeredPane.remove(play4Button);
+                        layeredPane.repaint();
+                    });
+
+                    // Ensure any existing play button is removed before adding a new one
+                    for (Component comp : layeredPane.getComponents()) {
+                        if (comp instanceof JButton && "♦".equals(((JButton) comp).getText())) {
+                            layeredPane.remove(comp);
+                        }
+                        if (comp instanceof JButton && "♣".equals(((JButton) comp).getText())) {
+                            layeredPane.remove(comp);
+                        }
+                        if (comp instanceof JButton && "♥".equals(((JButton) comp).getText())) {
+                            layeredPane.remove(comp);
+                        }
+                        if (comp instanceof JButton && "♠".equals(((JButton) comp).getText())) {
+                            layeredPane.remove(comp);
+                        }
+                    }
+
+                    layeredPane.add(playButton, Integer.valueOf(2)); // Add playButton above centerPanel
+                    layeredPane.add(play2Button, Integer.valueOf(2)); // Add playButton above centerPanel
+                    layeredPane.add(play3Button, Integer.valueOf(2)); // Add playButton above centerPanel
+                    layeredPane.add(play4Button, Integer.valueOf(2)); // Add playButton above centerPanel
+
+
+                    layeredPane.moveToFront(playButton);
+                    layeredPane.moveToFront(play2Button);
+                    layeredPane.moveToFront(play3Button);
+                    layeredPane.moveToFront(play4Button);
+
+                    layeredPane.revalidate();
+                    layeredPane.repaint();
+                }
+
                 @Override
                 public void mousePressed(MouseEvent e) {
 
                     List<Card> temp = new ArrayList<>();
-                    temp.add(new Card(1, Suit.DIAMONDS));
+                    temp.add(new Card(8, Suit.DIAMONDS));
                     temp.add(new Card(11, Suit.HEARTS));
                     temp.add(new Card(1, Suit.HEARTS));
                     temp.add(new Card(13, Suit.CLUBS));
@@ -242,12 +324,26 @@ public class InGameScreen extends JPanel {
                     Suit suit = Suit.valueOf(s[1]);
                     Card tempcard = new Card(value, suit);
 
-                    for (Card c : temp){
-                        if (c.equals(tempcard)){
-                            temp.remove(c);
-                            test.addCard(c);
-                        }
-                    }
+//                    for ( int i = 0; i< temp.size(); i ++) {
+//                        if(temp.get(i).equals())
+//                    }
+                            // if card thrown is 8, execute showSuitsButton()
+                            if (tempcard.getValue() == 8) {
+                                showSuitsButton();
+                            }
+
+                            // remove card from hand
+                            for (Card c : temp) {
+                                if (tempcard.equals(c)) {
+                                    temp.remove(c);
+                                    test.addCard(c);
+                                    System.out.println("top card is " + test.getTopCard());
+                                    System.out.println("after adding card");
+                                    System.out.println(temp);
+                                    break;
+                                }
+                            }
+
                 }
             });
         }
@@ -263,57 +359,11 @@ public class InGameScreen extends JPanel {
             panel.add(cardLabel);
         }
     }
-//    private void positionCardButtons(JPanel panel, String orientation) {
-//        int numCards = panel.getComponentCount();
-//        if (numCards == 0) return;
-//
-//        boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
-//        int panelWidth = panel.getWidth();
-//        int panelHeight = panel.getHeight();
-//
-//        // Presume a standard aspect ratio for the cards, e.g., 5:7 (width:height)
-//        final double cardAspectRatio = 5.0 / 7.0;
-//        int cardWidth, cardHeight;
-//
-//        if (isVertical) {
-//            // For vertical panels, calculate card width based on panel width and maintain aspect ratio for height
-//            cardWidth = panelWidth / 5; // Adjust the divisor based on your layout needs
-//            cardHeight = (int) (cardWidth / cardAspectRatio);
-//        } else {
-//            // For horizontal panels, calculate card height based on panel height and maintain aspect ratio for width
-//            cardHeight = panelHeight / 5; // Adjust the divisor based on your layout needs
-//            cardWidth = (int) (cardHeight * cardAspectRatio);
-//        }
-//
-//        // Adjust positions based on orientation
-//        int xOffset = 0;
-//        int yOffset = 0;
-//        for (int i = 0; i < numCards; i++) {
-//            JButton cardButton = (JButton) panel.getComponent(i);
-//
-//            // Load and scale image appropriately
-//            ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/1_of_clubs.png", cardWidth, cardHeight, isVertical);
-//            cardButton.setIcon(icon);
-//
-//            if (isVertical) {
-//                // For vertical layout, cards are stacked vertically
-//                yOffset = i * (cardHeight + 5); // Adjust gap as needed
-//            } else {
-//                // For horizontal layout, cards are placed side by side
-//                xOffset = i * (cardWidth + 5); // Adjust gap as needed
-//            }
-//
-//            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
-//        }
-//
-//        panel.revalidate();
-//        panel.repaint();
-//    }
 
     private void positionCardButtons(JPanel panel, String orientation) {
 
         List<Card> temp = new ArrayList<>();
-        temp.add(new Card(1, Suit.DIAMONDS));
+        temp.add(new Card(8, Suit.DIAMONDS));
         temp.add(new Card(11, Suit.HEARTS));
         temp.add(new Card(1, Suit.HEARTS));
         temp.add(new Card(13, Suit.CLUBS));
