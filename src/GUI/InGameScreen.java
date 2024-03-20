@@ -23,8 +23,8 @@ public class InGameScreen extends JPanel {
     private JLayeredPane layeredPane;
     private Round round = new Round();
     private DiscardPile discardPile = round.getDiscardPile();
-
     private Map<String, JPanel> panelMap = new HashMap<>();
+    private JLabel discardPileLabel = new JLabel();
 
     public InGameScreen() {
 
@@ -234,8 +234,8 @@ public class InGameScreen extends JPanel {
 
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
+        System.out.println(numCards);
         List<Card> currentHand = round.getListOfPlayers().getFirst().getHand();
-
 
         for (int i = 0; i < numCards; i++) {
             JButton cardButton = new JButton(); // Create button without icon initially
@@ -278,9 +278,13 @@ public class InGameScreen extends JPanel {
                             // remove card from hand
                             for (Card c : currentHand) {
                                 if (tempcard.equals(c)) {
+                                    panelMap.get("South").removeAll();
                                     currentHand.remove(c);
                                     discardPile.addCard(c);
-//                                    panelMap.get("South").removeAll();
+                                    updateDiscardPileImage();
+                                    panelMap.get("South").revalidate();
+                                    panelMap.get("South").repaint();
+                                    setupCardButtons(panelMap.get("South"));
                                     positionCardButtons(panelMap.get("South"), "South");
 
                                     //DEBUGGING PRINT STATEMENTS
@@ -620,15 +624,15 @@ public class InGameScreen extends JPanel {
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
 
         JButton button1 = new JButton(drawPileIcon);
-        JButton button2 = new JButton(discardPileIcon);
+        discardPileLabel.setIcon(discardPileIcon);
         centerPanel.add(button1);
-        centerPanel.add(button2);
+        centerPanel.add(discardPileLabel);
 
         // Make buttons transparent
         button1.setBorder(BorderFactory.createEmptyBorder());
         button1.setContentAreaFilled(false);
-        button2.setBorder(BorderFactory.createEmptyBorder());
-        button2.setContentAreaFilled(false);
+//        discardPileLabel.setBorder(BorderFactory.createEmptyBorder());
+//        discardPileLabel.setContentAreaFilled(false);
 
         // If you have specific components to add, replicate the above block adjusting gbc as needed
 
@@ -660,6 +664,9 @@ public class InGameScreen extends JPanel {
     //This method is to update the image of the discardPile
     public void updateDiscardPileImage() {
         String filePath = discardPile.getCards().getLast().getFilepath();
+//        JButton discardPileButton = panelMap.get("Center");
+        ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
+        discardPileLabel.setIcon(discardPileIcon);
 
     }
 }
