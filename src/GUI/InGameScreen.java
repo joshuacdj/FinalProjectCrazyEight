@@ -221,42 +221,50 @@ public class InGameScreen extends JPanel {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    //Initialise the cards the human is able to play
+                    //First get the player whose turn it is
+                    Player currentPlayer = round.getListOfPlayers().get(0);
+                    //Get the current topcard
+                    Card currentTopCard = discardPile.getTopCard();
+                    currentPlayer.setPlayableCards(currentTopCard);
 
-//                    List<Card> temp = new ArrayList<>();
-//                    temp.add(new Card(8, Suit.DIAMONDS));
-//                    temp.add(new Card(11, Suit.HEARTS));
-//                    temp.add(new Card(1, Suit.HEARTS));
-//                    temp.add(new Card(13, Suit.CLUBS));
-//                    temp.add(new Card(8, Suit.SPADES));
-
-                    String [] s = cardButton.getName().split("_");
+                    //Initialise the card being clicked
+                    String[] s = cardButton.getName().split("_");
                     int value = Integer.parseInt(s[0]);
                     Suit suit = Suit.valueOf(s[1]);
-                    Card tempcard = new Card(value, suit);
+                    Card chosenCard = new Card(value, suit);
+                    //Check whether the card clicked is playable
+                    boolean cardIsPlayable = currentPlayer.isPlayable(chosenCard, currentTopCard);
 
-                            // remove card from hand
-                            for (Card c : currentHand) {
-                                if (tempcard.equals(c)) {
-                                    panelMap.get("South").removeAll();
-                                    currentHand.remove(c);
-                                    discardPile.addCard(c);
-                                    updateDiscardPileImage();
-                                    panelMap.get("South").revalidate();
-                                    panelMap.get("South").repaint();
-                                    setupCardButtons(panelMap.get("South"));
-                                    positionCardButtons(panelMap.get("South"), "South");
+                    // remove card from hand if it is a valid card
+                    if (cardIsPlayable) {
+                        for (Card c : currentHand) {
+                            if (chosenCard.equals(c)) {
+                                panelMap.get("South").removeAll();
+                                currentHand.remove(c);
+                                discardPile.addCard(c);
+                                updateDiscardPileImage();
+                                panelMap.get("South").revalidate();
+                                panelMap.get("South").repaint();
+                                setupCardButtons(panelMap.get("South"));
+                                positionCardButtons(panelMap.get("South"), "South");
 
-                                    //DEBUGGING PRINT STATEMENTS
-                                    System.out.println("top card is " + discardPile.getTopCard());
-                                    System.out.println("after adding card");
-                                    System.out.println(currentHand);
-                                    break;
-                                }
+                                //DEBUGGING PRINT STATEMENTS
+                                System.out.println("top card is " + discardPile.getTopCard());
+                                System.out.println("after adding card");
+                                System.out.println(currentHand);
+                                break;
                             }
-                    if (tempcard.getValue() == 8) {
+                        }
+                    } else {
+                        System.out.println("INVALID CARD");
+                    }
+
+                    if (chosenCard.getValue() == 8) {
                         System.out.println("tempcard before " + discardPile.getTopCard());
                         showSuitsButton();
                     }
+
                     System.out.println("tempcard after " + discardPile.getTopCard());
 
                 }
@@ -598,17 +606,19 @@ public class InGameScreen extends JPanel {
         @Override
         public void mousePressed(MouseEvent e) {
 
+            //TODO THE GET FIRST WILL CHANGE IF WE HAVE MULTIPLE ROUNDS
+            //This will draw a card from the drawpile for the player
             round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
 
+            //Check if the drawpile has sufficient cards for the next player and restock if necessary
+            restockDrawPile();
+
+            //Update the hand graphics
             JPanel south = panelMap.get("South");
-
-
             south.revalidate();
             south.repaint();
-
             setupCardButtons(south);
             positionCardButtons(south,"South");
-
         }
 
     });
@@ -627,6 +637,25 @@ public class InGameScreen extends JPanel {
         return centerPanel;
     }
 
+    //This method is to update the image of the discardPile
+    public void updateDiscardPileImage() {
+        String filePath = discardPile.getCards().getLast().getFilepath();
+//        JButton discardPileButton = panelMap.get("Center");
+        ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
+        discardPileLabel.setIcon(discardPileIcon);
+
+    }
+
+    //This method will check if the drawpile has less than or equal to 5 cards, if so,
+    //add the discardpile to the drawpile and then shuffle the drawpile
+    public void restockDrawPile() {
+        final int MINUMUMDRAWPILESIZE = 5;
+        if (drawPile.getListOfCards().size() <= MINUMUMDRAWPILESIZE) {
+            discardPile.transferTo(drawPile);
+            drawPile.shuffleDeck();
+        }
+    }
+
     // Main method to test the InGameScreen layout
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -638,14 +667,5 @@ public class InGameScreen extends JPanel {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
-    }
-
-    //This method is to update the image of the discardPile
-    public void updateDiscardPileImage() {
-        String filePath = discardPile.getCards().getLast().getFilepath();
-//        JButton discardPileButton = panelMap.get("Center");
-        ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
-        discardPileLabel.setIcon(discardPileIcon);
-
     }
 }
