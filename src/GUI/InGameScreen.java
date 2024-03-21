@@ -624,8 +624,6 @@ System.out.println(cardsDrawn);
 
             //Update the hand graphics
             JPanel south = panelMap.get("South");
-            south.revalidate();
-            south.repaint();
             setupCardButtons(south);
             positionCardButtons(south,"South");
         }
