@@ -35,6 +35,8 @@ public class DiscardPile implements Deck {
 //        }
     }
 
+
+
     public void setTopCard(Card topCard) {
         this.topCard = topCard;
     }
@@ -50,7 +52,7 @@ public class DiscardPile implements Deck {
 
     public void transferTo(DrawPile drawPile) {
         for(int i = 0; i < listOfCards.size() - 1; i++){
-            drawPile.add(listOfCards.getFirst());
+            drawPile.getListOfCards().addFirst(listOfCards.get(i));
             listOfCards.removeFirst();
         }
     }

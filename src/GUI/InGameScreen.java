@@ -25,6 +25,7 @@ public class InGameScreen extends JPanel {
     private DiscardPile discardPile = round.getDiscardPile();
     private Map<String, JPanel> panelMap = new HashMap<>();
     private JLabel discardPileLabel = new JLabel();
+    private DrawPile drawPile = round.getDrawPile();
 
     public InGameScreen() {
 
@@ -131,8 +132,6 @@ public class InGameScreen extends JPanel {
         }
     }
 
-
-
     private JPanel createPlayerPanel(String orientation) {
         JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
 //            @Override
@@ -171,46 +170,6 @@ public class InGameScreen extends JPanel {
         setupCardLabel(computer1Panel);
 
         return computer1Panel;
-    }
-
-    private JPanel createComputer2Panel(String orientation) {
-        JPanel computer2Panel = new JPanel(null) { // Use null layout for absolute positioning
-//            @Override
-//            public void doLayout() {
-//                positionCardButtons(this, orientation);
-//            }
-        };
-        computer2Panel.setOpaque(false);
-        computer2Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
-
-        // Initial card buttons setup
-        setupCardButtons(computer2Panel);
-
-        return computer2Panel;
-    }
-
-    private JPanel createComputer3Panel(String orientation) {
-        JPanel computer3Panel = new JPanel(null) { // Use null layout for absolute positioning
-//            @Override
-//            public void doLayout() {
-//                positionCardButtons(this, orientation);
-//            }
-        };
-        computer3Panel.setOpaque(false);
-        computer3Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
-
-        // Add a component listener to resize the card buttons when the panel is resized
-//        computer3Panel.addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentResized(ComponentEvent e) {
-//                positionCardButtons(computer3Panel, orientation);
-//            }
-//        });
-
-        // Initial card buttons setup
-        setupCardButtons(computer3Panel);
-
-        return computer3Panel;
     }
 
     private void setupSuitButtons(JLayeredPane centerPanel) {
@@ -385,7 +344,6 @@ public class InGameScreen extends JPanel {
                     layeredPane.add(play3Button, Integer.valueOf(2)); // Add playButton above centerPanel
                     layeredPane.add(play4Button, Integer.valueOf(2)); // Add playButton above centerPanel
 
-
                     layeredPane.moveToFront(play1Button);
                     layeredPane.moveToFront(play2Button);
                     layeredPane.moveToFront(play3Button);
@@ -466,7 +424,7 @@ public class InGameScreen extends JPanel {
                 cardButton.setOpaque(false);
 
             // Position the cards with proper offset
-                xOffset = (cardWidth - (cardWidth / humanHand.size()) - 55) * i;
+                xOffset = (cardWidth - 90) * i;
 
 
             // Set the bounds for the button based on the orientation
@@ -531,7 +489,6 @@ public class InGameScreen extends JPanel {
                 } else {
                     yOffset = (cardHeight - (cardHeight / numCards) - 55) * i;
                 }
-
 
                 // Set the bounds for the button based on the orientation
                 back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
@@ -615,24 +572,46 @@ public class InGameScreen extends JPanel {
         JPanel centerPanel = new JPanel(new GridLayout(1, 4, 0, 0)); // 1 row, 2 columns with a gap of 10px
         centerPanel.setOpaque(false);
 
-        // Example of adding a component to the centerPanel
-        // You can add more components similarly, adjusting the gridx, gridy, weightx, weighty as needed
-        ImageIcon drawPileIcon = new ImageIcon(new ImageIcon("src/main/resources/images/back_card.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
-
         //Get the filepath of the first discarded card at the start of the round
         String filePath = discardPile.getCards().getFirst().getFilepath();
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
 
-        JButton button1 = new JButton(drawPileIcon);
         discardPileLabel.setIcon(discardPileIcon);
-        centerPanel.add(button1);
+        discardPileLabel.setBorder(BorderFactory.createEmptyBorder(0, 120, 0, 0));
+
+        // drawpilebutton
+        // Example of adding a component to the centerPanel
+        // You can add more components similarly, adjusting the gridx, gridy, weightx, weighty as needed
+        ImageIcon drawPileIcon = new ImageIcon(new ImageIcon("src/main/resources/images/back_card.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
+
+        JButton drawPilebutton = new JButton(drawPileIcon);
+        centerPanel.add(drawPilebutton);
         centerPanel.add(discardPileLabel);
 
         // Make buttons transparent
-        button1.setBorder(BorderFactory.createEmptyBorder());
-        button1.setContentAreaFilled(false);
+        drawPilebutton.setBorder(BorderFactory.createEmptyBorder());
+        drawPilebutton.setContentAreaFilled(false);
 //        discardPileLabel.setBorder(BorderFactory.createEmptyBorder());
 //        discardPileLabel.setContentAreaFilled(false);
+
+        drawPilebutton.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+            round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
+
+            JPanel south = panelMap.get("South");
+
+
+            south.revalidate();
+            south.repaint();
+
+            setupCardButtons(south);
+            positionCardButtons(south,"South");
+
+        }
+
+    });
 
         // If you have specific components to add, replicate the above block adjusting gbc as needed
 
