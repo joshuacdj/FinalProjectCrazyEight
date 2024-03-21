@@ -610,6 +610,15 @@ public class InGameScreen extends JPanel {
             //This will draw a card from the drawpile for the player
             round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
 
+            //Keep a counter of the amount of cards drawn, skip the players turn if 5 cards are drawn
+            int cardsDrawn = round.getCardsDrawnInTurn();
+            cardsDrawn++;
+            round.setCardsDrawnInTurn(cardsDrawn);
+System.out.println(cardsDrawn);
+            if (cardsDrawn == 5) {
+                System.out.println("YOU HAVE DRAWN 5 CARDS. TOO BAD");
+            }
+
             //Check if the drawpile has sufficient cards for the next player and restock if necessary
             restockDrawPile();
 

@@ -11,6 +11,7 @@ public class Round {
     private ArrayList<Player> listOfPlayers;
     private DrawPile drawPile;
     private DiscardPile discardPile;
+    private int cardsDrawnInTurn = 0;
 
     public Round() {
         listOfPlayers = new ArrayList<>();
@@ -30,6 +31,10 @@ public class Round {
         return discardPile;
     }
 
+    public int getCardsDrawnInTurn() {
+        return cardsDrawnInTurn;
+    }
+
     public ArrayList<Player> getListOfPlayers() {
         return listOfPlayers;
     }
@@ -44,6 +49,10 @@ public class Round {
 
     public void setDiscardPile(DiscardPile discardPile) {
         this.discardPile = discardPile;
+    }
+
+    public void setCardsDrawnInTurn(int cardsDrawnInTurn) {
+        this.cardsDrawnInTurn = cardsDrawnInTurn;
     }
 
     // set the first card of the round
