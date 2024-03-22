@@ -77,13 +77,7 @@ public abstract class Player {
 
     // How card is deemed playable
 
-    public boolean isPlayable (Card currCard, Card lastPlayedCard) {
-        if (currCard.getValue() == lastPlayedCard.getValue()) {
-            return true;
-        } else if (currCard.getSuit() == lastPlayedCard.getSuit()) {
-            return true;
-        } else return currCard.getValue() == 8;
-    }
+
 
     // Remove the card from current hand
     public void removeCard(Card card) {
@@ -101,6 +95,15 @@ public abstract class Player {
                 playableCards.add(card);
             }
         }
+    }
+
+    //This method returns true if a card is playable
+    public boolean isPlayable (Card currCard, Card lastPlayedCard) {
+        if (currCard.getValue() == lastPlayedCard.getValue()) {
+            return true;
+        } else if (currCard.getSuit() == lastPlayedCard.getSuit()) {
+            return true;
+        } else return currCard.getValue() == 8;
     }
 
 

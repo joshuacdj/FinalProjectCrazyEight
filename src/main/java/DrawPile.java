@@ -3,6 +3,8 @@ package main.java;
 import main.java.Card;
 import main.java.Deck;
 
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
 import java.util.*;
 import java.util.Collections;
 
@@ -13,7 +15,8 @@ public class DrawPile implements Deck {
         listOfCards = new ArrayList<>();
         for (int i = 1; i <= 13; i++) {
             for (Suit suit : Suit.values()) {
-                Card cardToAdd = new Card(i, suit);
+                Card temp = new Card(i, suit);
+                listOfCards.add(temp);
             }
         }
     }

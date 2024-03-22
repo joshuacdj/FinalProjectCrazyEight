@@ -8,14 +8,51 @@ import main.java.Player;
 import java.util.ArrayList;
 
 public class Round {
-    private ArrayList<Player> playerPosition;
+    private ArrayList<Player> listOfPlayers;
     private DrawPile drawPile;
     private DiscardPile discardPile;
+    private int cardsDrawnInTurn = 0;
 
-    public Round(ArrayList<Player> playerPosition) {
-        this.playerPosition = playerPosition;
+    public Round() {
+        listOfPlayers = new ArrayList<>();
+        listOfPlayers.add(new Human("You"));
+        listOfPlayers.add(new Computer("Comp 1"));
+        listOfPlayers.add(new Computer("Comp 2"));
+        listOfPlayers.add(new Computer("Comp 3"));
         this.drawPile = new DrawPile();
         this.discardPile = new DiscardPile();
+    }
+
+    public DrawPile getDrawPile() {
+        return drawPile;
+    }
+
+    public DiscardPile getDiscardPile() {
+        return discardPile;
+    }
+
+    public int getCardsDrawnInTurn() {
+        return cardsDrawnInTurn;
+    }
+
+    public ArrayList<Player> getListOfPlayers() {
+        return listOfPlayers;
+    }
+
+    public void setListOfPlayers(ArrayList<Player> listOfPlayers) {
+        this.listOfPlayers = listOfPlayers;
+    }
+
+    public void setDrawPile(DrawPile drawPile) {
+        this.drawPile = drawPile;
+    }
+
+    public void setDiscardPile(DiscardPile discardPile) {
+        this.discardPile = discardPile;
+    }
+
+    public void setCardsDrawnInTurn(int cardsDrawnInTurn) {
+        this.cardsDrawnInTurn = cardsDrawnInTurn;
     }
 
     // set the first card of the round
@@ -41,11 +78,10 @@ public class Round {
     }
 
     public void clearAllPlayerHands() {
-        for (Player p : playerPosition) {
+        for (Player p : listOfPlayers) {
             p.clearHand();
         }
     }
-
     public void roundStart() {
 
         // shuffle a new deck
@@ -54,16 +90,20 @@ public class Round {
         // set the first playing card of the game
         setFirstCard(drawPile, discardPile);
 
-        // each of the 4 players draws 5 cards
         for (int i = 0; i < 5; i++) {
-            for (Player p : playerPosition) {
+            for (Player p : listOfPlayers) {
                 p.drawCard(drawPile.getTopCard());
             }
         }
+    }
+
+    public void roundStart2() {
+
+
 
         // each player goes through their turns until the round ends this is going to take forever!
         while (!roundEnd()){
-            for (Player currentPlayer : playerPosition) {
+            for (Player currentPlayer : listOfPlayers) {
                 // current player makes his move
                 // TODO: Implement player play himself
 //                Card cardPlayed = currentPlayer.play();
@@ -84,7 +124,7 @@ public class Round {
 
         // At the end of the round, we sum up the points of each player and clear their hand
         // Loop through each player
-        for (Player p : playerPosition) {
+        for (Player p : listOfPlayers) {
 
             // Sum up the total points for each player
             p.addPoints(p.calculatePoints());
@@ -101,7 +141,7 @@ public class Round {
 
         // Loop through every player's hand and check if it is empty
         // If it is empty, set round end to true and break out of loop
-        for (Player p : playerPosition) {
+        for (Player p : listOfPlayers) {
             if (p.getHand().isEmpty()) {
                 shouldRoundEnd = true;
                 break;
@@ -110,7 +150,7 @@ public class Round {
 
         // If the round ends, clear every player's hand and reset the draw and discard pile
         if (shouldRoundEnd) {
-            for (Player p : playerPosition) {
+            for (Player p : listOfPlayers) {
                 p.clearHand();
             }
 

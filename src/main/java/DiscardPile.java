@@ -14,23 +14,31 @@ public class DiscardPile implements Deck {
     }
     //    [Card, DesiredSuit]
 
-    public void addCard(Card c){
+    public void addCard(Card c) {
         listOfCards.add(c);
-        if(c.getValue() != 8){
-            topCard = c;
-        }else{
-            Scanner sc = new Scanner(System.in);
-            String suitName = sc.nextLine();
-            Suit suit = switch (suitName) {
-                case ("DIAMONDS") -> Suit.DIAMONDS;
-                case ("CLUBS") -> Suit.CLUBS;
-                case ("HEARTS") -> Suit.HEARTS;
-                case ("SPADES") -> Suit.SPADES;
-                default -> c.getSuit();
-            };
-            //
-            topCard = new Card(c.getValue(), suit);
-        }
+        topCard = c;
+//        if(c.getValue() != 8){
+//            topCard = c;
+
+//        }else{
+//            Scanner sc = new Scanner(System.in);
+//            String suitName = sc.nextLine();
+//            Suit suit = switch (suitName)
+//                case ("DIAMONDS") -> Suit.DIAMONDS;
+//                case ("CLUBS") -> Suit.CLUBS;
+//                case ("HEARTS") -> Suit.HEARTS;
+//                case ("SPADES") -> Suit.SPADES;
+//                default -> c.getSuit();
+//            };
+//            //
+//            topCard = new Card(c.getValue(), suit);
+//        }
+    }
+
+
+
+    public void setTopCard(Card topCard) {
+        this.topCard = topCard;
     }
 
     public Card getTopCard(){
@@ -44,7 +52,7 @@ public class DiscardPile implements Deck {
 
     public void transferTo(DrawPile drawPile) {
         for(int i = 0; i < listOfCards.size() - 1; i++){
-            drawPile.add(listOfCards.getFirst());
+            drawPile.getListOfCards().addFirst(listOfCards.get(i));
             listOfCards.removeFirst();
         }
     }
