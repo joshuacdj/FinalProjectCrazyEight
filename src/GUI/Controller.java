@@ -21,33 +21,37 @@ public class Controller {
         welcomeScreen.getPlayButton().addActionListener(e -> startGame());
     }
 
-    public void compPlay(){
-        //play for comps only
-        ArrayList<Player> playerList = currentRound.getListOfPlayers();
-        for(Player p : playerList){
-            if(p instanceof Computer){
-                Computer c = (Computer) p;
-                ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
-                if(cardNSuit != null){
-                    Card cardy = (Card) cardNSuit.get(0);
-                    Suit s = (Suit) cardNSuit.get(1);
-                    currentRound.getDiscardPile().addCard(cardy);
-                    currentRound.getDiscardPile().setTopCard(cardy);
-//                    System.out.println("The discard pile's top card is " + cardy);
-                    inGameScreen.updateDiscardPileImage();
+    public void compPlay() {
+        new Thread(() -> {
+            ArrayList<Player> playerList = currentRound.getListOfPlayers();
+            for (Player p : playerList) {
+                if (p instanceof Computer) {
+                    Computer c = (Computer) p;
+                    ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
+                    if (cardNSuit != null) {
+                        Card cardy = (Card) cardNSuit.get(0);
+                        Suit s = (Suit) cardNSuit.get(1);
+                        // Updating GUI components must be done on the EDT
+                        SwingUtilities.invokeLater(() -> {
+                            currentRound.getDiscardPile().addCard(cardy);
+                            currentRound.getDiscardPile().setTopCard(cardy);
+                            // System.out.println("The discard pile's top card is " + cardy);
+                            inGameScreen = new InGameScreen(currentRound, this);
+                            showScreen(inGameScreen);
+                        });
+                    }
+                    try {
+                        // Log computer action
+                        System.out.println("This is computer " + c.getName() + ":" + c.getHand());
+                        // Wait for 3 seconds before proceeding to the next iteration
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new RuntimeException(e);
+                    }
                 }
-                System.out.println("This is computer " + c.getName() + ":" + c.getHand());
-                inGameScreen = new InGameScreen(currentRound, this);
-                showScreen(inGameScreen);
-//                try{
-//                    Thread.sleep(5000);
-////                    wait(5000);
-//
-//                }catch(InterruptedException e){
-//                    throw new RuntimeException();
-//                }
             }
-        }
+        }).start();
     }
 
     private void startGame() {
