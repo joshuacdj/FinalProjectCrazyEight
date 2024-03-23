@@ -27,6 +27,7 @@ public class InGameScreen extends JPanel {
     private JLabel discardPileLabel = new JLabel();
     private DrawPile drawPile;
 
+
     private Controller controller;
 
     public InGameScreen(Round round, Controller controller) {
@@ -209,7 +210,7 @@ public class InGameScreen extends JPanel {
 
             // Add the card button to the panel
             panel.add(cardButton);
-            
+
             cardButton.addMouseListener(new MouseAdapter() {
 
                 @Override
@@ -626,22 +627,32 @@ public class InGameScreen extends JPanel {
 //        discardPileLabel.setBorder(BorderFactory.createEmptyBorder());
 //        discardPileLabel.setContentAreaFilled(false);
 
-        drawPilebutton.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
 
+
+
+        int cardsDrawn = round.getCardsDrawnInTurn();
+        cardsDrawn++;
+        round.setCardsDrawnInTurn(cardsDrawn);
+        System.out.println(cardsDrawn);
+        System.out.println("playable cards are " + round.getListOfPlayers().getFirst().getPlayableCards());
+
+        if (round.getListOfPlayers().getFirst().getPlayableCards().isEmpty()) {
+            drawPilebutton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    drawPilebutton.setEnabled(true);
+
+                    if (!round.getListOfPlayers().getFirst().getPlayableCards().isEmpty()) {
+                        drawPilebutton.setEnabled(false);
+                        drawPilebutton.removeMouseListener(this);
+                    }
+                }
+            });
             //TODO THE GET FIRST WILL CHANGE IF WE HAVE MULTIPLE ROUNDS
             //This will draw a card from the drawpile for the player
             round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
 
-            //Keep a counter of the amount of cards drawn, skip the players turn if 5 cards are drawn
-            int cardsDrawn = round.getCardsDrawnInTurn();
-            cardsDrawn++;
-            round.setCardsDrawnInTurn(cardsDrawn);
-System.out.println(cardsDrawn);
-            if (cardsDrawn == 5) {
-                System.out.println("YOU HAVE DRAWN 5 CARDS. TOO BAD");
-            }
+            //Keep a counter of the amount of cards drawn, skip the player's turn if 5 cards are drawn
 
             //Check if the drawpile has sufficient cards for the next player and restock if necessary
             restockDrawPile();
@@ -652,7 +663,6 @@ System.out.println(cardsDrawn);
             positionCardButtons(south,"South");
         }
 
-    });
 
         // If you have specific components to add, replicate the above block adjusting gbc as needed
 
