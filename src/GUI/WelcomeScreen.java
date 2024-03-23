@@ -8,6 +8,13 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.text.AttributedString;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.GradientPaint;
 
 public class WelcomeScreen extends JFrame {
 
@@ -124,7 +131,7 @@ public class WelcomeScreen extends JFrame {
         // action buttons
         gbc.gridx = 1;
         gbc.gridy = 1;
-        playButton = new JButton("playplayplayplayplay");
+        playButton = createCustomButton("Play", 300, 60);
         playButton.addMouseListener(new MouseAdapter() {
                                         public void mouseClicked(MouseEvent e) {
 //                                            if (text.equals("Play")) {
@@ -140,57 +147,68 @@ public class WelcomeScreen extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        backgroundPanel.add(createButton("Help", 300, 60), gbc);
+        backgroundPanel.add(createCustomButton("Help", 300, 60), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        backgroundPanel.add(createButton("Exit", 300, 60), gbc);
+        backgroundPanel.add(createCustomButton("Exit", 300, 60), gbc);
 
         pack();
         setLocationRelativeTo(null);
     }
 
-    private JPanel createButton(String text, int width, int height) {
-        JPanel buttonPanel = new CustomButton(new Color(255, 255, 255, 200), new Color(0, 0, 0, 50));
-        buttonPanel.setPreferredSize(new Dimension(width, height));
-        buttonPanel.setLayout(new BorderLayout());
-        JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setForeground(Color.DARK_GRAY);
-        label.setFont(buttonFont);
-        buttonPanel.add(label, BorderLayout.CENTER);
-
-        buttonPanel.addMouseListener(new MouseAdapter() {
+    public JButton createCustomButton(String text, int width, int height) {
+        JButton button = new JButton(text) {
+            // Custom painting is handled here
             @Override
-            public void mouseEntered(MouseEvent e) {
-                buttonPanel.setBackground(new Color(255, 255, 255, 255));
-            }
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                buttonPanel.setBackground(new Color(255, 255, 255, 200));
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                buttonPanel.setBackground(new Color(200, 200, 200, 200));
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                buttonPanel.setBackground(new Color(255, 255, 255, 255));
-            }
-
-            public void mouseClicked(MouseEvent e) {
-                if (text.equals("Play")) {
-                    // Assuming this code is inside an ActionListener in your WelcomeScreen
-                      getContentPane().removeAll();
-                      add(new GUI.InGameScreen());
-                      revalidate();
-                      repaint();
+                // Set gradients or solid colors here
+                if (getModel().isPressed()) {
+                    // Gradient paint for pressed button
+                    g2.setPaint(new GradientPaint(0, 0, new Color(180, 180, 180, 200),
+                            0, getHeight(), new Color(150, 150, 150, 200)));
+                } else if (getModel().isRollover()) {
+                    // Gradient paint for hover button
+                    g2.setPaint(new GradientPaint(0, 0, new Color(255, 255, 255, 255),
+                            0, getHeight(), new Color(220, 220, 220, 255)));
+                } else {
+                    // Default gradient paint
+                    g2.setPaint(new GradientPaint(0, 0, new Color(255, 255, 255, 200),
+                            0, getHeight(), new Color(230, 230, 230, 200)));
                 }
+
+                // Draw the rounded rectangle button background
+                g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
+                g2.dispose();
+
+                super.paintComponent(g);
             }
-        });
-        return buttonPanel;
+
+            // Method to paint border if needed
+            @Override
+            protected void paintBorder(Graphics g) {
+                // Optional: Implement custom border painting if required
+            }
+        };
+
+        button.setPreferredSize(new Dimension(width, height));
+        button.setForeground(Color.DARK_GRAY); // Text color
+        button.setFocusPainted(false); // Remove the focus border
+        button.setContentAreaFilled(false); // Tell Swing to not fill the content area
+        button.setOpaque(false); // Make the button non-opaque
+
+        // Customize font, e.g., button.setFont(new Font("Arial", Font.BOLD, 12));
+
+//        // Action listener for button's functionality
+//        button.addActionListener(e -> {
+//            // Your action logic here
+//            System.out.println(text + " button clicked.");
+//        });
+
+        return button;
     }
 
     public JButton getPlayButton(){
