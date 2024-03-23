@@ -18,6 +18,11 @@ public class WelcomeScreen extends JFrame {
     private Font buttonFont = new Font("Segoe UI Symbol", Font.BOLD, 22); // Modern, readable font
     private Font symbolFont = new Font("Segoe UI Symbol", Font.PLAIN, 100); // For card symbols
 
+    private JButton playButton;
+    private JButton helpButton;
+    private JButton exitButton;
+
+
     private class TitlePanel extends JPanel {
         private Font buttonFont = new Font("Segoe UI Symbol", Font.BOLD, 22); // Modern, readable font
         private Font symbolFont = new Font("Segoe UI Symbol", Font.PLAIN, 100); // For card symbols
@@ -90,31 +95,6 @@ public class WelcomeScreen extends JFrame {
         gbc.gridy = 0;
         backgroundPanel.add(titlePanel, gbc);
 
-        // Title label with a shadow effect
-//        JLabel titleLabel = new JLabel("Crazy Eights") {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                Graphics2D g2d = (Graphics2D) g.create();
-//                g2d.setColor(Color.BLACK);
-//                g2d.drawString(getText(), 11, 41);
-//                g2d.setColor(Color.RED);
-//                g2d.drawString(getText(), 10, 40);
-//                g2d.dispose();
-//            }
-//        };
-//        titleLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 60));
-//        titleLabel.setForeground(Color.RED);
-//        gbc.gridwidth = 2;
-//        gbc.gridx = 0;
-//        gbc.gridy = 0;
-//        gbc.insets = new Insets(20, 0, 20, 0);
-//        backgroundPanel.add(titlePanel, gbc);
-
-//        JLabel symbolsLabel = new JLabel("♠ ♥ ♣ ♦", SwingConstants.CENTER);
-//        symbolsLabel.setFont(symbolFont);
-//        symbolsLabel.setForeground(Color.WHITE);
-//        backgroundPanel.add(symbolsLabel, gbc);
-
         // Card images
         ImageIcon icon1 = new ImageIcon(new ImageIcon("src/main/resources/images/8_of_clubs.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
         JLabel cardLabel1 = new JLabel(icon1);
@@ -144,7 +124,19 @@ public class WelcomeScreen extends JFrame {
         // action buttons
         gbc.gridx = 1;
         gbc.gridy = 1;
-        backgroundPanel.add(createButton("Play", 300, 60), gbc);
+        playButton = new JButton("playplayplayplayplay");
+        playButton.addMouseListener(new MouseAdapter() {
+                                        public void mouseClicked(MouseEvent e) {
+//                                            if (text.equals("Play")) {
+//                                                // Assuming this code is inside an ActionListener in your WelcomeScreen
+//                                                getContentPane().removeAll();
+//                                                add(new GUI.InGameScreen());
+//                                                revalidate();
+//                                                repaint();
+//                                            }
+                                        }
+                                    });
+        backgroundPanel.add(playButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -200,6 +192,13 @@ public class WelcomeScreen extends JFrame {
         });
         return buttonPanel;
     }
+
+    public JButton getPlayButton(){
+        return playButton;
+    }
+
+
+
 
     private static class CustomButton extends JPanel {
         private Color backgroundColor;
