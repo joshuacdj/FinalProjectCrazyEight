@@ -6,7 +6,11 @@ import main.java.CardCompare;
 import java.util.*;
 
 public class Computer extends Player {
+    private DrawActionListener drawActionListener;
 
+    public void setDrawActionListener(DrawActionListener listener) {
+        this.drawActionListener = listener;
+    }
 
     public Computer(String name) {
         super(name);
@@ -20,8 +24,20 @@ public class Computer extends Player {
 //        check if there are no playable cards in hand
         while (getPlayableCards().isEmpty() && cardsDrawn < 5) {
             drawCard(deck.getTopCard());
+            if (drawActionListener != null) {
+                drawActionListener.onCardDrawn(this); // Notify about the draw
+            }
             setPlayableCards(lastPlayedCard);
             cardsDrawn++;
+
+            // Delay for 1 second
+            try {
+                Thread.sleep(1000); // Pause for 1 second before the next draw
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restore interrupted status
+                // Optionally handle the interruption, e.g., break the loop
+                break;
+            }
         }
         System.out.println(getHand());
 //        check if player drew 5 cards
