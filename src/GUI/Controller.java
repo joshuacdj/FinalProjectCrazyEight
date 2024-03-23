@@ -1,8 +1,6 @@
 package GUI;
 
 import java.util.*;
-import GUI.WelcomeScreen;
-import GUI.InGameScreen;
 import main.java.*;// Adjust the package path based on your actual structure
 
 import javax.swing.*;

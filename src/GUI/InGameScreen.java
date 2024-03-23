@@ -308,7 +308,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
-                        discardPile.setTopCard(new Card(8, Suit.DIAMONDS));
+                        discardPile.setTopCard(new Card(0, Suit.DIAMONDS));
                         controller.compPlay();
                     });
 
@@ -319,7 +319,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
-                        discardPile.setTopCard(new Card(8, Suit.CLUBS));
+                        discardPile.setTopCard(new Card(0, Suit.CLUBS));
                         controller.compPlay();
                     });
 
@@ -330,7 +330,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
-                        discardPile.setTopCard(new Card(8, Suit.HEARTS));
+                        discardPile.setTopCard(new Card(0, Suit.HEARTS));
                         controller.compPlay();
                     });
 
@@ -341,7 +341,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
-                        discardPile.setTopCard(new Card(8, Suit.SPADES));
+                        discardPile.setTopCard(new Card(0, Suit.SPADES));
                         controller.compPlay();
                     });
 
