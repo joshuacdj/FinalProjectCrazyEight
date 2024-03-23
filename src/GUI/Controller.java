@@ -1,52 +1,68 @@
 package GUI;
 
+import java.util.*;
 import GUI.WelcomeScreen;
 import GUI.InGameScreen;
-import main.java.Round; // Adjust the package path based on your actual structure
+import main.java.*;// Adjust the package path based on your actual structure
 
 import javax.swing.*;
 
 public class Controller {
     private WelcomeScreen welcomeScreen = new WelcomeScreen();
-    private InGameScreen inGameScreen = new InGameScreen();
-    private Round currentRound;
+    private Round currentRound = new Round();
+
+    private InGameScreen inGameScreen;
 
     public Controller() {
+        currentRound.roundStart();
+        inGameScreen = new InGameScreen(currentRound, this);
         // Initialize the main JFrame to hold different screens (panels)
         welcomeScreen.setVisible(true);
-
-        // Initialize the round logic
-        currentRound = new Round();
-
-        // Initialize the welcome screen and add action listeners
-        initializeWelcomeScreen();
+        welcomeScreen.getPlayButton().addActionListener(e -> startGame());
     }
 
-    private void initializeWelcomeScreen() {
-//        welcomeScreen = new WelcomeScreen(
-        welcomeScreen.getPlayButton().addActionListener(e -> startGame());
-//        welcomeScreen.getExitButton().addActionListener(e -> System.exit(0));
-        // Assuming you have methods in WelcomeScreen to get buttons. If not, add them.
-//        showScreen(welcomeScreen);
+    public void compPlay(){
+        //play for comps only
+        ArrayList<Player> playerList = currentRound.getListOfPlayers();
+        for(Player p : playerList){
+            if(p instanceof Computer){
+                Computer c = (Computer) p;
+                ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
+                if(cardNSuit != null){
+                    Card cardy = (Card) cardNSuit.get(0);
+                    Suit s = (Suit) cardNSuit.get(1);
+                    currentRound.getDiscardPile().addCard(cardy);
+                    currentRound.getDiscardPile().setTopCard(cardy);
+//                    System.out.println("The discard pile's top card is " + cardy);
+                    inGameScreen.updateDiscardPileImage();
+                }
+                System.out.println("This is computer " + c.getName() + ":" + c.getHand());
+                inGameScreen = new InGameScreen(currentRound, this);
+                showScreen(inGameScreen);
+//                try{
+//                    Thread.sleep(5000);
+////                    wait(5000);
+//
+//                }catch(InterruptedException e){
+//                    throw new RuntimeException();
+//                }
+            }
+        }
     }
 
     private void startGame() {
-        // Prepare the game round
-//        currentRound.setupRound(); // Assuming this method exists to initialize the round
-
-        // Initialize the in-game screen with the current round
-//        inGameScreen = new InGameScreen(); // Adjust constructor based on your actual implementation
         showScreen(inGameScreen);
-
-        // Continue with additional game setup or directly jump into game logic
+//        compPlay();
     }
+
+
 
     private void showScreen(JPanel panel) {
         // Switching the content pane to display the specified screen
         welcomeScreen.getContentPane().removeAll();
         welcomeScreen.revalidate();
-        welcomeScreen.setContentPane(panel);
         welcomeScreen.repaint();
+        welcomeScreen.setContentPane(panel);
     }
 
     public static void main(String[] args) {

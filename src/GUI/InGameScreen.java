@@ -21,17 +21,21 @@ import javax.imageio.ImageIO;
 public class InGameScreen extends JPanel {
     private JPanel centerPanel; // Instance variable for the center panel
     private JLayeredPane layeredPane;
-    private Round round = new Round();
-    private DiscardPile discardPile = round.getDiscardPile();
+    private Round round;
+    private DiscardPile discardPile;
     private Map<String, JPanel> panelMap = new HashMap<>();
     private JLabel discardPileLabel = new JLabel();
-    private DrawPile drawPile = round.getDrawPile();
+    private DrawPile drawPile;
 
-    public InGameScreen() {
+    private Controller controller;
 
-        round.roundStart();
-        System.out.println("-----------");
-        System.out.println(discardPile.getCards());
+    public InGameScreen(Round round, Controller controller) {
+        this.round = round;
+        this.controller = controller;
+        discardPile = round.getDiscardPile();
+        drawPile = round.getDrawPile();
+//        System.out.println("-----------");
+//        System.out.println(discardPile.getCards());
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -167,7 +171,7 @@ public class InGameScreen extends JPanel {
         computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
         // Initial card buttons setup
-        setupCardLabel(computer1Panel);
+        setupCardLabel(computer1Panel, orientation);
 
         return computer1Panel;
     }
@@ -256,16 +260,22 @@ public class InGameScreen extends JPanel {
                                 break;
                             }
                         }
+                        if (chosenCard.getValue() == 8) {
+                            showSuitsButton();
+                            return;
+                        }
                     } else {
                         System.out.println("INVALID CARD");
+                        return;
                     }
 
-                    if (chosenCard.getValue() == 8) {
-                        System.out.println("tempcard before " + discardPile.getTopCard());
-                        showSuitsButton();
-                    }
+//                    if (chosenCard.getValue() == 8) {
+//                        System.out.println("tempcard before " + discardPile.getTopCard());
+//                        showSuitsButton();
+//                    }
 
                     System.out.println("tempcard after " + discardPile.getTopCard());
+                    controller.compPlay();
 
                 }
                 private void showSuitsButton() {
@@ -299,6 +309,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(8, Suit.DIAMONDS));
+                        controller.compPlay();
                     });
 
                     play2Button.addActionListener(e -> {
@@ -309,6 +320,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(8, Suit.CLUBS));
+                        controller.compPlay();
                     });
 
                     play3Button.addActionListener(e -> {
@@ -319,6 +331,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(8, Suit.HEARTS));
+                        controller.compPlay();
                     });
 
                     play4Button.addActionListener(e -> {
@@ -329,6 +342,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play1Button);
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(8, Suit.SPADES));
+                        controller.compPlay();
                     });
 
                     // Ensure any existing play button is removed before adding a new one
@@ -357,6 +371,7 @@ public class InGameScreen extends JPanel {
                     layeredPane.moveToFront(play3Button);
                     layeredPane.moveToFront(play4Button);
 
+
                     layeredPane.revalidate();
                     layeredPane.repaint();
                 }
@@ -365,8 +380,15 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    private void setupCardLabel(JPanel panel) {
-        int numCards = 5; // The number of cards to display
+    private void setupCardLabel(JPanel panel, String orientation) {
+        int numCards;
+        if(orientation.equals("West")){
+            numCards = round.getListOfPlayers().get(1).getHand().size();
+        }else if(orientation.equals("North")){
+            numCards = round.getListOfPlayers().get(2).getHand().size();
+        }else{
+            numCards = round.getListOfPlayers().get(3).getHand().size();
+        }
 
         for (int i = 0; i < numCards; i++) {
             JLabel cardLabel = new JLabel(); // Create button without icon initially
@@ -449,13 +471,15 @@ public class InGameScreen extends JPanel {
         //numCards is dependent on the panel
         //East is 1, north is 2 and west is 3
         int numCards = switch (orientation) {
-            case "East" -> round.getListOfPlayers().get(1).getHand().size();
+            case "East" -> round.getListOfPlayers().get(3).getHand().size();
             case "North" -> round.getListOfPlayers().get(2).getHand().size();
-            case "West" -> round.getListOfPlayers().get(3).getHand().size();
+            case "West" -> round.getListOfPlayers().get(1).getHand().size();
             default -> 0;
         };
 
-        if (numCards == 0) return;
+        if (numCards == 0){
+            System.out.println("someone won");;
+        }
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
 
@@ -581,7 +605,7 @@ public class InGameScreen extends JPanel {
         centerPanel.setOpaque(false);
 
         //Get the filepath of the first discarded card at the start of the round
-        String filePath = discardPile.getCards().getFirst().getFilepath();
+        String filePath = discardPile.getCards().getLast().getFilepath();
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
 
         discardPileLabel.setIcon(discardPileIcon);
@@ -664,15 +688,15 @@ System.out.println(cardsDrawn);
     }
 
     // Main method to test the InGameScreen layout
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("In-Game Screen");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setContentPane(new InGameScreen());
-            frame.setPreferredSize(new Dimension(1000, 1000)); // Preferred initial size
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("In-Game Screen");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.setContentPane(new InGameScreen());
+//            frame.setPreferredSize(new Dimension(1000, 1000)); // Preferred initial size
+//            frame.pack();
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
+//        });
+//    }
 }

@@ -25,7 +25,7 @@ public class Computer extends Player {
         }
         System.out.println(getHand());
 //        check if player drew 5 cards
-        if (cardsDrawn <= 5) {
+        if (!getPlayableCards().isEmpty()) {
 //            choose to discard the card worth the most points
 //            if 8 present, return 8 and choose suit which is most common in hand
             for (Card card : getPlayableCards()) {
@@ -48,10 +48,16 @@ public class Computer extends Player {
                 }
             }
 //            else choose highest face value card
-            Card cardWithHighestPoints = Collections.max(getPlayableCards(), new CardCompare());
-            removeCard(cardWithHighestPoints);
-            output.add(cardWithHighestPoints);
-            output.add(cardWithHighestPoints.getSuit());
+            Card cardPlayed = null;
+            if(getPlayableCards().size() < 2){
+                cardPlayed = getPlayableCards().getFirst();
+            }
+            else {
+                cardPlayed = Collections.max(getPlayableCards(), new CardCompare());
+            }
+            removeCard(cardPlayed);
+            output.add(cardPlayed);
+            output.add(cardPlayed.getSuit());
             return output;
         }
         return null;
