@@ -32,7 +32,12 @@ public class Controller {
                         // Updating GUI components must be done on the EDT
                         SwingUtilities.invokeLater(() -> {
                             currentRound.getDiscardPile().addCard(cardy);
-                            currentRound.getDiscardPile().setTopCard(cardy);
+                            if (cardy.getValue() != 8) {
+                                currentRound.getDiscardPile().setTopCard(cardy);
+                            } else {
+                                currentRound.getDiscardPile().setTopCard(new Card(0,s));
+                                inGameScreen.updateDiscardPileImage();
+                            }
                             // System.out.println("The discard pile's top card is " + cardy);
                             inGameScreen = new InGameScreen(currentRound, this);
                             showScreen(inGameScreen);

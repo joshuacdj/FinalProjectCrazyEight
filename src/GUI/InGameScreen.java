@@ -307,8 +307,8 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play3Button);
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
-                        layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.DIAMONDS));
+                        updateDiscardPileImage();
                         controller.compPlay();
                     });
 
@@ -318,8 +318,8 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play3Button);
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
-                        layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.CLUBS));
+                        updateDiscardPileImage();
                         controller.compPlay();
                     });
 
@@ -329,8 +329,8 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play3Button);
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
-                        layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.HEARTS));
+                        updateDiscardPileImage();
                         controller.compPlay();
                     });
 
@@ -340,8 +340,8 @@ public class InGameScreen extends JPanel {
                         layeredPane.remove(play3Button);
                         layeredPane.remove(play2Button);
                         layeredPane.remove(play1Button);
-                        layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.SPADES));
+                        updateDiscardPileImage();
                         controller.compPlay();
                     });
 
@@ -670,10 +670,12 @@ System.out.println(cardsDrawn);
 
     //This method is to update the image of the discardPile
     public void updateDiscardPileImage() {
-        String filePath = discardPile.getCards().getLast().getFilepath();
+        String filePath = discardPile.getTopCard().getFilepath();
 //        JButton discardPileButton = panelMap.get("Center");
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
         discardPileLabel.setIcon(discardPileIcon);
+        discardPileLabel.revalidate();
+        discardPileLabel.repaint();
 
     }
 
