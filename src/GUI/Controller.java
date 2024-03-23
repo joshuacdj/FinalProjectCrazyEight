@@ -35,12 +35,15 @@ public class Controller {
                             if (cardy.getValue() != 8) {
                                 currentRound.getDiscardPile().setTopCard(cardy);
                             } else {
-                                currentRound.getDiscardPile().setTopCard(new Card(0,s));
-                                inGameScreen.updateDiscardPileImage();
+                                currentRound.getDiscardPile().setTopCard(new Card(0, s));
                             }
-                            // System.out.println("The discard pile's top card is " + cardy);
+                            // Update GUI here
                             inGameScreen = new InGameScreen(currentRound, this);
                             showScreen(inGameScreen);
+
+                            inGameScreen.updateDiscardPileImage();
+                            inGameScreen.repaint(); // Ensure the screen is repainted to reflect changes
+                            // System.out.println("The discard pile's top card is " + cardy);
                         });
                     }
                     try {

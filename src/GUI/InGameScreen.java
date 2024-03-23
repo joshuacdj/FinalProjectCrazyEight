@@ -676,7 +676,6 @@ System.out.println(cardsDrawn);
         discardPileLabel.setIcon(discardPileIcon);
         discardPileLabel.revalidate();
         discardPileLabel.repaint();
-
     }
 
     //This method will check if the drawpile has less than or equal to 5 cards, if so,
@@ -701,4 +700,7 @@ System.out.println(cardsDrawn);
 //            frame.setVisible(true);
 //        });
 //    }
+
+
+
 }
