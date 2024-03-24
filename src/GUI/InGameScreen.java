@@ -814,7 +814,7 @@ public class InGameScreen extends JPanel {
         }else if(!humanPlayer.canDrawCard()){
             drawPileButton.setEnabled(false);
             if(humanPlayer.getPlayableCards().size() == 0){
-
+                humanPlayer.resetDrawCounter();
                 controller.compPlay();
             }
         }
