@@ -77,6 +77,7 @@ public class Controller implements DrawActionListener{
                     if(c.getHand().size() == 0){
                         inGameScreen.setGameEnd(true);
                         endGame();
+                        break;
                     }
                 }
             }
