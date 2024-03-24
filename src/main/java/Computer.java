@@ -50,6 +50,7 @@ public class Computer extends Player {
             for (Card card : getPlayableCards()) {
                 if (card.getValue() == 8) {
                     removeCard(card);
+                    dealCardEightSound();
 //                    find which suit is most common in computer's hand
                     HashMap<Suit, Integer> suitCount = new HashMap<>();
                     suitCount.put(Suit.DIAMONDS, 0);

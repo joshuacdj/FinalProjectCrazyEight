@@ -14,6 +14,7 @@ public class Controller implements DrawActionListener{
     private InGameScreen inGameScreen;
 
     public Controller() {
+        backgroundMusic();
         currentRound.roundStart();
         // After creating Computer instances
         for (Player player : currentRound.getListOfPlayers()) {

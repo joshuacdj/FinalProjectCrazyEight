@@ -314,6 +314,7 @@ public class InGameScreen extends JPanel {
                                 if (currentPlayer.getHand().size() == 0) {
                                     gameEnd = true;
                                     controller.endGame();
+                                    cardButton.removeMouseListener(this);
                                     return;
                                 }
                                 //DEBUGGING PRINT STATEMENTS
@@ -813,7 +814,7 @@ public class InGameScreen extends JPanel {
         }else if(!humanPlayer.canDrawCard()){
             drawPileButton.setEnabled(false);
             if(humanPlayer.getPlayableCards().size() == 0){
-                
+
                 controller.compPlay();
             }
         }
