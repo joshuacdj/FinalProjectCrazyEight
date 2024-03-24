@@ -44,6 +44,7 @@ public class Controller implements DrawActionListener{
                     ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
                     SwingUtilities.invokeLater(() -> {
                         if (cardNSuit != null) {
+                            inGameScreen.drawCardSound();
                             Card cardy = (Card) cardNSuit.get(0);
                             Suit s = (Suit) cardNSuit.get(1);
                             // Updating GUI components must be done on the EDT
