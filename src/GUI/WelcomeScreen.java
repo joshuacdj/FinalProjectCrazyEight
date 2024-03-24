@@ -16,6 +16,8 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.GradientPaint;
 
+import java.io.*;
+
 public class WelcomeScreen extends JFrame {
 
     private Color darkGreen= new Color(0x00512C); // Light green
@@ -72,6 +74,23 @@ public class WelcomeScreen extends JFrame {
         }
     }
     public WelcomeScreen() {
+
+        // Set the apple dock icon
+        try {
+            Image iconImage = ImageIO.read(new File("src/main/resources/images/CrazyEightIcon.png"));
+            setIconImage(iconImage);
+
+            // For macOS, set the dock icon
+            if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
+                // Java 9 and newer
+                if (Taskbar.isTaskbarSupported()) {
+                    Taskbar.getTaskbar().setIconImage(iconImage);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to find the app icon! " + e.getMessage());
+        }
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Crazy Eights - Card Game");
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Start maximized
@@ -251,6 +270,8 @@ public class WelcomeScreen extends JFrame {
     }
 
     public static void main(String[] args) {
+
+
         SwingUtilities.invokeLater(() -> new WelcomeScreen().setVisible(true));
     }
 }
