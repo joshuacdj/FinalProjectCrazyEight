@@ -286,6 +286,7 @@ public class InGameScreen extends JPanel {
 
                     // remove card from hand if it is a valid card
                     if (cardIsPlayable) {
+                        cardsPlayed++;
                         for (Card c : currentHand) {
                             if (chosenCard.equals(c)) {
                                 panelMap.get("South").removeAll();
@@ -296,6 +297,10 @@ public class InGameScreen extends JPanel {
                                 panelMap.get("South").repaint();
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
+                                if (currentPlayer.getHand().size() == 0) {
+                                    controller.endGame();
+                                    return;
+                                }
                                 //DEBUGGING PRINT STATEMENTS
                                 System.out.println("top card is " + discardPile.getTopCard());
                                 System.out.println("after adding card");
@@ -307,7 +312,7 @@ public class InGameScreen extends JPanel {
                             showSuitsButton();
                             return;
                         }
-                        cardsPlayed++;
+
                     } else {
                         System.out.println("INVALID CARD");
                         return;
