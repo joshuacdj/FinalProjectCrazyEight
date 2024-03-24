@@ -21,8 +21,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 
-import static GUI.Sound.dealCardSound;
-import static GUI.Sound.drawCardSound;
+import static GUI.Sound.*;
 
 public class InGameScreen extends JPanel {
     private JPanel centerPanel; // Instance variable for the center panel
@@ -375,6 +374,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.DIAMONDS));
                         updateDiscardPileImage();
+                        dealCardEightSound();
                         controller.compPlay();
                     });
 
@@ -387,6 +387,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.CLUBS));
                         updateDiscardPileImage();
+                        dealCardEightSound();
                         controller.compPlay();
                     });
 
@@ -399,6 +400,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.HEARTS));
                         updateDiscardPileImage();
+                        dealCardEightSound();
                         controller.compPlay();
                     });
 
@@ -411,6 +413,7 @@ public class InGameScreen extends JPanel {
                         layeredPane.repaint();
                         discardPile.setTopCard(new Card(0, Suit.SPADES));
                         updateDiscardPileImage();
+                        dealCardEightSound();
                         controller.compPlay();
                     });
 
