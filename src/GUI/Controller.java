@@ -54,7 +54,12 @@ public class Controller implements DrawActionListener{
                             }
                             // Update GUI here
                             inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));;
+//                            inGameScreen.updateDrawPileButton();
                             inGameScreen.updateDiscardPileImage();
+                            if(c.getName().equals("Comp 3")){
+                                inGameScreen.updateDrawPileButton();
+                            }
+
 //                            inGameScreen.repaint(); // Ensure the screen is repainted to reflect changes
                             // System.out.println("The discard pile's top card is " + cardy);
                         });
@@ -64,6 +69,7 @@ public class Controller implements DrawActionListener{
                     }
                 }
             }
+//            inGameScreen.updateDrawPileButton();
         }).start();
     }
     public void endGame(){
@@ -84,10 +90,15 @@ public class Controller implements DrawActionListener{
         welcomeScreen.setContentPane(panel);
     }
 
-    @Override
-    public void onCardDrawn(Player player) {
+        public void onCardDrawn(Player player) {
         SwingUtilities.invokeLater(() -> {
-            inGameScreen.updateDrawCard(player);
+            if (player instanceof Human) {
+//                updateHumanPlayerPanel();
+            } else if (player instanceof Computer) {
+                // Assuming you have a way to get the correct orientation for this computer player
+                String orientation = inGameScreen.determineOrientation(player);
+                inGameScreen.refreshPlayerPanel(orientation);
+            }
         });
     }
 

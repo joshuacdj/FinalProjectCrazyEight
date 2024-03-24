@@ -159,6 +159,7 @@ public class InGameScreen extends JPanel {
 
         // Initial card buttons setup
         setupCardButtons(playerPanel);
+        updateDrawPileButton();
 
         return playerPanel;
     }
@@ -201,38 +202,39 @@ public class InGameScreen extends JPanel {
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
         round.getListOfPlayers().get(0).setPlayableCards(discardPile.getTopCard());
-        MouseListener listener = new MouseAdapter(){
-            public void mousePressed(MouseEvent e) {
-
-                //TODO THE GET FIRST WILL CHANGE IF WE HAVE MULTIPLE ROUNDS
-                //This will draw a card from the drawpile for the player
-                round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
-
-                //Keep a counter of the amount of cards drawn, skip the players turn if 5 cards are drawn
-                int cardsDrawn = round.getCardsDrawnInTurn();
-                cardsDrawn++;
-                round.setCardsDrawnInTurn(cardsDrawn);
-                System.out.println(cardsDrawn);
-                if (cardsDrawn == 5) {
-                    System.out.println("YOU HAVE DRAWN 5 CARDS. TOO BAD");
-                }
-
-                //Check if the drawpile has sufficient cards for the next player and restock if necessary
-                restockDrawPile();
-
-                //Update the hand graphics
-                JPanel south = panelMap.get("South");
-                setupCardButtons(south);
-                positionCardButtons(south,"South");
-            }
-        };
-        if(round.getListOfPlayers().get(0).getPlayableCards().size() != 0){
-            drawPileButton.setEnabled(false);
-            drawPileButton.removeMouseListener(listener);
-        }else {
-            drawPileButton.setEnabled(true);
-            drawPileButton.addMouseListener(listener);
-        }
+//        updateDrawPileButton();
+//        MouseListener listener = new MouseAdapter(){
+//            public void mousePressed(MouseEvent e) {
+//
+//                //TODO THE GET FIRST WILL CHANGE IF WE HAVE MULTIPLE ROUNDS
+//                //This will draw a card from the drawpile for the player
+//                round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
+//
+//                //Keep a counter of the amount of cards drawn, skip the players turn if 5 cards are drawn
+//                int cardsDrawn = round.getCardsDrawnInTurn();
+//                cardsDrawn++;
+//                round.setCardsDrawnInTurn(cardsDrawn);
+//                System.out.println(cardsDrawn);
+//                if (cardsDrawn == 5) {
+//                    System.out.println("YOU HAVE DRAWN 5 CARDS. TOO BAD");
+//                }
+//
+//                //Check if the drawpile has sufficient cards for the next player and restock if necessary
+//                restockDrawPile();
+//
+//                //Update the hand graphics
+//                JPanel south = panelMap.get("South");
+//                setupCardButtons(south);
+//                positionCardButtons(south,"South");
+//            }
+//        };
+//        if(round.getListOfPlayers().get(0).getPlayableCards().size() != 0){
+//            drawPileButton.setEnabled(false);
+//            drawPileButton.removeMouseListener(listener);
+//        }else {
+//            drawPileButton.setEnabled(true);
+//            drawPileButton.addMouseListener(listener);
+//        }
         System.out.println(numCards);
         List<Card> currentHand = round.getListOfPlayers().getFirst().getHand();
 
@@ -266,7 +268,7 @@ public class InGameScreen extends JPanel {
                     Player currentPlayer = round.getListOfPlayers().get(0);
                     //Get the current topcard
                     Card currentTopCard = discardPile.getTopCard();
-                    currentPlayer.setPlayableCards(currentTopCard);
+                    currentPlayer.getPlayableCards();
 
                     //Initialise the card being clicked
                     String[] s = cardButton.getName().split("_");
@@ -288,7 +290,6 @@ public class InGameScreen extends JPanel {
                                 panelMap.get("South").repaint();
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
-
                                 //DEBUGGING PRINT STATEMENTS
                                 System.out.println("top card is " + discardPile.getTopCard());
                                 System.out.println("after adding card");
@@ -312,7 +313,6 @@ public class InGameScreen extends JPanel {
 
                     System.out.println("tempcard after " + discardPile.getTopCard());
                     controller.compPlay();
-
                 }
                 private void showSuitsButton() {
                     // Method to show the "Play card?" button within the layeredPane
@@ -531,22 +531,6 @@ public class InGameScreen extends JPanel {
         int cardHeight = isVertical ? 110 : 160;
         int overlap = cardWidth / 2;
 
-//        if ("South".equals(orientation) || "North".equals(orientation)) {
-//            cardWidth = 110;
-//            cardHeight = 160;
-//        }
-//        if ("East".equals(orientation) || "West".equals(orientation)) {
-//            cardWidth = 160;
-//            cardHeight = 110;
-//        }
-//
-//
-//        // For vertical panels, adjust the height for stacking with overlap
-//        if (isVertical) {
-//            overlap = cardHeight / 2;
-////            cardHeight = (panelHeight + (overlap * (5 - 1))) / numCards;
-//        }
-
         // Set the initial offset for the first card
         int xOffset = 0;
         int yOffset = 0;
@@ -750,18 +734,84 @@ public class InGameScreen extends JPanel {
             if ("South".equals(orientation)) {
                 // Assuming South is always the human player in your game setup
                 setupCardButtons(playerPanel); // If this method sets up the human player's cards
+                positionCardButtons(playerPanel, "South");
             } else {
                 // For computer players
                 setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
+                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
             }
 
             // Reposition labels or buttons as needed, potentially reusing existing logic
-            positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
 
             playerPanel.revalidate();
             playerPanel.repaint();
         }
     }
+
+    private MouseListener getDrawListener(Human humanPlayer) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (humanPlayer.canDrawCard() && drawPileButton.isEnabled()) {
+                    // Execute draw logic
+                    humanPlayer.drawCard(drawPile); // Assume this method returns the drawn card and adds it to the player's hand
+                    // Potentially update UI here, like adding the new card to the display
+
+                    refreshPlayerPanel("South"); // Update the player's hand display
+
+                    // Re-evaluate conditions after drawing
+                    updateDrawPileButton();
+                    // If necessary, you can also trigger computer players' turns or other game logic here
+                }
+            }
+        };
+    }
+
+    public void updateDrawPileButton() {
+        Human humanPlayer = (Human) round.getListOfPlayers().getFirst();
+        humanPlayer.setPlayableCards(discardPile.getTopCard());
+
+        // Setup MouseListener for drawPileButton, if not already added
+        MouseListener drawListener = getDrawListener(humanPlayer);
+        boolean listenerNotAdded = Arrays.stream(drawPileButton.getMouseListeners()).noneMatch(ml -> ml.equals(drawListener));
+        System.out.println("Human has " + humanPlayer.getPlayableCards().size() + " cards to play");
+        System.out.println("Human hand is " + humanPlayer.getHand());
+        System.out.println("Top card is " + discardPile.getTopCard());
+        System.out.println(humanPlayer.getPlayableCards());
+        if (humanPlayer.getPlayableCards().size() != 0) {
+            drawPileButton.setEnabled(false);
+            if (!listenerNotAdded) {
+                drawPileButton.removeMouseListener(drawListener);
+            }
+        } else if (humanPlayer.canDrawCard()) {
+            drawPileButton.setEnabled(true);
+            if (listenerNotAdded) {
+                drawPileButton.addMouseListener(drawListener);
+            }
+        }
+        drawPileButton.revalidate();
+        drawPileButton.repaint();
+    }
+
+    private Player findHumanPlayer() {
+        // Example implementation, adjust based on your actual player management
+        return round.getListOfPlayers().stream()
+                .filter(p -> p instanceof Human)
+                .findFirst()
+                .orElse(null);
+    }
+
+//    public void onCardDrawn(Player player) {
+//        SwingUtilities.invokeLater(() -> {
+//            if (player instanceof Human) {
+//                updateHumanPlayerPanel();
+//            } else if (player instanceof Computer) {
+//                // Assuming you have a way to get the correct orientation for this computer player
+//                String orientation = determineOrientation(player);
+//                updateComputerPlayerPanel(orientation);
+//            }
+//        });
+//    }
 
 
 }

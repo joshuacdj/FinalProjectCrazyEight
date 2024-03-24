@@ -99,9 +99,10 @@ public abstract class Player {
 
     //This method returns true if a card is playable
     public boolean isPlayable (Card currCard, Card lastPlayedCard) {
+        System.out.println("Curr card:" + currCard + " Last played:" + lastPlayedCard);
         if (currCard.getValue() == lastPlayedCard.getValue()) {
             return true;
-        } else if (currCard.getSuit() == lastPlayedCard.getSuit()) {
+        } else if (currCard.getSuit().equals(lastPlayedCard.getSuit())) {
             return true;
         } else return currCard.getValue() == 8;
     }
