@@ -835,42 +835,87 @@ public class InGameScreen extends JPanel {
                 .orElse(null);
     }
 
+//    public void displayWinPanel() {
+//        // Step 1: Create the win panel
+//        JPanel winPanel = new JPanel();
+//        winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.Y_AXIS));
+//        winPanel.setSize(layeredPane.getSize());
+//        winPanel.setOpaque(true);
+//        winPanel.setBackground(new Color(0, 0, 0, 150)); // Semi-transparent background
+//
+//        // Title
+//        JLabel titleLabel = new JLabel("Game Over - Leaderboard");
+//        titleLabel.setForeground(Color.WHITE);
+//        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        winPanel.add(titleLabel);
+//
+//        // Step 2: Populate the panel with scores
+//        List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
+//        sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
+//        sortedPlayers.forEach(player -> {
+//            player.addPoints(player.calculatePoints());
+//            JLabel playerScoreLabel = new JLabel(player.getName() + ": " + player.getPoints());
+//            playerScoreLabel.setForeground(Color.WHITE);
+//            playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//            winPanel.add(playerScoreLabel);
+//        });
+//
+//        // Additional styling for the winPanel can be added here, e.g., borders, fonts, etc.
+//
+//        // Step 3: Add the panel to the layeredPane
+//        layeredPane.add(winPanel, Integer.valueOf(2)); // Adding at a high layer to cover other components
+//
+//        // Making the panel fill the entire layeredPane
+//        winPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
+//
+//        // Step 4: This method should be called when the game ends to display the win panel
+//        layeredPane.revalidate();
+//        layeredPane.repaint();
+//    }
+
     public void displayWinPanel() {
         // Step 1: Create the win panel
         JPanel winPanel = new JPanel();
         winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.Y_AXIS));
-        winPanel.setSize(layeredPane.getSize());
+        winPanel.setSize(layeredPane.getWidth(), layeredPane.getHeight());
         winPanel.setOpaque(true);
         winPanel.setBackground(new Color(0, 0, 0, 150)); // Semi-transparent background
 
-        // Title
-        JLabel titleLabel = new JLabel("Game Over - Leaderboard");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        winPanel.add(titleLabel);
-
-        // Step 2: Populate the panel with scores
-        List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
-        sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
+        // Step 2: Populate the panel with sorted scores
+        List<Player> sortedPlayers = getSortedPlayersByHandValue();
         sortedPlayers.forEach(player -> {
-            player.addPoints(player.calculatePoints());
-            JLabel playerScoreLabel = new JLabel(player.getName() + ": " + player.getPoints());
+            JLabel playerScoreLabel = new JLabel(player.getName() + ": " + player.calculatePoints());
             playerScoreLabel.setForeground(Color.WHITE);
             playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             winPanel.add(playerScoreLabel);
         });
 
-        // Additional styling for the winPanel can be added here, e.g., borders, fonts, etc.
+        // Remove listeners from all player panels
+        panelMap.values().forEach(panel -> {
+            for (Component comp : panel.getComponents()) {
+                if (comp instanceof JButton) {
+                    JButton button = (JButton) comp;
+                    Arrays.stream(button.getMouseListeners()).forEach(button::removeMouseListener);
+                }
+            }
+        });
 
-        // Step 3: Add the panel to the layeredPane
-        layeredPane.add(winPanel, Integer.valueOf(2)); // Adding at a high layer to cover other components
-
-        // Making the panel fill the entire layeredPane
+        // Add the win panel to the layeredPane and make it visible
+        layeredPane.add(winPanel, Integer.valueOf(3)); // Add at the top layer
         winPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
-
-        // Step 4: This method should be called when the game ends to display the win panel
         layeredPane.revalidate();
         layeredPane.repaint();
+
+        // Make sure this method is called when the game ends
+    }
+
+
+    private List<Player> getSortedPlayersByHandValue() {
+        // Clone the list of players to avoid modifying the original list
+        List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
+        // Sort the cloned list based on hand value in ascending order
+        sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
+        return sortedPlayers;
     }
 
 
