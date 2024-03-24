@@ -20,6 +20,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 
+import static GUI.Sound.dealCardSound;
+import static GUI.Sound.drawCardSound;
+
 public class InGameScreen extends JPanel {
     private JPanel centerPanel; // Instance variable for the center panel
     private JLayeredPane layeredPane;
@@ -210,28 +213,6 @@ public class InGameScreen extends JPanel {
         gameEnd = bool;
     }
 
-    public void dealCardSound() {
-        try {
-            // Load the click sound file
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/audio/dealingcardsound.wav"));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    public void drawCardSound() {
-        try {
-            // Load the click sound file
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/audio/flipcard-91468.wav"));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display

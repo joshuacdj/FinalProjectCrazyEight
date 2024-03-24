@@ -1,14 +1,16 @@
 package GUI;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import main.java.*;// Adjust the package path based on your actual structure
 
 import javax.swing.*;
 
+import static GUI.Sound.dealCardSound;
+
 public class Controller implements DrawActionListener{
     private WelcomeScreen welcomeScreen = new WelcomeScreen();
     private Round currentRound = new Round();
-
     private InGameScreen inGameScreen;
 
     public Controller() {
@@ -41,10 +43,12 @@ public class Controller implements DrawActionListener{
                         Thread.currentThread().interrupt();
                         throw new RuntimeException(e);
                     }
+
                     ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
+
                     SwingUtilities.invokeLater(() -> {
                         if (cardNSuit != null) {
-                            inGameScreen.drawCardSound();
+                            dealCardSound();
                             Card cardy = (Card) cardNSuit.get(0);
                             Suit s = (Suit) cardNSuit.get(1);
                             // Updating GUI components must be done on the EDT

@@ -5,6 +5,8 @@ import main.java.CardCompare;
 
 import java.util.*;
 
+import static GUI.Sound.drawCardSound;
+
 public class Computer extends Player {
     private DrawActionListener drawActionListener;
 
@@ -28,6 +30,7 @@ public class Computer extends Player {
                 drawActionListener.onCardDrawn(this); // Notify about the draw
             }
             setPlayableCards(lastPlayedCard);
+            drawCardSound();
             cardsDrawn++;
 
             // Delay for 1 second
