@@ -31,6 +31,7 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
 
     private Controller controller;
+    private int cardsPlayed = 0;
 
     public InGameScreen(Round round, Controller controller) {
         this.round = round;
@@ -198,7 +199,9 @@ public class InGameScreen extends JPanel {
 
         }
     }
-
+    public void setCardsPlayed(int num) {
+        cardsPlayed = num;
+    }
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
         round.getListOfPlayers().get(0).setPlayableCards(discardPile.getTopCard());
@@ -263,6 +266,9 @@ public class InGameScreen extends JPanel {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    if (cardsPlayed != 0) {
+                        return;
+                    }
                     //Initialise the cards the human is able to play
                     //First get the player whose turn it is
                     Player currentPlayer = round.getListOfPlayers().get(0);
@@ -301,6 +307,7 @@ public class InGameScreen extends JPanel {
                             showSuitsButton();
                             return;
                         }
+                        cardsPlayed++;
                     } else {
                         System.out.println("INVALID CARD");
                         return;
@@ -771,6 +778,9 @@ public class InGameScreen extends JPanel {
     }
 
     public void updateDrawPileButton() {
+        if (drawPile.getListOfCards().isEmpty()) {
+            System.out.println("deck is empty");
+        }
         Human humanPlayer = (Human) round.getListOfPlayers().getFirst();
         humanPlayer.setPlayableCards(discardPile.getTopCard());
 

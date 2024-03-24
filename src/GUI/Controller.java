@@ -58,6 +58,7 @@ public class Controller implements DrawActionListener{
                             inGameScreen.updateDiscardPileImage();
                             if(c.getName().equals("Comp 3")){
                                 inGameScreen.updateDrawPileButton();
+                                inGameScreen.setCardsPlayed(0);
                             }
 
 //                            inGameScreen.repaint(); // Ensure the screen is repainted to reflect changes
