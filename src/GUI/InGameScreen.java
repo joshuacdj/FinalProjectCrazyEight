@@ -519,8 +519,12 @@ public class InGameScreen extends JPanel {
 
             // Set the bounds for the button based on the orientation
             cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+
+            // Make sure that the cards added on later are set to the front to overlap nicely
+                panel.setComponentZOrder(panel.getComponent(i), 0);
             }
         }
+
 
         panel.revalidate();
         panel.repaint();
