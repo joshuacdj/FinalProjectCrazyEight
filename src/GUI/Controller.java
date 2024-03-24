@@ -14,6 +14,7 @@ public class Controller implements DrawActionListener{
     private InGameScreen inGameScreen;
 
     public Controller() {
+        backgroundMusic();
         currentRound.roundStart();
         // After creating Computer instances
         for (Player player : currentRound.getListOfPlayers()) {
@@ -77,6 +78,7 @@ public class Controller implements DrawActionListener{
                     if(c.getHand().size() == 0){
                         inGameScreen.setGameEnd(true);
                         endGame();
+                        break;
                     }
                 }
             }
