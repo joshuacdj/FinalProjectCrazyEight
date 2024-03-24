@@ -83,6 +83,7 @@ public class Controller implements DrawActionListener{
         inGameScreen.displayWinPanel();
 //        welcomeScreen.setVisible(false);
     }
+
     private void startGame() {
         showScreen(inGameScreen);
 //        compPlay();

@@ -869,7 +869,10 @@ public class InGameScreen extends JPanel {
         winPanel.add(titleLabel);
 
         // Step 2: Populate the panel with scores
-        round.getListOfPlayers().forEach(player -> {
+        List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
+        sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
+        sortedPlayers.forEach(player -> {
+            player.addPoints(player.calculatePoints());
             JLabel playerScoreLabel = new JLabel(player.getName() + ": " + player.getPoints());
             playerScoreLabel.setForeground(Color.WHITE);
             playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
