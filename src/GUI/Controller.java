@@ -42,11 +42,12 @@ public class Controller implements DrawActionListener{
                         throw new RuntimeException(e);
                     }
                     ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
-                    if (cardNSuit != null) {
-                        Card cardy = (Card) cardNSuit.get(0);
-                        Suit s = (Suit) cardNSuit.get(1);
-                        // Updating GUI components must be done on the EDT
-                        SwingUtilities.invokeLater(() -> {
+                    SwingUtilities.invokeLater(() -> {
+                        if (cardNSuit != null) {
+                            Card cardy = (Card) cardNSuit.get(0);
+                            Suit s = (Suit) cardNSuit.get(1);
+                            // Updating GUI components must be done on the EDT
+
                             currentRound.getDiscardPile().addCard(cardy);
                             if (cardy.getValue() != 8) {
                                 currentRound.getDiscardPile().setTopCard(cardy);
@@ -55,17 +56,19 @@ public class Controller implements DrawActionListener{
                             }
                             // Update GUI here
                             inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));;
-//                            inGameScreen.updateDrawPileButton();
+    //                            inGameScreen.updateDrawPileButton();
                             inGameScreen.updateDiscardPileImage();
-                            if(c.getName().equals("Comp 3")){
-                                inGameScreen.updateDrawPileButton();
+                        } else if (c.getName().equals("Comp 3")) {
                                 inGameScreen.setCardsPlayed(0);
-                            }
+                        }
 
-//                            inGameScreen.repaint(); // Ensure the screen is repainted to reflect changes
-                            // System.out.println("The discard pile's top card is " + cardy);
-                        });
-                    }
+                        if(c.getName().equals("Comp 3")){
+                            inGameScreen.updateDrawPileButton();
+                            inGameScreen.setCardsPlayed(0);
+                        }
+
+                    });
+
                     if(c.getHand().size() == 0){
                         inGameScreen.setGameEnd(true);
                         endGame();
