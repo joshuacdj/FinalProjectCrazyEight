@@ -6,8 +6,7 @@ import main.java.*;// Adjust the package path based on your actual structure
 
 import javax.swing.*;
 
-import static GUI.Sound.backGroundMusic;
-import static GUI.Sound.dealCardSound;
+import static GUI.Sound.*;
 
 public class Controller implements DrawActionListener{
     private WelcomeScreen welcomeScreen = new WelcomeScreen();
@@ -39,6 +38,7 @@ public class Controller implements DrawActionListener{
                     try {
                         // Log computer action
                         System.out.println("This is computer " + c.getName() + ":" + c.getHand());
+                        inGameScreen.highlightPlayerTurn(inGameScreen.determineOrientation(c));
                         // Wait for 3 seconds before proceeding to the next iteration
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -83,6 +83,8 @@ public class Controller implements DrawActionListener{
                     }
                 }
             }
+            inGameScreen.highlightPlayerTurn("South");
+//            inGameScreen.highlightPlayerTurn(inGameScreen.determineOrientation())
 //            inGameScreen.updateDrawPileButton();
         }).start();
     }

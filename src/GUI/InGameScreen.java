@@ -153,7 +153,8 @@ public class InGameScreen extends JPanel {
 //                positionCardButtons(this, orientation);
 //            }
         };
-        playerPanel.setOpaque(false);
+        playerPanel.setOpaque(true);
+        playerPanel.setBackground(Color.YELLOW);
         playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
         // Add a component listener to resize the card buttons when the panel is resized
@@ -178,7 +179,7 @@ public class InGameScreen extends JPanel {
                 positionCardLabel(this, orientation);
             }
         };
-        computer1Panel.setOpaque(false);
+        computer1Panel.setOpaque(true);
         computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
         // Initial card buttons setup
@@ -938,6 +939,30 @@ public class InGameScreen extends JPanel {
         sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
         return sortedPlayers;
     }
+
+    public void highlightPlayerTurn(String orientation) {
+        SwingUtilities.invokeLater(() -> {
+            // Reset all panels to the default background first
+            panelMap.values().forEach(panel -> panel.setBackground(null));
+
+            // Now highlight the active player's panel
+            if (orientation != null) {
+                JPanel activePanel = panelMap.get(orientation);
+                if (activePanel != null) {
+                    // Set to a yellow background to indicate active player
+                    activePanel.setBackground(Color.YELLOW);
+                    activePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Optional: Add a black border for emphasis
+                }
+            }
+
+            // Refresh the panels
+            panelMap.values().forEach(panel -> {
+                panel.revalidate();
+                panel.repaint();
+            });
+        });
+    }
+
 
 
 //    public void onCardDrawn(Player player) {
