@@ -6,6 +6,7 @@ import main.java.*;// Adjust the package path based on your actual structure
 
 import javax.swing.*;
 
+import static GUI.Sound.backGroundMusic;
 import static GUI.Sound.dealCardSound;
 
 public class Controller implements DrawActionListener{
@@ -14,7 +15,7 @@ public class Controller implements DrawActionListener{
     private InGameScreen inGameScreen;
 
     public Controller() {
-        backgroundMusic();
+        backGroundMusic();
         currentRound.roundStart();
         // After creating Computer instances
         for (Player player : currentRound.getListOfPlayers()) {

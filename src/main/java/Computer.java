@@ -5,6 +5,7 @@ import main.java.CardCompare;
 
 import java.util.*;
 
+import static GUI.Sound.dealCardEightSound;
 import static GUI.Sound.drawCardSound;
 
 public class Computer extends Player {
