@@ -772,62 +772,53 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    private MouseListener getDrawListener(Human humanPlayer) {
-        return new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (humanPlayer.canDrawCard() && drawPileButton.isEnabled()) {
-                    // Execute draw logic
-                    humanPlayer.drawCard(drawPile); // Assume this method returns the drawn card and adds it to the player's hand
-                    // Potentially update UI here, like adding the new card to the display
 
-                    refreshPlayerPanel("South"); // Update the player's hand display
-
-                    // Re-evaluate conditions after drawing
-                    updateDrawPileButton();
-                    // If necessary, you can also trigger computer players' turns or other game logic here
-                }else if(!humanPlayer.canDrawCard()){
-                    updateDrawPileButton();
-                    controller.compPlay();
-                }
+    private ActionListener getDrawListener(Human humanPlayer) {
+        return e -> {
+            if (humanPlayer.canDrawCard() && drawPileButton.isEnabled()) {
+                humanPlayer.drawCard(drawPile); // Execute draw logic
+                refreshPlayerPanel("South"); // Update the player's hand display
+                updateDrawPileButton(); // Re-evaluate conditions after drawing
             }
         };
     }
 
     public void updateDrawPileButton() {
         if (drawPile.getListOfCards().isEmpty()) {
-            System.out.println("deck is empty");
+            System.out.println("Deck is empty");
         }
         Human humanPlayer = (Human) round.getListOfPlayers().getFirst();
         humanPlayer.setPlayableCards(discardPile.getTopCard());
+        ActionListener drawListener = getDrawListener(humanPlayer);
+        // Remove all previous action listeners to prevent stacking
+        for(ActionListener al : drawPileButton.getActionListeners()) {
+            drawPileButton.removeActionListener(al);
+        }
 
-        // Setup MouseListener for drawPileButton, if not already added
-        MouseListener drawListener = getDrawListener(humanPlayer);
-        boolean listenerNotAdded = Arrays.stream(drawPileButton.getMouseListeners()).noneMatch(ml -> ml.equals(drawListener));
+        if(humanPlayer.getPlayableCards().size() != 0){
+            humanPlayer.resetDrawCounter();
+            drawPileButton.setEnabled(false);
+        }else if (humanPlayer.canDrawCard()){
+            drawPileButton.setEnabled(true);
+            drawPileButton.addActionListener(drawListener);
+        }else if(!humanPlayer.canDrawCard()){
+            drawPileButton.setEnabled(false);
+            if(humanPlayer.getPlayableCards().size() == 0){
+                controller.compPlay();
+            }
+        }
+
         System.out.println("Human has " + humanPlayer.getPlayableCards().size() + " cards to play");
         System.out.println("Human hand is " + humanPlayer.getHand());
         System.out.println("Top card is " + discardPile.getTopCard());
         System.out.println(humanPlayer.getPlayableCards());
-        if (humanPlayer.getPlayableCards().size() != 0) {
-            humanPlayer.resetDrawCounter();
-            drawPileButton.setEnabled(false);
-            if (!listenerNotAdded) {
-                drawPileButton.removeMouseListener(drawListener);
-            }
-        } else if (humanPlayer.canDrawCard()) {
-            drawPileButton.setEnabled(true);
-            if (listenerNotAdded) {
-                drawPileButton.addMouseListener(drawListener);
-            }
-        } else if (humanPlayer.canDrawCard()) {
-            drawPileButton.setEnabled(false);
-            if (!listenerNotAdded) {
-                drawPileButton.removeMouseListener(drawListener);
-            }
-        }
+
+        // Enable or disable the button based on the player's ability to draw a card
+//        drawPileButton.setEnabled(humanPlayer.getPlayableCards().isEmpty() && humanPlayer.canDrawCard());
         drawPileButton.revalidate();
         drawPileButton.repaint();
     }
+
 
     private Player findHumanPlayer() {
         // Example implementation, adjust based on your actual player management
