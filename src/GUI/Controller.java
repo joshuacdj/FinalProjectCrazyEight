@@ -29,6 +29,7 @@ public class Controller implements DrawActionListener{
         new Thread(() -> {
             ArrayList<Player> playerList = currentRound.getListOfPlayers();
             for (Player p : playerList) {
+                inGameScreen.restockDrawPile();
                 if (p instanceof Computer) {
                     Computer c = (Computer) p;
                     try {
@@ -66,6 +67,7 @@ public class Controller implements DrawActionListener{
                         });
                     }
                     if(c.getHand().size() == 0){
+                        inGameScreen.setGameEnd(true);
                         endGame();
                     }
                 }

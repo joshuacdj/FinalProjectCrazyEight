@@ -52,7 +52,7 @@ public class DiscardPile implements Deck {
 
     public void transferTo(DrawPile drawPile) {
         for(int i = 0; i < listOfCards.size() - 1; i++){
-            drawPile.getListOfCards().addFirst(listOfCards.get(i));
+            drawPile.getListOfCards().addFirst(listOfCards.getFirst());
             listOfCards.removeFirst();
         }
     }

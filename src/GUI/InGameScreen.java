@@ -32,6 +32,7 @@ public class InGameScreen extends JPanel {
 
     private Controller controller;
     private int cardsPlayed = 0;
+    private boolean gameEnd = false;
 
     public InGameScreen(Round round, Controller controller) {
         this.round = round;
@@ -199,9 +200,15 @@ public class InGameScreen extends JPanel {
 
         }
     }
+
     public void setCardsPlayed(int num) {
         cardsPlayed = num;
     }
+
+    public void setGameEnd(boolean bool) {
+        gameEnd = bool;
+    }
+
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
         round.getListOfPlayers().get(0).setPlayableCards(discardPile.getTopCard());
@@ -298,6 +305,7 @@ public class InGameScreen extends JPanel {
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
                                 if (currentPlayer.getHand().size() == 0) {
+                                    gameEnd = true;
                                     controller.endGame();
                                     return;
                                 }
