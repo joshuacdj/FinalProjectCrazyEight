@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 
 public class InGameScreen extends JPanel {
     private JPanel centerPanel; // Instance variable for the center panel
@@ -209,6 +210,29 @@ public class InGameScreen extends JPanel {
         gameEnd = bool;
     }
 
+    public void dealCardSound() {
+        try {
+            // Load the click sound file
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/audio/dealingcardsound.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void drawCardSound() {
+        try {
+            // Load the click sound file
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/audio/flipcard-91468.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
         round.getListOfPlayers().get(0).setPlayableCards(discardPile.getTopCard());
@@ -300,6 +324,7 @@ public class InGameScreen extends JPanel {
                                 currentHand.remove(c);
                                 discardPile.addCard(c);
                                 updateDiscardPileImage();
+                                dealCardSound();
                                 panelMap.get("South").revalidate();
                                 panelMap.get("South").repaint();
                                 setupCardButtons(panelMap.get("South"));
@@ -779,6 +804,7 @@ public class InGameScreen extends JPanel {
                 humanPlayer.drawCard(drawPile); // Execute draw logic
                 refreshPlayerPanel("South"); // Update the player's hand display
                 updateDrawPileButton(); // Re-evaluate conditions after drawing
+                drawCardSound();
             }
         };
     }
