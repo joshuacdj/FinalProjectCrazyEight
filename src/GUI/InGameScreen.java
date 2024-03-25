@@ -1076,14 +1076,14 @@ public class InGameScreen extends JPanel {
             winPanel.add(playerScoreLabel);
         }
         // "Play Again?" button
-        JButton playAgainButton = createCustomButton("Play Again?", 300, 60);
+        JButton playAgainButton = createCustomButton("Play Again", 300, 60);
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
             controller.startNewGame();
         });
 
         // "Close Game" button
-        JButton closeGameButton = createCustomButton("Play Again?", 300, 60);
+        JButton closeGameButton = createCustomButton("Quit Game", 300, 60);
         closeGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         closeGameButton.addActionListener(e -> {
             // Display a confirmation dialog
