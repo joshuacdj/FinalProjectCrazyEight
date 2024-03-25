@@ -46,9 +46,12 @@ public class Controller implements DrawActionListener{
     }
 
     public void compPlay() {
+        // Initialise a new thread to add a delay to computer actions
         new Thread(() -> {
+            // Loop through the players in this round
             ArrayList<Player> playerList = currentRound.getListOfPlayers();
             for (Player p : playerList) {
+                // At the start of every turn, check if the drawpile needs to be restocked
                 inGameScreen.restockDrawPile();
                 if (p instanceof Computer) {
                     Computer c = (Computer) p;
@@ -62,37 +65,45 @@ public class Controller implements DrawActionListener{
                         Thread.currentThread().interrupt();
                         throw new RuntimeException(e);
                     }
-
+                    // Get the card and suit played by the computer
+                    // The suit may differ from the card played if the computer plays an 8
+                    // ArrayList will be null if the computer turn is skipped
                     ArrayList<Object> cardNSuit = c.action(currentRound.getDiscardPile().getTopCard(), currentRound.getDrawPile());
 
                     SwingUtilities.invokeLater(() -> {
                         if (cardNSuit != null) {
                             dealCardSound();
+                            // Get the card and suit played
                             Card cardy = (Card) cardNSuit.get(0);
                             Suit s = (Suit) cardNSuit.get(1);
                             // Updating GUI components must be done on the EDT
 
+                            // Add the card played to the discard pile
                             currentRound.getDiscardPile().addCard(cardy);
+                            // Set the top card accordingly if card played is not an 8
                             if (cardy.getValue() != 8) {
                                 currentRound.getDiscardPile().setTopCard(cardy);
+
+                            // If the top card was an 8, indicate the appropriate suit that was set
                             } else {
                                 currentRound.getDiscardPile().setTopCard(new Card(0, s));
                             }
                             // Update GUI here
-                            inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));;
-    //                            inGameScreen.updateDrawPileButton();
+                            inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));
                             inGameScreen.updateDiscardPileImage();
-                        } else if (c.getName().equals("Comp 3")) {
-                                inGameScreen.setCardsPlayed(0);
-                        }
+                        } //NOTE BOTTOM 3 LINES SHOULD BE UNNECESSARY
+//                        else if (c.getName().equals("Comp 3")) {
+//                                inGameScreen.setCardPlayedByHumanToFalse();
+//                        }
 
+                        // Once Comp 3 has played, update the ability to draw and/or play cards by human
                         if(c.getName().equals("Comp 3")){
                             inGameScreen.updateDrawPileButton();
-                            inGameScreen.setCardsPlayed(0);
+                            inGameScreen.setCardPlayedByHumanToFalse();
                         }
-
                     });
 
+                    // If the computer's hand size is 0, end the game
                     if(c.getHand().size() == 0){
                         inGameScreen.setGameEnd(true);
                         endGame();
@@ -100,21 +111,18 @@ public class Controller implements DrawActionListener{
                     }
                 }
             }
+            // At the end of the third computer playing, highlight the player panel
+            // to indicate it is the human's turn
             inGameScreen.highlightPlayerTurn("South");
-//            inGameScreen.highlightPlayerTurn(inGameScreen.determineOrientation())
-//            inGameScreen.updateDrawPileButton();
         }).start();
     }
     public void endGame(){
         inGameScreen.displayWinPanel();
-//        welcomeScreen.setVisible(false);
     }
 
     private void startGame() {
         showScreen(inGameScreen);
     }
-
-
 
     private void showScreen(JPanel panel) {
         // Switching the content pane to display the specified screen
@@ -124,11 +132,9 @@ public class Controller implements DrawActionListener{
         welcomeScreen.setContentPane(panel);
     }
 
-        public void onCardDrawn(Player player) {
+    public void onCardDrawn(Player player) {
         SwingUtilities.invokeLater(() -> {
-            if (player instanceof Human) {
-//                updateHumanPlayerPanel();
-            } else if (player instanceof Computer) {
+            if (player instanceof Computer) {
                 // Assuming you have a way to get the correct orientation for this computer player
                 String orientation = inGameScreen.determineOrientation(player);
                 inGameScreen.refreshPlayerPanel(orientation);

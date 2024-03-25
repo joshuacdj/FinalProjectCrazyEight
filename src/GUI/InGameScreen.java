@@ -33,7 +33,7 @@ public class InGameScreen extends JPanel {
     private DrawPile drawPile;
     private JButton drawPileButton;
     private Controller controller;
-    private int cardsPlayed = 0;
+    private boolean cardPlayedByHuman = false;
     private boolean gameEnd = false;
     private Color darkGreen= new Color(0x00512C); // Light green
     private Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
@@ -206,8 +206,8 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    public void setCardsPlayed(int num) {
-        cardsPlayed = num;
+    public void setCardPlayedByHumanToFalse() {
+        cardPlayedByHuman = false;
     }
 
     public void setGameEnd(boolean bool) {
@@ -246,7 +246,7 @@ public class InGameScreen extends JPanel {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    if (cardsPlayed != 0) {
+                    if (cardPlayedByHuman) {
                         return;
                     }
                     //Initialise the cards the human is able to play
@@ -266,7 +266,7 @@ public class InGameScreen extends JPanel {
 
                     // remove card from hand if it is a valid card
                     if (cardIsPlayable) {
-                        cardsPlayed++;
+                        cardPlayedByHuman = true;
                         for (Card c : currentHand) {
                             if (chosenCard.equals(c)) {
                                 panelMap.get("South").removeAll();
