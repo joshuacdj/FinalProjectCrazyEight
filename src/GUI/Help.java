@@ -14,7 +14,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.GradientPaint;
-import java.text.AttributedString;
 
 import java.io.*;
 
@@ -37,10 +36,11 @@ public class Help extends JFrame {
 
         JTextArea textBox = new JTextArea();
         textBox.setEditable(false); // Make the text box read-only
+        textBox.getCaret().setVisible(false); // Hide the caret
         textBox.setOpaque(false); // Make the text box transparent
         textBox.setForeground(Color.WHITE); // Set text color to white
         textBox.setLineWrap(true); // Enable line wrapping
-        textBox.setWrapStyleWord(true); // Wrap at word boundaries
+        textBox.setWrapStyleWord(true);
 
         // Add some sample text to the text box
         textBox.setText("Objective: \nThe goal of the game is to have the least number of points when someone clears their hand!\n\n\n" +
@@ -57,12 +57,8 @@ public class Help extends JFrame {
         Font textFont = textBox.getFont();
         textBox.setFont(new Font(textFont.getName(), textFont.getStyle(), 15));
 
-        // Set a custom border to mimic the default border without the black line
-        textBox.setBorder(new TextAreaBorder());
-
-        // Set the margin and padding to zero to remove any extra space
-        textBox.setMargin(new Insets(0, 0, 0, 0));
-        textBox.setBorder(BorderFactory.createEmptyBorder());
+        // Add a border to the text box to create a visible outline
+        textBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JPanel panel = new JPanel(new GridBagLayout()); // Use GridBagLayout for flexible component positioning
 
