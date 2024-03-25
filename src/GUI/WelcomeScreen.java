@@ -147,11 +147,13 @@ public class WelcomeScreen extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        backgroundPanel.add(createCustomButton("Help", 300, 60), gbc);
+        helpButton = createCustomButton("Help", 300, 60);
+        backgroundPanel.add(helpButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        backgroundPanel.add(createCustomButton("Exit", 300, 60), gbc);
+        exitButton = createCustomButton("Exit", 300, 60);
+        backgroundPanel.add(exitButton, gbc);
 
         pack();
         setLocationRelativeTo(null);
@@ -215,6 +217,13 @@ public class WelcomeScreen extends JFrame {
         return playButton;
     }
 
+    public JButton getExitButton(){
+        return exitButton;
+    }
+
+    public JButton getHelpButton(){
+        return helpButton;
+    }
 
 
 
