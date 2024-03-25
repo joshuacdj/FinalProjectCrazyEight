@@ -147,14 +147,151 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    private JPanel createPlayerPanel(String orientation) {
-        JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
+//    private JPanel createPlayerPanel(String orientation) {
+//        JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
+////            @Override
+////            public void doLayout() {
+////                positionCardButtons(this, orientation);
+////            }
+//        };
+//        playerPanel.setOpaque(false);
+//        playerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Remove later
+//
+//        // Add a component listener to resize the card buttons when the panel is resized
+//        playerPanel.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                positionCardButtons(playerPanel, orientation);
+//            }
+//        });
+//
+//        // Initial card buttons setup
+//        setupCardButtons(playerPanel);
+//        updateDrawPileButton();
+//
+//        return playerPanel;
+//    }
+//
+//    private JPanel createComputer1Panel(String orientation) {
+//        JPanel computer1Panel = new JPanel(null) { // Use null layout for absolute positioning
 //            @Override
 //            public void doLayout() {
-//                positionCardButtons(this, orientation);
+//                positionCardLabel(this, orientation);
 //            }
+//        };
+//        computer1Panel.setOpaque(false);
+//
+//        // Initial card buttons setup
+//        setupCardLabel(computer1Panel, orientation);
+//
+//        return computer1Panel;
+//    }
+
+    private JPanel createComputer1Panel(String orientation) {
+        // Create an anonymous subclass of JPanel with custom painting and layout
+        JPanel computer1Panel = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+
+                // Determine the computer's name based on orientation
+                String name = switch (orientation) {
+                    case "West" -> "COMP 1";
+                    case "North" -> "COMP 2";
+                    case "East" -> "COMP 3";
+                    default -> "";
+                };
+
+                // Set the font and color for the name
+                Font font = new Font("Arial", Font.BOLD, 22);
+                g2d.setFont(font);
+                g2d.setColor(Color.WHITE);
+
+                // Get the FontMetrics for calculating text width and height
+                FontMetrics fm = g2d.getFontMetrics();
+                Rectangle2D textBounds = fm.getStringBounds(name, g2d);
+
+                int x, y;
+
+                if ("West".equals(orientation) || "East".equals(orientation)) {
+                    // For vertical orientation, rotate the graphics object
+                    g2d.translate(getWidth() / 2, getHeight() / 2);
+                    g2d.rotate("West".equals(orientation) ? -Math.PI / 2 : Math.PI / 2);
+                    x = (int) (-textBounds.getWidth() / 2);
+//                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
+                    y = 0;
+                } else {
+                    // For horizontal orientation, no rotation is needed
+                    x = (getWidth() - (int) textBounds.getWidth()) / 2;
+                    y = (getHeight() - (int) textBounds.getHeight()) / 2 + fm.getAscent();
+                }
+
+                // Draw the string such that it is centered on the panel
+                g2d.drawString(name, x, y);
+                g2d.dispose();
+            }
+
+            @Override
+            public void doLayout() {
+                positionCardLabel(this, orientation);
+            }
+        };
+        computer1Panel.setOpaque(false);
+
+        // Setup card labels or any other initial setup
+        setupCardLabel(computer1Panel, orientation);
+
+        return computer1Panel;
+    }
+
+//    public void refreshPlayerPanel(String orientation) {
+//        // Assuming orientation is something like "North", "South", "East", "West"
+//        JPanel playerPanel = panelMap.get(orientation);
+//        if (playerPanel != null) {
+//            // Clear the panel before re-adding updated content
+//            playerPanel.removeAll();
+//
+//            // Utilize existing setup methods based on orientation
+//            if ("South".equals(orientation)) {
+//                // Assuming South is always the human player in your game setup
+//                setupCardButtons(playerPanel); // If this method sets up the human player's cards
+//                positionCardButtons(playerPanel, "South");
+//            } else {
+//                // For computer players
+//                setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
+//                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
+//            }
+//
+//            // Reposition labels or buttons as needed, potentially reusing existing logic
+//
+//            playerPanel.revalidate();
+//            playerPanel.repaint();
+//        }
+//    }
+
+
+    private JPanel createPlayerPanel(String orientation) {
+        JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Set the color and font for the text
+                g.setColor(Color.WHITE); // Set the text color
+                g.setFont(new Font("Arial", Font.BOLD, 48)); // Set the text font and size
+
+                // Calculate the position of the text to center it in the panel
+                FontMetrics metrics = g.getFontMetrics(g.getFont());
+                String text = "YOU";
+                int x = (getWidth() - metrics.stringWidth(text)) / 2;
+                int y = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+
+                // Draw the text
+                g.drawString(text, x, y);
+            }
         };
         playerPanel.setOpaque(false);
+//        playerPanel.setBackground(Color.YELLOW);
         playerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Remove later
 
         // Add a component listener to resize the card buttons when the panel is resized
@@ -170,21 +307,6 @@ public class InGameScreen extends JPanel {
         updateDrawPileButton();
 
         return playerPanel;
-    }
-
-    private JPanel createComputer1Panel(String orientation) {
-        JPanel computer1Panel = new JPanel(null) { // Use null layout for absolute positioning
-            @Override
-            public void doLayout() {
-                positionCardLabel(this, orientation);
-            }
-        };
-        computer1Panel.setOpaque(false);
-
-        // Initial card buttons setup
-        setupCardLabel(computer1Panel, orientation);
-
-        return computer1Panel;
     }
 
     private void setupSuitButtons(JLayeredPane centerPanel) {
@@ -724,6 +846,31 @@ public class InGameScreen extends JPanel {
             }
         });
     }
+
+//    public void refreshPlayerPanel(String orientation) {
+//        // Assuming orientation is something like "North", "South", "East", "West"
+//        JPanel playerPanel = panelMap.get(orientation);
+//        if (playerPanel != null) {
+//            // Clear the panel before re-adding updated content
+//            playerPanel.removeAll();
+//
+//            // Utilize existing setup methods based on orientation
+//            if ("South".equals(orientation)) {
+//                // Assuming South is always the human player in your game setup
+//                setupCardButtons(playerPanel); // If this method sets up the human player's cards
+//                positionCardButtons(playerPanel, "South");
+//            } else {
+//                // For computer players
+//                setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
+//                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
+//            }
+//
+//            // Reposition labels or buttons as needed, potentially reusing existing logic
+//
+//            playerPanel.revalidate();
+//            playerPanel.repaint();
+//        }
+//    }
 
     public void refreshPlayerPanel(String orientation) {
         // Assuming orientation is something like "North", "South", "East", "West"

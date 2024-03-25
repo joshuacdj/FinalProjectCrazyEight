@@ -43,10 +43,6 @@ public abstract class Player {
         return name;
     }
 
-    // [card, desiredSuit]
-    // Returns null if player skips turn (drew 5 cards)
-    public abstract ArrayList<Object> action(Card card, DrawPile deck);
-
     // Add points to the player depending on the value of the cards left in their hand at the end of a round
     public void addPoints(int points) {
         this.points += points;
@@ -74,10 +70,6 @@ public abstract class Player {
     public void drawCard(Card card) {
         hand.add(card);
     }
-
-    // How card is deemed playable
-
-
 
     // Remove the card from current hand
     public void removeCard(Card card) {
@@ -107,20 +99,4 @@ public abstract class Player {
         } else return currCard.getValue() == 8;
     }
 
-
-    @Override
-    public String toString() {
-        try {
-            StringBuilder sb = new StringBuilder();
-            for (Card c : hand) {
-                sb.append(c);
-            }
-
-            return sb.toString();
-        } catch (NullPointerException e) {
-            System.out.println("No cards in hand!");
-        }
-
-        return "";
-    }
 }
