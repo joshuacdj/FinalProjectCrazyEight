@@ -25,6 +25,7 @@ public class Help extends JFrame {
 
         setTitle("Help");
         setSize(1000, 600);
+        setMinimumSize(new Dimension(800,500));
         setLocationRelativeTo(null); // Center the window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Dispose the window on close
 
@@ -36,7 +37,7 @@ public class Help extends JFrame {
 
         JTextArea textBox = new JTextArea();
         textBox.setEditable(false); // Make the text box read-only
-        textBox.getCaret().setVisible(false); // Hide the caret
+        textBox.setFocusable(false);
         textBox.setOpaque(false); // Make the text box transparent
         textBox.setForeground(Color.WHITE); // Set text color to white
         textBox.setLineWrap(true); // Enable line wrapping
