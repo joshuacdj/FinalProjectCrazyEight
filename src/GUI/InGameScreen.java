@@ -155,11 +155,29 @@ public class InGameScreen extends JPanel {
     }
 
     private JPanel createPlayerPanel(String orientation) {
+//        JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
+////            @Override
+////            public void doLayout() {
+////                positionCardButtons(this, orientation);
+////            }
+//        };
         JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
-//            @Override
-//            public void doLayout() {
-//                positionCardButtons(this, orientation);
-//            }
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Set the color and font for the text
+                g.setColor(Color.WHITE); // Set the text color
+                g.setFont(new Font("Arial", Font.BOLD, 48)); // Set the text font and size
+
+                // Calculate the position of the text to center it in the panel
+                FontMetrics metrics = g.getFontMetrics(g.getFont());
+                String text = "YOU";
+                int x = (getWidth() - metrics.stringWidth(text)) / 2;
+                int y = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+
+                // Draw the text
+                g.drawString(text, x, y);
+            }
         };
         playerPanel.setOpaque(false);
 //        playerPanel.setBackground(Color.YELLOW);
@@ -180,38 +198,217 @@ public class InGameScreen extends JPanel {
         return playerPanel;
     }
 
+//    private JPanel createPlayerPanel(String orientation) {
+//        // Create a panel that will serve as the container for everything
+//        JPanel containerPanel = new JPanel(new BorderLayout());
+//        containerPanel.setOpaque(false);
+//        containerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+//
+//        // Create a layered pane to hold the cards and the label
+//        JLayeredPane layeredPane = new JLayeredPane();
+//        containerPanel.add(layeredPane, BorderLayout.CENTER);
+//
+//        // Create the player panel for cards with null layout for absolute positioning
+//        JPanel playerPanel = new JPanel(null);
+//        playerPanel.setOpaque(false);
+//        playerPanel.setBounds(0, 0, containerPanel.getWidth(), containerPanel.getHeight()); // Cover the whole area of the layered pane
+//        layeredPane.add(playerPanel, Integer.valueOf(1)); // Z-order 1
+//
+//        // Add the "YOU" label to the layered pane directly
+//        JLabel youLabel = new JLabel("YOU", SwingConstants.CENTER);
+//        youLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Adjust font size as needed
+//        youLabel.setBounds(0, 0, containerPanel.getWidth(), containerPanel.getHeight()); // Make the label cover the whole area
+//        layeredPane.add(youLabel, Integer.valueOf(2)); // Z-order 2 so it's above the cards
+//
+//        // Ensuring the layeredPane and its components adjust to containerPanel size changes
+//        containerPanel.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                super.componentResized(e);
+//                int width = containerPanel.getWidth();
+//                int height = containerPanel.getHeight();
+//                layeredPane.setSize(width, height);
+//                playerPanel.setBounds(0, 0, width, height);
+//                youLabel.setBounds(0, 0, width, height);
+//            }
+//        });
+//
+//        // Your existing card setup and update methods remain the same
+//        setupCardButtons(playerPanel);
+//        positionCardButtons(playerPanel, orientation);
+//        updateDrawPileButton();
+//
+//        return containerPanel; // Return the container with layered pane
+//    }
+
+//    private JPanel createPlayerPanel(String orientation) {
+//        // Create a panel that will serve as the container for everything
+//        JLayeredPane layeredPane = new JLayeredPane();
+//        JPanel playerPanel = new JPanel(null);
+//        JLabel youLabel = new JLabel("YOU", SwingConstants.CENTER);
+//        JPanel containerPanel = new JPanel(new BorderLayout()) {
+//            @Override
+//            public void doLayout() {
+//                super.doLayout();
+//                layeredPane.setSize(getSize());
+//                playerPanel.setSize(getSize());
+//                youLabel.setSize(getSize());
+//                positionCardButtons(playerPanel, orientation);
+//            }
+//        };
+//        containerPanel.setOpaque(false);
+//        containerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+//
+//        // Initialized as fields or ensure they are final to be used in the doLayout override
+//
+//
+//        // Setup playerPanel
+//        playerPanel.setOpaque(false);
+//
+//        // Setup youLabel
+//        youLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Adjust font size as needed
+//        youLabel.setForeground(Color.WHITE); // Ensure the text is visible
+//
+//        // Add components to the layeredPane
+//        layeredPane.add(playerPanel, JLayeredPane.DEFAULT_LAYER);
+//        layeredPane.add(youLabel, JLayeredPane.PALETTE_LAYER);
+//
+//        // Add the layeredPane to the containerPanel
+//        containerPanel.add(layeredPane, BorderLayout.CENTER);
+//
+//        // Your existing card setup and update methods remain the same
+//        setupCardButtons(playerPanel);
+//        updateDrawPileButton();
+//
+//        return containerPanel; // Return the container with layered pane
+//    }
+
+//    private JPanel createPlayerPanel(String orientation) {
+//        // Main container panel with BorderLayout to hold everything
+//        JPanel containerPanel = new JPanel(new BorderLayout());
+//        containerPanel.setOpaque(false);
+//
+//        // JLayeredPane for layering components
+//        JLayeredPane layeredPane = new JLayeredPane();
+//        containerPanel.add(layeredPane, BorderLayout.CENTER);
+//
+//        // Player panel for cards, with null layout for absolute positioning
+//        JPanel playerPanel = new JPanel(null);
+//        playerPanel.setOpaque(false);
+//        layeredPane.add(playerPanel, JLayeredPane.DEFAULT_LAYER);
+//
+//        // "YOU" label setup
+//        JLabel youLabel = new JLabel("YOU", SwingConstants.CENTER);
+//        youLabel.setFont(new Font("Arial", Font.BOLD, 24));
+//        youLabel.setForeground(Color.WHITE); // Set color to ensure visibility
+//        layeredPane.add(youLabel, JLayeredPane.PALETTE_LAYER); // Ensuring label is above cards
+//
+//        // Component listener for resizing
+//        containerPanel.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                int width = containerPanel.getWidth();
+//                int height = containerPanel.getHeight();
+//                layeredPane.setSize(width, height);
+//                playerPanel.setBounds(0, 0, width, height);
+//                youLabel.setBounds(0, 0, width, height);
+//            }
+//        });
+//
+//        // Initial card buttons setup and other initializations...
+//        setupCardButtons(playerPanel);
+//        positionCardButtons(playerPanel, orientation);
+//
+//        return containerPanel;
+//    }
+
+
+
+//    private JPanel createComputer1Panel(String orientation) {
+//        JPanel computer1Panel = new JPanel(null) { // Use null layout for absolute positioning
+//            @Override
+//            public void doLayout() {
+//                positionCardLabel(this, orientation);
+//            }
+//        };
+//        computer1Panel.setOpaque(false);
+////        computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
+//
+//        // Initial card buttons setup
+//        setupCardLabel(computer1Panel, orientation);
+//
+//        return computer1Panel;
+//    }
+
     private JPanel createComputer1Panel(String orientation) {
-        JPanel computer1Panel = new JPanel(null) { // Use null layout for absolute positioning
+        // Create an anonymous subclass of JPanel with custom painting and layout
+        JPanel computer1Panel = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+
+                // Determine the computer's name based on orientation
+                String name = switch (orientation) {
+                    case "West" -> "COMP 1";
+                    case "North" -> "COMP 2";
+                    case "East" -> "COMP 3";
+                    default -> "";
+                };
+
+                // Set the font and color for the name
+                Font font = new Font("Arial", Font.BOLD, 22);
+                g2d.setFont(font);
+                g2d.setColor(Color.WHITE);
+
+                // Get the FontMetrics for calculating text width and height
+                FontMetrics fm = g2d.getFontMetrics();
+                Rectangle2D textBounds = fm.getStringBounds(name, g2d);
+
+                int x, y;
+
+                if ("West".equals(orientation) || "East".equals(orientation)) {
+                    // For vertical orientation, rotate the graphics object
+                    g2d.translate(getWidth() / 2, getHeight() / 2);
+                    g2d.rotate("West".equals(orientation) ? -Math.PI / 2 : Math.PI / 2);
+                    x = (int) (-textBounds.getWidth() / 2);
+//                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
+                    y = 0;
+                } else {
+                    // For horizontal orientation, no rotation is needed
+                    x = (getWidth() - (int) textBounds.getWidth()) / 2;
+                    y = (getHeight() - (int) textBounds.getHeight()) / 2 + fm.getAscent();
+                }
+
+                // Draw the string such that it is centered on the panel
+                g2d.drawString(name, x, y);
+                g2d.dispose();
+            }
+
             @Override
             public void doLayout() {
                 positionCardLabel(this, orientation);
             }
         };
         computer1Panel.setOpaque(false);
-//        computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
-        // Initial card buttons setup
+        // Setup card labels or any other initial setup
         setupCardLabel(computer1Panel, orientation);
 
         return computer1Panel;
     }
 
-    private void setupSuitButtons(JLayeredPane centerPanel) {
-        int numSuits = 4;
 
-        for (int i = 0; i < numSuits; i ++) {
-            JButton suitButton = new JButton();
-            suitButton.setBorderPainted(false);
-            suitButton.setContentAreaFilled(false);
-            suitButton.setFocusPainted(false);
-            suitButton.setOpaque(false);
-
-            centerPanel.add(suitButton);
-
-            suitButton.addMouseListener(new MouseAdapter() {
-
-            });
-
+    private String getNameBasedOnOrientation(String orientation) {
+        switch (orientation) {
+            case "West":
+                return "Comp 1";
+            case "North":
+                return "Comp 2";
+            case "East":
+                return "Comp 3";
+            default:
+                return ""; // Default case, should not happen
         }
     }
 
@@ -612,6 +809,8 @@ public class InGameScreen extends JPanel {
             JLabel back_card = (JLabel) panel.getComponent(i);
             ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/back_card.png", cardWidth, cardHeight, isVertical);
             back_card.setIcon(icon);
+            back_card.setOpaque(false);
+            back_card.setBorder(null);
 
             // Adjust the offset for the north panel to position cards at the top right
             if ("North".equals(orientation)) {
@@ -881,6 +1080,10 @@ public class InGameScreen extends JPanel {
             playerPanel.repaint();
         }
     }
+
+
+
+
 
 
     private ActionListener getDrawListener(Human humanPlayer) {
