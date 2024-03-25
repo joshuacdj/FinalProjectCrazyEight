@@ -12,30 +12,11 @@ public class DiscardPile implements Deck {
     public ArrayList<Card> getCards(){
         return listOfCards;
     }
-    //    [Card, DesiredSuit]
 
     public void addCard(Card c) {
         listOfCards.add(c);
         topCard = c;
-//        if(c.getValue() != 8){
-//            topCard = c;
-
-//        }else{
-//            Scanner sc = new Scanner(System.in);
-//            String suitName = sc.nextLine();
-//            Suit suit = switch (suitName)
-//                case ("DIAMONDS") -> Suit.DIAMONDS;
-//                case ("CLUBS") -> Suit.CLUBS;
-//                case ("HEARTS") -> Suit.HEARTS;
-//                case ("SPADES") -> Suit.SPADES;
-//                default -> c.getSuit();
-//            };
-//            //
-//            topCard = new Card(c.getValue(), suit);
-//        }
     }
-
-
 
     public void setTopCard(Card topCard) {
         this.topCard = topCard;
