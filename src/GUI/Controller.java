@@ -13,6 +13,8 @@ public class Controller implements DrawActionListener{
     private Round currentRound = new Round();
     private InGameScreen inGameScreen;
 
+    private Help help = new Help();
+
     public Controller() {
         backGroundMusic();
         currentRound.roundStart();
@@ -113,7 +115,6 @@ public class Controller implements DrawActionListener{
     private void startGame() {
         showScreen(inGameScreen);
     }
-
 
 
     private void showScreen(JPanel panel) {
