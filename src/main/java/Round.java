@@ -92,43 +92,6 @@ public class Round {
         }
     }
 
-    public void roundStart2() {
-
-
-
-        // each player goes through their turns until the round ends this is going to take forever!
-        while (!roundEnd()){
-            for (Player currentPlayer : listOfPlayers) {
-                // current player makes his move
-                // TODO: Implement player play himself
-//                Card cardPlayed = currentPlayer.play();
-
-                checkPileSize(drawPile, discardPile);
-
-                // Add the played card to the discard pile only if it is not null aka skip turn
-//                if (cardPlayed != null) {
-//                    discardPile.addCard(cardPlayed);
-//                }
-
-                // check if player's hand is 0 to break out of the for loop
-                if (roundEnd()) {
-                    break;
-                }
-            }
-        }
-
-        // At the end of the round, we sum up the points of each player and clear their hand
-        // Loop through each player
-        for (Player p : listOfPlayers) {
-
-            // Sum up the total points for each player
-            p.addPoints(p.calculatePoints());
-        }
-
-        //This will clear every player's hand at the end of the round
-        clearAllPlayerHands();
-    }
-
     public boolean roundEnd() {
 
         // Initialise round end to be false
