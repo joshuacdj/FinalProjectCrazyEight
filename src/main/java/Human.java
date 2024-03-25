@@ -1,10 +1,5 @@
 package main.java;
 
-import main.java.Card;
-import main.java.DrawPile;
-
-import java.util.*;
-
 public class Human extends Player {
 
     private int cardsDrawnThisTurn = 0;
