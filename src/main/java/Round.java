@@ -103,7 +103,7 @@ public class Round {
                 // TODO: Implement player play himself
 //                Card cardPlayed = currentPlayer.play();
 
-                checkPileSize(drawPile, discardPile);
+//                checkPileSize(drawPile, discardPile);
 
                 // Add the played card to the discard pile only if it is not null aka skip turn
 //                if (cardPlayed != null) {
