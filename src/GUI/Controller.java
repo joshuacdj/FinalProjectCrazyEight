@@ -26,6 +26,23 @@ public class Controller implements DrawActionListener{
         // Initialize the main JFrame to hold different screens (panels)
         welcomeScreen.setVisible(true);
         welcomeScreen.getPlayButton().addActionListener(e -> startGame());
+        welcomeScreen.getExitButton().addActionListener(e -> {
+            // Display a confirmation dialog
+            int confirm = JOptionPane.showConfirmDialog(
+                    welcomeScreen, // Assuming 'inGameScreen' is the component you want to anchor the dialog to
+                    "Are you sure you want to quit the game?", // The message to display
+                    "Quit Game", // The title of the dialog window
+                    JOptionPane.YES_NO_OPTION, // Option type (Yes/No)
+                    JOptionPane.QUESTION_MESSAGE // Message type
+            );
+
+            // Check if the user confirmed
+            if (confirm == JOptionPane.YES_OPTION) {
+                // User clicked "YES", so exit the game
+                System.exit(0);
+            }
+            // If "NO" or closed dialog, do nothing and return to the game
+        });
     }
 
     public void compPlay() {
@@ -95,7 +112,6 @@ public class Controller implements DrawActionListener{
 
     private void startGame() {
         showScreen(inGameScreen);
-//        compPlay();
     }
 
 
@@ -118,6 +134,26 @@ public class Controller implements DrawActionListener{
                 inGameScreen.refreshPlayerPanel(orientation);
             }
         });
+    }
+
+    public void startNewGame() {
+        // Initialize or reinitialize game state
+        currentRound = new Round();
+        currentRound.roundStart();
+        for (Player player : currentRound.getListOfPlayers()) {
+            if (player instanceof Computer) {
+                ((Computer) player).setDrawActionListener(this);
+            }
+        }
+
+        // Setup InGameScreen for a new game
+        if (inGameScreen != null) {
+            inGameScreen.setVisible(false); // Hide or dispose of the existing InGameScreen
+            inGameScreen = null; // Ensure the old instance is discarded
+        }
+        inGameScreen = new InGameScreen(currentRound, this);
+        showScreen(inGameScreen); // Method to switch the view to InGameScreen, if needed
+        inGameScreen.setVisible(true);
     }
 
     public static void main(String[] args) {
