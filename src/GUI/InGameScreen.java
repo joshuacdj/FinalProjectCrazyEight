@@ -31,12 +31,12 @@ public class InGameScreen extends JPanel {
     private Map<String, JPanel> panelMap = new HashMap<>();
     private JLabel discardPileLabel = new JLabel();
     private DrawPile drawPile;
-
     private JButton drawPileButton;
-
     private Controller controller;
     private int cardsPlayed = 0;
     private boolean gameEnd = false;
+    private Color darkGreen= new Color(0x00512C); // Light green
+    private Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
 
     public InGameScreen(Round round, Controller controller) {
         this.round = round;
@@ -52,8 +52,8 @@ public class InGameScreen extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
 
         // Set the weights to distribute extra space equally among all components
-        gbc.weightx = 1.0; // Equal horizontal weight
-        gbc.weighty = 1.0; // Equal vertical weight
+//        gbc.weightx = 1.0; // Equal horizontal weight
+//        gbc.weighty = 1.0; // Equal vertical weight
 
         // Initialize the layered pane
         layeredPane = new JLayeredPane();
@@ -125,6 +125,15 @@ public class InGameScreen extends JPanel {
         gbc.weighty = 1.0;
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        GradientPaint gradientPaint = new GradientPaint(0, 0, darkGreen, 0, getHeight(), lightGreen);
+        g2d.setPaint(gradientPaint);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+    }
+
     private void adjustPlayCardButtonPosition() {
         // Find the "Play card?" button and adjust its position
 
@@ -152,9 +161,9 @@ public class InGameScreen extends JPanel {
 //                positionCardButtons(this, orientation);
 //            }
         };
-        playerPanel.setOpaque(true);
-        playerPanel.setBackground(Color.YELLOW);
-        playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
+        playerPanel.setOpaque(false);
+//        playerPanel.setBackground(Color.YELLOW);
+        playerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Remove later
 
         // Add a component listener to resize the card buttons when the panel is resized
         playerPanel.addComponentListener(new ComponentAdapter() {
@@ -178,8 +187,8 @@ public class InGameScreen extends JPanel {
                 positionCardLabel(this, orientation);
             }
         };
-        computer1Panel.setOpaque(true);
-        computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
+        computer1Panel.setOpaque(false);
+//        computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
         // Initial card buttons setup
         setupCardLabel(computer1Panel, orientation);
@@ -462,11 +471,12 @@ public class InGameScreen extends JPanel {
             numCards = round.getListOfPlayers().get(3).getHand().size();
         }
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.LAST_LINE_END;
         for (int i = 0; i < numCards; i++) {
             JLabel cardLabel = new JLabel(); // Create button without icon initially
-
             // Add the card button to the panel
-            panel.add(cardLabel);
+            panel.add(cardLabel, gbc);
         }
     }
 
@@ -571,18 +581,36 @@ public class InGameScreen extends JPanel {
         int xOffset = 0;
         int yOffset = 0;
 
-            for ( int i = 0; i < numCards; i++) {
-                JLabel back_card = (JLabel) panel.getComponent(i);
-                ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/back_card.png", cardWidth, cardHeight, isVertical);
-                back_card.setIcon(icon);
-                if (!isVertical) {
-                    xOffset = (cardWidth - 90)*i;
-                } else {
-                    yOffset = (cardHeight - 90)*i;
-                }
 
-                // Set the bounds for the button based on the orientation
-                back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+        for (int i = 0; i < numCards; i++) {
+            JLabel back_card = (JLabel) panel.getComponent(i);
+            ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/back_card.png", cardWidth, cardHeight, isVertical);
+            back_card.setIcon(icon);
+
+            // Adjust the offset for the north panel to position cards at the top right
+            if ("North".equals(orientation)) {
+                xOffset = panelWidth - cardWidth - (cardWidth - 90) * i;
+            }
+
+            // Adjust the xOffset for the east panel to position cards from the bottom right
+            if ("East".equals(orientation)) {
+                xOffset = panelWidth - cardWidth;
+                yOffset = panelHeight - cardHeight - (cardHeight - 90) * i;
+            }
+
+            if ("West".equals(orientation)) {
+                yOffset = (cardHeight - 90) * i;
+            }
+
+            // Set the bounds for the button based on the orientation
+            back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+
+            // Update the yOffset for the next card
+//            if (!isVertical) {
+//                xOffset = (cardWidth - 90) * i;
+//            } else {
+//                yOffset = (cardHeight - 90) * i;
+//            }
         }
 
 
@@ -946,15 +974,15 @@ public class InGameScreen extends JPanel {
     public void highlightPlayerTurn(String orientation) {
         SwingUtilities.invokeLater(() -> {
             // Reset all panels to the default background first
-            panelMap.values().forEach(panel -> panel.setBackground(null));
+            panelMap.values().forEach(panel -> panel.setBorder(null));
 
             // Now highlight the active player's panel
             if (orientation != null) {
                 JPanel activePanel = panelMap.get(orientation);
                 if (activePanel != null) {
                     // Set to a yellow background to indicate active player
-                    activePanel.setBackground(Color.YELLOW);
-                    activePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Optional: Add a black border for emphasis
+//                    activePanel.setBackground(Color.YELLOW);
+                    activePanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Optional: Add a black border for emphasis
                 }
             }
 
