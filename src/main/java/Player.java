@@ -71,10 +71,6 @@ public abstract class Player {
         hand.add(card);
     }
 
-    // How card is deemed playable
-
-
-
     // Remove the card from current hand
     public void removeCard(Card card) {
         hand.remove(card);
