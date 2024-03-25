@@ -48,7 +48,8 @@ public class Help extends JFrame {
                 "You can play any card that matches the SUIT or VALUE of the top card of the discard pile.\n" +
                 "BUT an 8 can be played anytime and upon playing an 8, you can set the current suit to any suit you want!\n" +
                 "If you don't have any playable cards, you can draw up to 5 cards. If you still don't have any cards to play, your turn will be skipped!\n\n\n" +
-                "How to Win: \nThe game ends when someone empties their entire hand and the loser is determined by the number of points you have at the end of the game with Aces being 1 point and Kings being worth 13 points. However, any 8 is worth 50 POINTS!!!\n\n\n" +
+                "How to Win: \nThe game ends when someone empties their entire hand and the loser is determined by the number of points he/she has at the end of the game.\n" +
+                "Aces are 1 point, Kings are 13 points. Any 8 cards are worth 50 POINTS!\n\n\n" +
                 "Have fun playing!\n");
 
 
