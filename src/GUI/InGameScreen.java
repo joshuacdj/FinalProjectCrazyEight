@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
+import javax.swing.border.Border;
 
 import static GUI.Sound.*;
 
@@ -226,17 +227,24 @@ public class InGameScreen extends JPanel {
 
                 int x, y;
 
-                if ("West".equals(orientation) || "East".equals(orientation)) {
+                if ("East".equals(orientation)) {
+                    // For East orientation
+                    g2d.translate(22, getHeight() / 2);
+                    g2d.rotate(-Math.PI / 2);
+                    x = (int) (-textBounds.getWidth() / 2);
+                    y = 0;
+                } else if ("West".equals(orientation)) {
                     // For vertical orientation, rotate the graphics object
-                    g2d.translate(getWidth() / 2, getHeight() / 2);
-                    g2d.rotate("West".equals(orientation) ? -Math.PI / 2 : Math.PI / 2);
+                    g2d.translate(getWidth() - 22, getHeight() / 2);
+                    g2d.rotate(Math.PI / 2);
                     x = (int) (-textBounds.getWidth() / 2);
 //                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
                     y = 0;
                 } else {
-                    // For horizontal orientation, no rotation is needed
-                    x = (getWidth() - (int) textBounds.getWidth()) / 2;
-                    y = (getHeight() - (int) textBounds.getHeight()) / 2 + fm.getAscent();
+                    g2d.translate(getWidth() / 2, getHeight() - 22);
+                    g2d.rotate(Math.PI);
+                    x = 0;
+                    y = 0;
                 }
 
                 // Draw the string such that it is centered on the panel
@@ -250,6 +258,9 @@ public class InGameScreen extends JPanel {
             }
         };
         computer1Panel.setOpaque(false);
+
+        Border roundedBorder = new RoundedBorder(20, Color.white, 3);
+        computer1Panel.setBorder(roundedBorder);
 
         // Setup card labels or any other initial setup
         setupCardLabel(computer1Panel, orientation);
@@ -290,13 +301,13 @@ public class InGameScreen extends JPanel {
                 super.paintComponent(g);
                 // Set the color and font for the text
                 g.setColor(Color.WHITE); // Set the text color
-                g.setFont(new Font("Arial", Font.BOLD, 48)); // Set the text font and size
+                g.setFont(new Font("Arial", Font.BOLD, 22)); // Set the text font and size
 
                 // Calculate the position of the text to center it in the panel
                 FontMetrics metrics = g.getFontMetrics(g.getFont());
                 String text = "YOU";
                 int x = (getWidth() - metrics.stringWidth(text)) / 2;
-                int y = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+                int y = metrics.getHeight();
 
                 // Draw the text
                 g.drawString(text, x, y);
@@ -304,8 +315,9 @@ public class InGameScreen extends JPanel {
         };
         playerPanel.setOpaque(false);
 //        playerPanel.setBackground(Color.YELLOW);
-        playerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Remove later
 
+        Border roundedBorder = new RoundedBorder(20, Color.ORANGE, 3);
+        playerPanel.setBorder(roundedBorder);
         // Add a component listener to resize the card buttons when the panel is resized
         playerPanel.addComponentListener(new ComponentAdapter() {
             @Override
@@ -763,7 +775,8 @@ public class InGameScreen extends JPanel {
 
     private JPanel createCenterPanel() {
 
-        JPanel centerPanel = new JPanel(new GridLayout(1, 4, 0, 0)); // 1 row, 2 columns with a gap of 10px
+        JPanel centerPanel = new JPanel(new GridLayout(1, 3, 0, 0)); // 1 row, 2 columns with a gap of 10px
+        GridBagConstraints gbc = new GridBagConstraints();
         centerPanel.setOpaque(false);
 
         // drawpilebutton
@@ -775,8 +788,12 @@ public class InGameScreen extends JPanel {
         // Make buttons transparent
         drawPileButton.setBorder(BorderFactory.createEmptyBorder());
         drawPileButton.setContentAreaFilled(false);
-        centerPanel.add(drawPileButton);
+        gbc.gridx = 0;
+        centerPanel.add(drawPileButton, gbc );
 
+        // Action History Label
+
+        
         // Prepare discard pile icon and label, and place it within a panel for centering
         String filePath = discardPile.getCards().getLast().getFilepath();
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
@@ -785,7 +802,8 @@ public class InGameScreen extends JPanel {
         JPanel discardPilePanel = new JPanel(new GridBagLayout()); // Use GridBagLayout for auto-centering within the panel
         discardPilePanel.setOpaque(false);
         discardPilePanel.add(discardPileLabel); // This will center the label within the discardPilePanel
-        centerPanel.add(discardPilePanel);
+        gbc.gridx = 2;
+        centerPanel.add(discardPilePanel, gbc);
 
         // If you have a third component, add it here, or you can adjust the GridLayout and this method accordingly
 
@@ -1109,14 +1127,14 @@ public class InGameScreen extends JPanel {
     public void highlightPlayerTurn(String orientation) {
         SwingUtilities.invokeLater(() -> {
             // Reset all panels to the default background first
-            panelMap.values().forEach(panel -> panel.setBorder(null));
+            panelMap.values().forEach(panel -> panel.setBorder(new RoundedBorder(20, Color.white, 3)));
 
             // Now highlight the active player's panel
             if (orientation != null) {
                 JPanel activePanel = panelMap.get(orientation);
                 if (activePanel != null) {
                     // Set to a yellow border to indicate active player
-                    activePanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Optional: Add a black border for emphasis
+                    activePanel.setBorder(new RoundedBorder(20, Color.orange, 3)); // Optional: Add a black border for emphasis
                 }
             }
 
