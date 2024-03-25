@@ -71,17 +71,12 @@ public class Round {
         discardPile.addCard(startingCard);
     }
 
-    public void checkPileSize(DrawPile drawPile, DiscardPile discardPile) {
-        if (drawPile.getNoOfCardsRemaining() <= 5) {
-            discardPile.transferTo(drawPile);
-        }
-    }
-
     public void clearAllPlayerHands() {
         for (Player p : listOfPlayers) {
             p.clearHand();
         }
     }
+
     public void roundStart() {
 
         // shuffle a new deck

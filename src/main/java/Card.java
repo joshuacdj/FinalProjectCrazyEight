@@ -11,23 +11,22 @@ public class Card {
     private String filepath;
     // Instance of value and suit
 
-
+    // Card constructor
     public Card(int value, Suit suit) {
         // 11 -> J ; 12 -> Q ; 13 -> K
         this.value = value;
         this.suit = suit;
         this.filepath = "src/main/resources/images/" + value + "_of_" + suit.toString().toLowerCase() + ".png";
     }
-    // Card constructor
 
     public String getFilepath() {
         return filepath;
     }
 
+    // Return the face value of the card
     public int getValue() {
         return value;
     }
-    // Return the face value of the card
 
     // Return the suit of the card
     public Suit getSuit() {
@@ -55,7 +54,6 @@ public class Card {
     public boolean equals(Card c) {
         return c.getValue() == value && c.getSuit().equals(suit);
     }
-
 
     @Override
     public String toString() {
