@@ -92,8 +92,8 @@ public class Help extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
 
                 // Define the gradient colors
-                Color color1 = new Color(0x00512C);
-                Color color2 = new Color(0, 153, 76);
+                Color color1 = new Color(0xA49A7F);
+                Color color2 = new Color(164, 154, 127);
 
                 // Create the gradient paint
                 GradientPaint gradientPaint = new GradientPaint(0, 0, color1, getWidth(), getHeight(), color2);

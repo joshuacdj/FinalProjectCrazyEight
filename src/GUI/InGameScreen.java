@@ -44,6 +44,17 @@ public class InGameScreen extends JPanel {
         discardPile = round.getDiscardPile();
         drawPile = round.getDrawPile();
 
+        // add the help jbutton
+        JButton helpButton = new JButton("Help");
+        add(helpButton, BorderLayout.WEST);
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Help help = new Help();
+                help.setVisible(true);
+            }
+        });
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -118,6 +129,7 @@ public class InGameScreen extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
