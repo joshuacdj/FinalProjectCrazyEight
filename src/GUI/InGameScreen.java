@@ -43,17 +43,11 @@ public class InGameScreen extends JPanel {
         this.controller = controller;
         discardPile = round.getDiscardPile();
         drawPile = round.getDrawPile();
-//        System.out.println("-----------");
-//        System.out.println(discardPile.getCards());
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.fill = GridBagConstraints.BOTH;
-
-        // Set the weights to distribute extra space equally among all components
-//        gbc.weightx = 1.0; // Equal horizontal weight
-//        gbc.weighty = 1.0; // Equal vertical weight
 
         // Initialize the layered pane
         layeredPane = new JLayeredPane();
@@ -137,7 +131,6 @@ public class InGameScreen extends JPanel {
     private void adjustPlayCardButtonPosition() {
         // Find the "Play card?" button and adjust its position
 
-
         for (Component comp : layeredPane.getComponents()) {
             if (comp instanceof JButton) {
                 JButton playButton = (JButton) comp;
@@ -162,7 +155,6 @@ public class InGameScreen extends JPanel {
 //            }
         };
         playerPanel.setOpaque(false);
-//        playerPanel.setBackground(Color.YELLOW);
         playerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Remove later
 
         // Add a component listener to resize the card buttons when the panel is resized
@@ -188,7 +180,6 @@ public class InGameScreen extends JPanel {
             }
         };
         computer1Panel.setOpaque(false);
-//        computer1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Remove later
 
         // Initial card buttons setup
         setupCardLabel(computer1Panel, orientation);
@@ -223,43 +214,10 @@ public class InGameScreen extends JPanel {
         gameEnd = bool;
     }
 
-
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
         round.getListOfPlayers().get(0).setPlayableCards(discardPile.getTopCard());
-//        updateDrawPileButton();
-//        MouseListener listener = new MouseAdapter(){
-//            public void mousePressed(MouseEvent e) {
-//
-//                //TODO THE GET FIRST WILL CHANGE IF WE HAVE MULTIPLE ROUNDS
-//                //This will draw a card from the drawpile for the player
-//                round.getListOfPlayers().getFirst().getHand().add(drawPile.getTopCard());
-//
-//                //Keep a counter of the amount of cards drawn, skip the players turn if 5 cards are drawn
-//                int cardsDrawn = round.getCardsDrawnInTurn();
-//                cardsDrawn++;
-//                round.setCardsDrawnInTurn(cardsDrawn);
-//                System.out.println(cardsDrawn);
-//                if (cardsDrawn == 5) {
-//                    System.out.println("YOU HAVE DRAWN 5 CARDS. TOO BAD");
-//                }
-//
-//                //Check if the drawpile has sufficient cards for the next player and restock if necessary
-//                restockDrawPile();
-//
-//                //Update the hand graphics
-//                JPanel south = panelMap.get("South");
-//                setupCardButtons(south);
-//                positionCardButtons(south,"South");
-//            }
-//        };
-//        if(round.getListOfPlayers().get(0).getPlayableCards().size() != 0){
-//            drawPileButton.setEnabled(false);
-//            drawPileButton.removeMouseListener(listener);
-//        }else {
-//            drawPileButton.setEnabled(true);
-//            drawPileButton.addMouseListener(listener);
-//        }
+
         System.out.println(numCards);
         List<Card> currentHand = round.getListOfPlayers().getFirst().getHand();
 
@@ -343,35 +301,10 @@ public class InGameScreen extends JPanel {
                         return;
                     }
 
-//                    if (chosenCard.getValue() == 8) {
-//                        System.out.println("tempcard before " + discardPile.getTopCard());
-//                        showSuitsButton();
-//                    }
-
                     System.out.println("tempcard after " + discardPile.getTopCard());
                     controller.compPlay();
                 }
                 private void showSuitsButton() {
-//                    // Method to show the "Play card?" button within the layeredPane
-//                    JButton play1Button = new JButton("♦");
-//                    play1Button.setFont(new Font("♦", Font.BOLD, 30));
-//                    play1Button.setBounds(layeredPane.getWidth() - 670, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
-//
-//
-//                    JButton play2Button = new JButton("♣");
-//                    play2Button.setFont(new Font("♣", Font.BOLD, 30));
-//                    play2Button.setBounds(layeredPane.getWidth() - 530, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
-//
-//
-//                    JButton play3Button = new JButton("♥");
-//                    play3Button.setFont(new Font("♥", Font.BOLD, 30));
-//                    play3Button.setBounds(layeredPane.getWidth() - 390, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
-//
-//
-//                    JButton play4Button = new JButton("♠");
-//                    play4Button.setFont(new Font("♠", Font.BOLD, 30));
-//                    play4Button.setBounds(layeredPane.getWidth() - 250, layeredPane.getHeight() - 80, 140, 70); // Position at bottom-right
-//
 
                     int buttonWidth = 140;
                     int buttonHeight = 70;
@@ -478,7 +411,6 @@ public class InGameScreen extends JPanel {
                     layeredPane.moveToFront(play3Button);
                     layeredPane.moveToFront(play4Button);
 
-
                     layeredPane.revalidate();
                     layeredPane.repaint();
                 }
@@ -537,11 +469,9 @@ public class InGameScreen extends JPanel {
             cardHeight = 110;
         }
 
-
         // For vertical panels, adjust the height for stacking with overlap
         if (isVertical) {
             overlap = cardHeight / 2;
-//            cardHeight = (panelHeight + (overlap * (5 - 1))) / numCards;
         }
 
         // Set the initial offset for the first card
@@ -561,14 +491,14 @@ public class InGameScreen extends JPanel {
                 cardButton.setFocusPainted(false);
                 cardButton.setOpaque(false);
 
-            // Position the cards with proper offset
+                // Position the cards with proper offset
                 xOffset = (cardWidth - 90) * i;
 
 
-            // Set the bounds for the button based on the orientation
-            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+                // Set the bounds for the button based on the orientation
+                cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
 
-            // Make sure that the cards added on later are set to the front to overlap nicely
+                // Make sure that the cards added on later are set to the front to overlap nicely
                 panel.setComponentZOrder(panel.getComponent(i), 0);
             }
         }
@@ -607,7 +537,6 @@ public class InGameScreen extends JPanel {
         int xOffset = 0;
         int yOffset = 0;
 
-
         for (int i = 0; i < numCards; i++) {
             JLabel back_card = (JLabel) panel.getComponent(i);
             ImageIcon icon = loadAndScaleCardImage("src/main/resources/images/back_card.png", cardWidth, cardHeight, isVertical);
@@ -630,13 +559,6 @@ public class InGameScreen extends JPanel {
 
             // Set the bounds for the button based on the orientation
             back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
-
-            // Update the yOffset for the next card
-//            if (!isVertical) {
-//                xOffset = (cardWidth - 90) * i;
-//            } else {
-//                yOffset = (cardHeight - 90) * i;
-//            }
         }
 
 
@@ -706,13 +628,6 @@ public class InGameScreen extends JPanel {
 
 
     private JPanel createCenterPanel() {
-//        JPanel centerPanel = new JPanel(new GridBagLayout()); // Using GridBagLayout for flexibility
-//        centerPanel.setOpaque(false); // Set based on your UI design
-//
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.fill = GridBagConstraints.BOTH;
-//        gbc.weightx = 1.0;
-//        gbc.weighty = 1.0;
 
         JPanel centerPanel = new JPanel(new GridLayout(1, 4, 0, 0)); // 1 row, 2 columns with a gap of 10px
         centerPanel.setOpaque(false);
@@ -751,56 +666,9 @@ public class InGameScreen extends JPanel {
         return centerPanel;
     }
 
-//    private JPanel createCenterPanel() {
-//        JPanel centerPanel = new JPanel(new GridBagLayout());
-//        centerPanel.setOpaque(false);
-//
-//        GridBagConstraints gbc = new GridBagConstraints();
-//
-//        // Get the filepath of the first discarded card at the start of the round
-//        String filePath = discardPile.getCards().getLast().getFilepath();
-//        ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
-//        discardPileLabel.setIcon(discardPileIcon);
-//
-//        // ImageIcon for draw pile
-//        ImageIcon drawPileIcon = new ImageIcon(new ImageIcon("src/main/resources/images/back_card.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
-//        drawPileButton = new JButton(drawPileIcon);
-//        drawPileButton.setBorder(BorderFactory.createEmptyBorder());
-//        drawPileButton.setContentAreaFilled(false);
-//
-//        // GridBagConstraints settings for draw pile button
-//        gbc.gridx = 0;
-//        gbc.gridy = 0;
-//        gbc.weightx = 0.5; // Give extra horizontal space
-//        gbc.fill = GridBagConstraints.HORIZONTAL; // Fill horizontally
-//        centerPanel.add(drawPileButton, gbc);
-//
-//        // GridBagConstraints settings for discard pile label
-//        gbc.gridx = 1;
-//        gbc.gridy = 0;
-//        gbc.weightx = 1.0; // Make this occupy most of the space
-//        gbc.fill = GridBagConstraints.HORIZONTAL; // Fill horizontally
-//        centerPanel.add(discardPileLabel, gbc);
-//
-//        // If you have more components to add to the center panel, adjust the gridx and gridy accordingly
-//
-//        // Ensuring centerPanel and its components resize within the JLayeredPane
-//        centerPanel.addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentResized(ComponentEvent e) {
-//                centerPanel.revalidate();
-//                centerPanel.repaint();
-//            }
-//        });
-//
-//        return centerPanel;
-//    }
-
-
     //This method is to update the image of the discardPile
     public void updateDiscardPileImage() {
         String filePath = discardPile.getTopCard().getFilepath();
-//        JButton discardPileButton = panelMap.get("Center");
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
         discardPileLabel.setIcon(discardPileIcon);
         discardPileLabel.revalidate();
@@ -882,7 +750,6 @@ public class InGameScreen extends JPanel {
         }
     }
 
-
     private ActionListener getDrawListener(Human humanPlayer) {
         return e -> {
             if (humanPlayer.canDrawCard() && drawPileButton.isEnabled()) {
@@ -926,12 +793,9 @@ public class InGameScreen extends JPanel {
         System.out.println("Top card is " + discardPile.getTopCard());
         System.out.println(humanPlayer.getPlayableCards());
 
-        // Enable or disable the button based on the player's ability to draw a card
-//        drawPileButton.setEnabled(humanPlayer.getPlayableCards().isEmpty() && humanPlayer.canDrawCard());
         drawPileButton.revalidate();
         drawPileButton.repaint();
     }
-
 
     private Player findHumanPlayer() {
         // Example implementation, adjust based on your actual player management
@@ -940,88 +804,6 @@ public class InGameScreen extends JPanel {
                 .findFirst()
                 .orElse(null);
     }
-
-//    public void displayWinPanel() {
-//        // Step 1: Create the win panel
-//        JPanel winPanel = new JPanel();
-//        winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.Y_AXIS));
-//        winPanel.setSize(layeredPane.getSize());
-//        winPanel.setOpaque(true);
-//        winPanel.setBackground(new Color(0, 0, 0, 150)); // Semi-transparent background
-//
-//        // Title
-//        JLabel titleLabel = new JLabel("Game Over - Leaderboard");
-//        titleLabel.setForeground(Color.WHITE);
-//        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        winPanel.add(titleLabel);
-//
-//        // Step 2: Populate the panel with scores
-//        List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
-//        sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
-//        sortedPlayers.forEach(player -> {
-//            player.addPoints(player.calculatePoints());
-//            JLabel playerScoreLabel = new JLabel(player.getName() + ": " + player.getPoints());
-//            playerScoreLabel.setForeground(Color.WHITE);
-//            playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//            winPanel.add(playerScoreLabel);
-//        });
-//
-//        // Additional styling for the winPanel can be added here, e.g., borders, fonts, etc.
-//
-//        // Step 3: Add the panel to the layeredPane
-//        layeredPane.add(winPanel, Integer.valueOf(2)); // Adding at a high layer to cover other components
-//
-//        // Making the panel fill the entire layeredPane
-//        winPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
-//
-//        // Step 4: This method should be called when the game ends to display the win panel
-//        layeredPane.revalidate();
-//        layeredPane.repaint();
-//    }
-
-//    public void displayWinPanel() {
-//        // Step 1: Create the win panel with improved aesthetics
-//        JPanel winPanel = new JPanel();
-//        winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.Y_AXIS));
-//        winPanel.setSize(layeredPane.getWidth(), layeredPane.getHeight());
-//        winPanel.setOpaque(true);
-//        winPanel.setBackground(new Color(32, 32, 32, 200)); // A darker semi-transparent background
-//        winPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//
-//        // Step 2: Create a title label with larger font and style
-//        JLabel titleLabel = new JLabel("Game Over - Leaderboard");
-//        titleLabel.setForeground(new Color(255, 215, 0)); // Gold color for the title
-//        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-//        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0)); // Some padding for the title
-//
-//        winPanel.add(titleLabel);
-//
-//        // Step 3: Populate the panel with sorted scores and rankings
-//        List<Player> sortedPlayers = getSortedPlayersByHandValue();
-//        for (int i = 0; i < sortedPlayers.size(); i++) {
-//            Player player = sortedPlayers.get(i);
-//            String rankText = (i + 1) + getPositionSuffix(i + 1) + " Place - " + player.getName() + ": " + player.calculatePoints();
-//            JLabel playerScoreLabel = new JLabel(rankText);
-//            playerScoreLabel.setFont(new Font("Arial", Font.BOLD, 18));
-//            playerScoreLabel.setForeground(Color.WHITE);
-//            playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//            winPanel.add(playerScoreLabel);
-//        }
-//
-//        // Step 4: Add some styling and padding to the win panel
-//        winPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//
-//        // Remove listeners from all player panels to prevent interaction
-//        panelMap.values().forEach(this::removePanelListeners);
-//
-//        // Add the win panel to the layeredPane and make it visible
-//        layeredPane.add(winPanel, Integer.valueOf(3)); // Ensuring it's at the top layer
-//        winPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
-//
-//        layeredPane.revalidate();
-//        layeredPane.repaint();
-//    }
 
     public void displayWinPanel() {
         // Step 1: Create the win panel with gradient background
@@ -1132,7 +914,6 @@ public class InGameScreen extends JPanel {
         return new ImageIcon(scaledImage);
     }
 
-
     private void disableInteractions() {
         // Remove listeners from all player panels to prevent interaction
         panelMap.values().forEach(this::removePanelListeners);
@@ -1158,8 +939,6 @@ public class InGameScreen extends JPanel {
         }
     }
 
-
-
     private List<Player> getSortedPlayersByHandValue() {
         // Clone the list of players to avoid modifying the original list
         List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
@@ -1177,8 +956,7 @@ public class InGameScreen extends JPanel {
             if (orientation != null) {
                 JPanel activePanel = panelMap.get(orientation);
                 if (activePanel != null) {
-                    // Set to a yellow background to indicate active player
-//                    activePanel.setBackground(Color.YELLOW);
+                    // Set to a yellow border to indicate active player
                     activePanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Optional: Add a black border for emphasis
                 }
             }
@@ -1234,30 +1012,6 @@ public class InGameScreen extends JPanel {
         button.setContentAreaFilled(false); // Tell Swing to not fill the content area
         button.setOpaque(false); // Make the button non-opaque
 
-        // Customize font, e.g., button.setFont(new Font("Arial", Font.BOLD, 12));
-
-//        // Action listener for button's functionality
-//        button.addActionListener(e -> {
-//            // Your action logic here
-//            System.out.println(text + " button clicked.");
-//        });
-
         return button;
     }
-
-
-
-//    public void onCardDrawn(Player player) {
-//        SwingUtilities.invokeLater(() -> {
-//            if (player instanceof Human) {
-//                updateHumanPlayerPanel();
-//            } else if (player instanceof Computer) {
-//                // Assuming you have a way to get the correct orientation for this computer player
-//                String orientation = determineOrientation(player);
-//                updateComputerPlayerPanel(orientation);
-//            }
-//        });
-//    }
-
-
 }
