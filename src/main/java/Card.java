@@ -1,15 +1,13 @@
 package main.java;
 
-import java.awt.*;
-
 public class Card {
     /**
      * Stores value of a singular card
      */
+    // Instance of value, suit and filepath. Filepath refers to the filepath of the image that we are using to display each card
     private final int value;
     private final Suit suit;
     private String filepath;
-    // Instance of value and suit
 
     // Card constructor
     public Card(int value, Suit suit) {
@@ -19,6 +17,7 @@ public class Card {
         this.filepath = "src/main/resources/images/" + value + "_of_" + suit.toString().toLowerCase() + ".png";
     }
 
+    // Get the filepath of the card
     public String getFilepath() {
         return filepath;
     }
@@ -33,43 +32,25 @@ public class Card {
         return suit;
     }
 
-    // Calculate the points associated to each card
+    // Calculate the points associated to each card. Points will be tallied at the endgame to determine player rankings
     public int calculatePoints() {
-        int points = 0;
-        switch(value) {
-            case 8:
-                points = 50;
-                break;
-            case 11:
-            case 12:
-            case 13:
-                points = 10;
-                break;
-            default:
-                points = value;
-        }
-        return points;
+        return switch (value) {
+            case 8 -> 50;
+            case 11, 12, 13 -> 10;
+            default -> value;
+        };
     }
 
+    // Check if two cards are the same. Both values and suits must be the same for the cards to be considered equal
     public boolean equals(Card c) {
         return c.getValue() == value && c.getSuit().equals(suit);
     }
 
+
+    // To print out the value and suit for card for debugging
     @Override
     public String toString() {
         return String.format("value: %d suit: %s%n", value, suit);
-    }
-
-    // overriding equals method to check for same card value and suit
-    @Override
-    public boolean equals(Object object) {
-        if (object == null || object.getClass() != getClass()) {
-            return false;
-        }
-        else {
-            Card card = (Card) object;
-            return card.getValue() == getValue() && card.getSuit() == getSuit();
-        }
     }
 
 }
