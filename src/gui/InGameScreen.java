@@ -42,17 +42,6 @@ public class InGameScreen extends JPanel {
         discardPile = round.getDiscardPile();
         drawPile = round.getDrawPile();
 
-        // add the help jbutton
-        JButton helpButton = new JButton("How to play");
-        add(helpButton, BorderLayout.WEST);
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Help help = new Help();
-                help.setVisible(true);
-            }
-        });
-
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -77,6 +66,24 @@ public class InGameScreen extends JPanel {
         centerPanel = createCenterPanel();
         centerPanel.setBounds(0, 0, 600, 600); // Initial bounds, will adjust with componentListener
         layeredPane.add(centerPanel, JLayeredPane.DEFAULT_LAYER);
+
+        // add the helpButton
+        JButton helpButton = new JButton("How to play");
+        // creating the size of the helpButton
+        helpButton.setBounds(0,0,120,30);
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Help help = new Help();
+                help.setVisible(true);
+            }
+
+        });
+
+        layeredPane.add(helpButton,Integer.valueOf(1));
+        layeredPane.moveToFront(helpButton);
+
+
 
         // Setup the GridBagConstraints for layeredPane
         gbc.gridx = 1;
@@ -719,7 +726,7 @@ public class InGameScreen extends JPanel {
 
         // Action History Label
 
-        
+
         // Prepare discard pile icon and label, and place it within a panel for centering
         String filePath = discardPile.getCards().getLast().getFilepath();
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
