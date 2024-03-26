@@ -212,32 +212,6 @@ public class InGameScreen extends JPanel {
         return computer1Panel;
     }
 
-//    public void refreshPlayerPanel(String orientation) {
-//        // Assuming orientation is something like "North", "South", "East", "West"
-//        JPanel playerPanel = panelMap.get(orientation);
-//        if (playerPanel != null) {
-//            // Clear the panel before re-adding updated content
-//            playerPanel.removeAll();
-//
-//            // Utilize existing setup methods based on orientation
-//            if ("South".equals(orientation)) {
-//                // Assuming South is always the human player in your game setup
-//                setupCardButtons(playerPanel); // If this method sets up the human player's cards
-//                positionCardButtons(playerPanel, "South");
-//            } else {
-//                // For computer players
-//                setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
-//                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
-//            }
-//
-//            // Reposition labels or buttons as needed, potentially reusing existing logic
-//
-//            playerPanel.revalidate();
-//            playerPanel.repaint();
-//        }
-//    }
-
-
     private JPanel createPlayerPanel(String orientation) {
         JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
             @Override
@@ -305,7 +279,7 @@ public class InGameScreen extends JPanel {
 
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
-        round.getListOfPlayers().get(0).setPlayableCards(discardPile.getTopCard());
+        round.getListOfPlayers().getFirst().setPlayableCards(discardPile.getTopCard());
 
         System.out.println(numCards);
         List<Card> currentHand = round.getListOfPlayers().getFirst().getHand();
@@ -340,10 +314,9 @@ public class InGameScreen extends JPanel {
                     }
                     //Initialise the cards the human is able to play
                     //First get the player whose turn it is
-                    Player currentPlayer = round.getListOfPlayers().get(0);
+                    Player currentPlayer = round.getListOfPlayers().getFirst();
                     //Get the current topcard
                     Card currentTopCard = discardPile.getTopCard();
-                    currentPlayer.getPlayableCards();
 
                     //Initialise the card being clicked
                     String[] s = cardButton.getName().split("_");
@@ -367,7 +340,7 @@ public class InGameScreen extends JPanel {
                                 panelMap.get("South").repaint();
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
-                                if (currentPlayer.getHand().size() == 0) {
+                                if (currentPlayer.getHand().isEmpty()) {
                                     gameEnd = true;
                                     controller.endGame();
                                     cardButton.removeMouseListener(this);
@@ -775,16 +748,12 @@ public class InGameScreen extends JPanel {
         // Implement logic to determine the orientation based on your game's rules
         // This is a placeholder logic
         int playerIndex = round.getListOfPlayers().indexOf(player);
-        switch (playerIndex) {
-            case 1:
-                return "West";
-            case 2:
-                return "North";
-            case 3:
-                return "East";
-            default:
-                return "South"; // Default or error case
-        }
+        return switch (playerIndex) {
+            case 1 -> "West";
+            case 2 -> "North";
+            case 3 -> "East";
+            default -> "South"; // Default or error case
+        };
     }
 
     public void updateDrawCard(Player player) {
@@ -810,31 +779,6 @@ public class InGameScreen extends JPanel {
             }
         });
     }
-
-//    public void refreshPlayerPanel(String orientation) {
-//        // Assuming orientation is something like "North", "South", "East", "West"
-//        JPanel playerPanel = panelMap.get(orientation);
-//        if (playerPanel != null) {
-//            // Clear the panel before re-adding updated content
-//            playerPanel.removeAll();
-//
-//            // Utilize existing setup methods based on orientation
-//            if ("South".equals(orientation)) {
-//                // Assuming South is always the human player in your game setup
-//                setupCardButtons(playerPanel); // If this method sets up the human player's cards
-//                positionCardButtons(playerPanel, "South");
-//            } else {
-//                // For computer players
-//                setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
-//                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
-//            }
-//
-//            // Reposition labels or buttons as needed, potentially reusing existing logic
-//
-//            playerPanel.revalidate();
-//            playerPanel.repaint();
-//        }
-//    }
 
     public void refreshPlayerPanel(String orientation) {
         // Assuming orientation is something like "North", "South", "East", "West"
@@ -885,7 +829,7 @@ public class InGameScreen extends JPanel {
             drawPileButton.removeActionListener(al);
         }
 
-        if(humanPlayer.getPlayableCards().size() != 0){
+        if(!humanPlayer.getPlayableCards().isEmpty()){
             humanPlayer.resetDrawCounter();
             drawPileButton.setEnabled(false);
         }else if (humanPlayer.canDrawCard()){
@@ -893,7 +837,7 @@ public class InGameScreen extends JPanel {
             drawPileButton.addActionListener(drawListener);
         }else if(!humanPlayer.canDrawCard()){
             drawPileButton.setEnabled(false);
-            if(humanPlayer.getPlayableCards().size() == 0){
+            if(humanPlayer.getPlayableCards().isEmpty()){
                 humanPlayer.resetDrawCounter();
                 controller.compPlay();
             }
@@ -1041,19 +985,19 @@ public class InGameScreen extends JPanel {
     }
 
     private String getPositionSuffix(int position) {
-        switch (position) {
-            case 1: return "st";
-            case 2: return "nd";
-            case 3: return "rd";
-            default: return "th";
-        }
+        return switch (position) {
+            case 1 -> "st";
+            case 2 -> "nd";
+            case 3 -> "rd";
+            default -> "th";
+        };
     }
 
     private List<Player> getSortedPlayersByHandValue() {
         // Clone the list of players to avoid modifying the original list
         List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
         // Sort the cloned list based on hand value in ascending order
-        sortedPlayers.sort(Comparator.comparingInt(player -> player.calculatePoints()));
+        sortedPlayers.sort(Comparator.comparingInt(Player::calculatePoints));
         return sortedPlayers;
     }
 

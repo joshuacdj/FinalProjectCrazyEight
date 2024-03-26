@@ -40,15 +40,6 @@ public abstract class Player {
         return name;
     }
 
-    // Add points to the player depending on the value of the cards left in their hand at the end of a round
-    public void addPoints(int points) {
-        this.points += points;
-    }
-
-    //set points to a value - use for tieBreaker()
-//    public void setPoints(int points) {
-//        this.points = points;
-//    }
 
     // Calculate the points in player's hand
     public int calculatePoints() {
@@ -57,10 +48,6 @@ public abstract class Player {
             points += c.calculatePoints();
         }
         return points;
-    }
-
-    public void clearHand() {
-        hand.clear();
     }
 
     // Draw a card from the deck

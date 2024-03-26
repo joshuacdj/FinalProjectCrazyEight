@@ -24,8 +24,5 @@ public class Human extends Player {
         cardsDrawnThisTurn = 0;
     }
 
-    public int getCardsDrawnThisTurn() {
-        return cardsDrawnThisTurn;
-    }
 
 }

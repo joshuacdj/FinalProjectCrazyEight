@@ -66,7 +66,7 @@ public class Computer extends Player {
                     return output;
                 }
             }
-//            else choose highest face value card
+//            else choose the highest face value card
             Card cardPlayed = null;
             if(getPlayableCards().size() < 2){
                 cardPlayed = getPlayableCards().getFirst();
