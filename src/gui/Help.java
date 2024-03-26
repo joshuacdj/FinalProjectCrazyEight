@@ -11,8 +11,20 @@ import java.awt.GradientPaint;
 public class Help extends JFrame {
 
     private Font titleFont = new Font("Chalkboard", Font.BOLD, 26); // Elegant font
+    private static volatile Help instance = null;
 
-    public Help() {
+    public static Help getInstance() {
+        if (instance == null) {
+            synchronized (Help.class) {
+                if (instance == null) {
+                    instance = new Help();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private Help() {
 
         setTitle("Help");
         setSize(800, 500);

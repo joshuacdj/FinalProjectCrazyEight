@@ -122,7 +122,7 @@ public class WelcomeScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 welcomeClickSound();
-                Help helpWindow = new Help();
+                Help helpWindow = gui.Help.getInstance();
                 helpWindow.setVisible(true);
             }
         });

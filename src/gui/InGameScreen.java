@@ -75,8 +75,8 @@ public class InGameScreen extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 welcomeClickSound();
-                Help help = new Help();
-                help.setVisible(true);
+                Help helpWindow = gui.Help.getInstance();
+                helpWindow.setVisible(true);
             }
 
         });
@@ -271,11 +271,6 @@ public class InGameScreen extends JPanel {
         cardPlayedByHuman = false;
     }
 
-//    public void setGameEnd(boolean bool) {
-//        gameEnd = bool;
-//    }
-
-
     private void setupAndPositionCardButtons(JPanel panel) {
         // Clear existing card buttons from the panel
         panel.removeAll();
@@ -283,11 +278,6 @@ public class InGameScreen extends JPanel {
 
         List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
         int numCards = humanHand.size();
-        if (numCards == 0) {
-            controller.endGame();
-            disableInteractions();
-            return;
-        }
 
         int panelHeight = panel.getHeight();
         //change to const
@@ -363,16 +353,22 @@ public class InGameScreen extends JPanel {
             discardPile.addCard(selectedCard);
             updateDiscardPileImage();
             dealCardSound();
+            setupAndPositionCardButtons(panel);
+            if(currentPlayer.getHand().size() == 0){
+                //win
+                controller.endGame();
+                return;
+            }
             if (selectedCard.getValue() == 8) {
                 showSuitsButton();
             } else {
                 controller.compPlay();
             }
             // Refresh the card buttons to reflect the current hand after a card is played
-            setupAndPositionCardButtons(panel);
         } else {
             System.out.println("INVALID CARD");
             // Optionally, show an error message or some feedback
+            //return;
         }
     }
 
@@ -749,14 +745,6 @@ public class InGameScreen extends JPanel {
         drawPileButton.repaint();
     }
 
-    private Player findHumanPlayer() {
-        // Example implementation, adjust based on your actual player management
-        return round.getListOfPlayers().stream()
-                .filter(p -> p instanceof Human)
-                .findFirst()
-                .orElse(null);
-    }
-
     public void displayWinPanel() {
         // Step 1: Create the win panel with gradient background
         JPanel winPanel = new JPanel() {
@@ -809,7 +797,7 @@ public class InGameScreen extends JPanel {
             }
             if (i == 0 && (!(player instanceof Computer))) {
                 youWinSound();
-                break;
+//                break;
             } else {
                 youLoseSound();
             }
