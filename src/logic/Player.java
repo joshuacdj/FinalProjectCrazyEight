@@ -10,17 +10,11 @@ public abstract class Player {
     private ArrayList<Card> hand;
     private ArrayList<Card> playableCards;
     private String name;
-    private int points;
 
     public Player(String name) {
-
         this.hand = new ArrayList<>();
-
         this.playableCards = new ArrayList<>();
-
         this.name = name;
-        // All players should have 0 points initially
-        this.points = 0;
     }
 
     // Return the current hand of the player
@@ -30,11 +24,6 @@ public abstract class Player {
 
     public ArrayList<Card> getPlayableCards() {
         return playableCards;
-    }
-
-    // Return the points accumulated by the player in total for that game
-    public int getPoints() {
-        return points;
     }
 
     // Return name of player

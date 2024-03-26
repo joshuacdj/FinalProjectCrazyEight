@@ -1,9 +1,10 @@
-package gui;
+package app;
 
 import java.util.*;
 import javax.swing.*;
 
 import static gui.Sound.*;
+import gui.*;
 import logic.*;
 
 public class Controller implements DrawActionListener{
@@ -52,8 +53,7 @@ public class Controller implements DrawActionListener{
             for (Player p : playerList) {
                 // At the start of every turn, check if the drawpile needs to be restocked
                 inGameScreen.restockDrawPile();
-                if (p instanceof Computer) {
-                    Computer c = (Computer) p;
+                if (p instanceof Computer c) {
                     try {
                         // Log computer action
                         System.out.println("This is computer " + c.getName() + ":" + c.getHand());
@@ -90,7 +90,8 @@ public class Controller implements DrawActionListener{
                             // Update GUI here
                             inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));
                             inGameScreen.updateDiscardPileImage();
-                        } //NOTE BOTTOM 3 LINES SHOULD BE UNNECESSARY
+                        }
+                        //NOTE BOTTOM 3 LINES SHOULD BE UNNECESSARY
 //                        else if (c.getName().equals("Comp 3")) {
 //                                inGameScreen.setCardPlayedByHumanToFalse();
 //                        }
@@ -102,9 +103,9 @@ public class Controller implements DrawActionListener{
                         }
                     });
 
-                    // If the computer's hand size is 0, end the game
-                    if(c.getHand().size() == 0){
-                        inGameScreen.setGameEnd(true);
+                    // If the computer's hand size is empty, end the game
+                    if(c.getHand().isEmpty()){
+//                        inGameScreen.setGameEnd(true);
                         endGame();
                         break;
                     }

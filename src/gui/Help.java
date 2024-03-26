@@ -34,7 +34,7 @@ public class Help extends JFrame {
         textBox.setLineWrap(true); // Enable line wrapping
         textBox.setWrapStyleWord(true);
 
-        // Add some sample text to the text box
+        // Add the instructions to the game to the text box
         textBox.setText("Objective:\nThe goal of the game is to have the least number of points when someone clears their hand!\n\n" +
                 "How to Play:\nEach player takes turns playing 1 card per turn.\n" +
                 "You can play any card that matches the SUIT or VALUE of the latest played card.\n" +

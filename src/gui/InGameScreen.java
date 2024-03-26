@@ -14,9 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.border.Border;
 
+import app.Controller;
 import logic.*;
 import static gui.Sound.*;
 
@@ -31,7 +31,7 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
     private final Controller controller;
     private boolean cardPlayedByHuman = false;
-    private boolean gameEnd = false;
+//    private boolean gameEnd = false;
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
 
@@ -80,10 +80,8 @@ public class InGameScreen extends JPanel {
 
         });
 
-        layeredPane.add(helpButton);
+        layeredPane.add(helpButton,Integer.valueOf(1));
         layeredPane.moveToFront(helpButton);
-
-
 
         // Setup the GridBagConstraints for layeredPane
         gbc.gridx = 1;
@@ -134,7 +132,6 @@ public class InGameScreen extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -251,7 +248,6 @@ public class InGameScreen extends JPanel {
             }
         };
         playerPanel.setOpaque(false);
-//        playerPanel.setBackground(Color.YELLOW);
 
         Border roundedBorder = new RoundedBorder(20, Color.ORANGE, 3);
         playerPanel.setBorder(roundedBorder);
@@ -270,32 +266,13 @@ public class InGameScreen extends JPanel {
         return playerPanel;
     }
 
-    private void setupSuitButtons(JLayeredPane centerPanel) {
-        int numSuits = 4;
-
-        for (int i = 0; i < numSuits; i ++) {
-            JButton suitButton = new JButton();
-            suitButton.setBorderPainted(false);
-            suitButton.setContentAreaFilled(false);
-            suitButton.setFocusPainted(false);
-            suitButton.setOpaque(false);
-
-            centerPanel.add(suitButton);
-
-            suitButton.addMouseListener(new MouseAdapter() {
-
-            });
-
-        }
-    }
-
     public void setCardPlayedByHumanToFalse() {
         cardPlayedByHuman = false;
     }
 
-    public void setGameEnd(boolean bool) {
-        gameEnd = bool;
-    }
+//    public void setGameEnd(boolean bool) {
+//        gameEnd = bool;
+//    }
 
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
@@ -351,17 +328,19 @@ public class InGameScreen extends JPanel {
                         cardPlayedByHuman = true;
                         for (Card c : currentHand) {
                             if (chosenCard.equals(c)) {
-                                panelMap.get("South").removeAll();
                                 currentHand.remove(c);
                                 discardPile.addCard(c);
                                 updateDiscardPileImage();
                                 dealCardSound();
+
+                                panelMap.get("South").removeAll();
                                 panelMap.get("South").revalidate();
                                 panelMap.get("South").repaint();
+
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
                                 if (currentPlayer.getHand().isEmpty()) {
-                                    gameEnd = true;
+//                                    gameEnd = true;
                                     controller.endGame();
                                     cardButton.removeMouseListener(this);
                                     return;
@@ -386,119 +365,125 @@ public class InGameScreen extends JPanel {
                     System.out.println("tempcard after " + discardPile.getTopCard());
                     controller.compPlay();
                 }
-                private void showSuitsButton() {
 
-                    int buttonWidth = 140;
-                    int buttonHeight = 70;
-                    int totalButtonWidth = 4 * buttonWidth; // For 4 buttons
-                    int spacing = (layeredPane.getWidth() - totalButtonWidth) / 5; // Dividing the remaining space into 5 parts
-
-                    JButton play1Button = new JButton("♦");
-                    play1Button.setFont(new Font("♦", Font.BOLD, 30));
-                    int play1ButtonX = spacing;
-                    int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Adjusting Y to position buttons at the bottom
-                    play1Button.setBounds(play1ButtonX, buttonY, buttonWidth, buttonHeight);
-
-                    JButton play2Button = new JButton("♣");
-                    play2Button.setFont(new Font("♣", Font.BOLD, 30));
-                    int play2ButtonX = play1ButtonX + buttonWidth + spacing;
-                    play2Button.setBounds(play2ButtonX, buttonY, buttonWidth, buttonHeight);
-
-                    JButton play3Button = new JButton("♥");
-                    play3Button.setFont(new Font("♥", Font.BOLD, 30));
-                    int play3ButtonX = play2ButtonX + buttonWidth + spacing;
-                    play3Button.setBounds(play3ButtonX, buttonY, buttonWidth, buttonHeight);
-
-                    JButton play4Button = new JButton("♠");
-                    play4Button.setFont(new Font("♠", Font.BOLD, 30));
-                    int play4ButtonX = play3ButtonX + buttonWidth + spacing;
-                    play4Button.setBounds(play4ButtonX, buttonY, buttonWidth, buttonHeight);
-
-                    // removing of all buttons once a suit is clicked
-                    play1Button.addActionListener(e -> {
-                        // Your action logic
-                        layeredPane.remove(play4Button);
-                        layeredPane.remove(play3Button);
-                        layeredPane.remove(play2Button);
-                        layeredPane.remove(play1Button);
-                        layeredPane.repaint();
-                        discardPile.setTopCard(new Card(0, Suit.DIAMONDS));
-                        updateDiscardPileImage();
-                        dealCardEightSound();
-                        controller.compPlay();
-                    });
-
-                    play2Button.addActionListener(e -> {
-                        // Your action logic
-                        layeredPane.remove(play4Button);
-                        layeredPane.remove(play3Button);
-                        layeredPane.remove(play2Button);
-                        layeredPane.remove(play1Button);
-                        layeredPane.repaint();
-                        discardPile.setTopCard(new Card(0, Suit.CLUBS));
-                        updateDiscardPileImage();
-                        dealCardEightSound();
-                        controller.compPlay();
-                    });
-
-                    play3Button.addActionListener(e -> {
-                        // Your action logic
-                        layeredPane.remove(play4Button);
-                        layeredPane.remove(play3Button);
-                        layeredPane.remove(play2Button);
-                        layeredPane.remove(play1Button);
-                        layeredPane.repaint();
-                        discardPile.setTopCard(new Card(0, Suit.HEARTS));
-                        updateDiscardPileImage();
-                        dealCardEightSound();
-                        controller.compPlay();
-                    });
-
-                    play4Button.addActionListener(e -> {
-                        // Your action logic
-                        layeredPane.remove(play4Button);
-                        layeredPane.remove(play3Button);
-                        layeredPane.remove(play2Button);
-                        layeredPane.remove(play1Button);
-                        layeredPane.repaint();
-                        discardPile.setTopCard(new Card(0, Suit.SPADES));
-                        updateDiscardPileImage();
-                        dealCardEightSound();
-                        controller.compPlay();
-                    });
-
-                    // Ensure any existing play button is removed before adding a new one
-                    for (Component comp : layeredPane.getComponents()) {
-                        if (comp instanceof JButton && "♦".equals(((JButton) comp).getText())) {
-                            layeredPane.remove(comp);
-                        }
-                        if (comp instanceof JButton && "♣".equals(((JButton) comp).getText())) {
-                            layeredPane.remove(comp);
-                        }
-                        if (comp instanceof JButton && "♥".equals(((JButton) comp).getText())) {
-                            layeredPane.remove(comp);
-                        }
-                        if (comp instanceof JButton && "♠".equals(((JButton) comp).getText())) {
-                            layeredPane.remove(comp);
-                        }
-                    }
-
-                    layeredPane.add(play1Button); // Add playButton above centerPanel
-                    layeredPane.add(play2Button); // Add playButton above centerPanel
-                    layeredPane.add(play4Button); // Add playButton above centerPanel
-                    layeredPane.add(play3Button); // Add playButton above centerPanel
-
-                    layeredPane.moveToFront(play1Button);
-                    layeredPane.moveToFront(play2Button);
-                    layeredPane.moveToFront(play3Button);
-                    layeredPane.moveToFront(play4Button);
-
-                    layeredPane.revalidate();
-                    layeredPane.repaint();
-                }
 
             });
         }
+    }
+
+    private void showSuitsButton() {
+
+        final int SUITBUTTONFONTSIZE = 30;
+
+        final int BUTTONWIDTH = 140;
+        final int BUTTONHEIGHT = 70;
+        int totalButtonWidth = 4 * BUTTONWIDTH; // For 4 buttons
+        int spacing = (layeredPane.getWidth() - totalButtonWidth) / 5; // Dividing the remaining space into 5 parts
+
+        JButton play1Button = new JButton("♦");
+        play1Button.setFont(new Font("♦", Font.BOLD, SUITBUTTONFONTSIZE));
+        play1Button.setForeground(Color.RED);
+        int play1ButtonX = spacing;
+        int buttonY = layeredPane.getHeight() - BUTTONHEIGHT - 10; // Adjusting Y to position buttons at the bottom
+        play1Button.setBounds(play1ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
+
+        JButton play2Button = new JButton("♣");
+        play2Button.setFont(new Font("♣", Font.BOLD, SUITBUTTONFONTSIZE));
+        int play2ButtonX = play1ButtonX + BUTTONWIDTH + spacing;
+        play2Button.setBounds(play2ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
+
+        JButton play3Button = new JButton("♥");
+        play3Button.setFont(new Font("♥", Font.BOLD, SUITBUTTONFONTSIZE));
+        play3Button.setForeground(Color.RED);
+        int play3ButtonX = play2ButtonX + BUTTONWIDTH + spacing;
+        play3Button.setBounds(play3ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
+
+        JButton play4Button = new JButton("♠");
+        play4Button.setFont(new Font("♠", Font.BOLD, SUITBUTTONFONTSIZE));
+        int play4ButtonX = play3ButtonX + BUTTONWIDTH + spacing;
+        play4Button.setBounds(play4ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
+
+        // removing of all buttons once a suit is clicked
+        play1Button.addActionListener(e -> {
+            // Your action logic
+            layeredPane.remove(play4Button);
+            layeredPane.remove(play3Button);
+            layeredPane.remove(play2Button);
+            layeredPane.remove(play1Button);
+            layeredPane.repaint();
+            discardPile.setTopCard(new Card(0, Suit.DIAMONDS));
+            updateDiscardPileImage();
+            dealCardEightSound();
+            controller.compPlay();
+        });
+
+        play2Button.addActionListener(e -> {
+            // Your action logic
+            layeredPane.remove(play4Button);
+            layeredPane.remove(play3Button);
+            layeredPane.remove(play2Button);
+            layeredPane.remove(play1Button);
+            layeredPane.repaint();
+            discardPile.setTopCard(new Card(0, Suit.CLUBS));
+            updateDiscardPileImage();
+            dealCardEightSound();
+            controller.compPlay();
+        });
+
+        play3Button.addActionListener(e -> {
+            // Your action logic
+            layeredPane.remove(play4Button);
+            layeredPane.remove(play3Button);
+            layeredPane.remove(play2Button);
+            layeredPane.remove(play1Button);
+            layeredPane.repaint();
+            discardPile.setTopCard(new Card(0, Suit.HEARTS));
+            updateDiscardPileImage();
+            dealCardEightSound();
+            controller.compPlay();
+        });
+
+        play4Button.addActionListener(e -> {
+            // Your action logic
+            layeredPane.remove(play4Button);
+            layeredPane.remove(play3Button);
+            layeredPane.remove(play2Button);
+            layeredPane.remove(play1Button);
+            layeredPane.repaint();
+            discardPile.setTopCard(new Card(0, Suit.SPADES));
+            updateDiscardPileImage();
+            dealCardEightSound();
+            controller.compPlay();
+        });
+
+        // Ensure any existing play button is removed before adding a new one
+        for (Component comp : layeredPane.getComponents()) {
+            if (comp instanceof JButton && "♦".equals(((JButton) comp).getText())) {
+                layeredPane.remove(comp);
+            }
+            if (comp instanceof JButton && "♣".equals(((JButton) comp).getText())) {
+                layeredPane.remove(comp);
+            }
+            if (comp instanceof JButton && "♥".equals(((JButton) comp).getText())) {
+                layeredPane.remove(comp);
+            }
+            if (comp instanceof JButton && "♠".equals(((JButton) comp).getText())) {
+                layeredPane.remove(comp);
+            }
+        }
+
+        layeredPane.add(play1Button, Integer.valueOf(2)); // Add playButton above centerPanel
+        layeredPane.add(play2Button, Integer.valueOf(2)); // Add playButton above centerPanel
+        layeredPane.add(play3Button, Integer.valueOf(2)); // Add playButton above centerPanel
+        layeredPane.add(play4Button, Integer.valueOf(2)); // Add playButton above centerPanel
+
+        layeredPane.moveToFront(play1Button);
+        layeredPane.moveToFront(play2Button);
+        layeredPane.moveToFront(play3Button);
+        layeredPane.moveToFront(play4Button);
+
+        layeredPane.revalidate();
+        layeredPane.repaint();
     }
 
     private void setupCardLabel(JPanel panel, String orientation) {
@@ -523,11 +508,10 @@ public class InGameScreen extends JPanel {
     private void positionCardButtons(JPanel panel, String orientation) {
 
         //Initialise a listofcards to be a hand
-
         List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
 
-        int numCards = humanHand.size();
-        if (numCards == 0) return;
+//        int numCards = humanHand.size();
+//        if (numCards == 0) return;
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
 
@@ -535,9 +519,9 @@ public class InGameScreen extends JPanel {
         int panelHeight = panel.getHeight();
 
         // Adjust the card dimensions based on the orientation
-        int cardWidth = isVertical ? panelHeight/5 : panelWidth / 8;
+        int cardWidth = isVertical ? panelHeight / 5 : panelWidth / 8;
         int cardHeight = isVertical ? panelWidth - 20 : panelHeight - 20;
-        int overlap = cardWidth / 2;
+//        int overlap = cardWidth / 2;
 
         if ("South".equals(orientation) || "North".equals(orientation)) {
             cardWidth = 110;
@@ -549,9 +533,9 @@ public class InGameScreen extends JPanel {
         }
 
         // For vertical panels, adjust the height for stacking with overlap
-        if (isVertical) {
-            overlap = cardHeight / 2;
-        }
+//        if (isVertical) {
+//            overlap = cardHeight / 2;
+//        }
 
         // Set the initial offset for the first card
         int xOffset = 0;
@@ -582,10 +566,9 @@ public class InGameScreen extends JPanel {
             }
         }
 
-
         panel.revalidate();
         panel.repaint();
-        }
+    }
 
     private void positionCardLabel(JPanel panel, String orientation) {
 
@@ -610,7 +593,7 @@ public class InGameScreen extends JPanel {
         // Adjust the card dimensions based on the orientation
         int cardWidth = isVertical ? 160 : 110;
         int cardHeight = isVertical ? 110 : 160;
-        int overlap = cardWidth / 2;
+//        int overlap = cardWidth / 2;
 
         // Set the initial offset for the first card
         int xOffset = 0;
@@ -639,8 +622,7 @@ public class InGameScreen extends JPanel {
             // Set the bounds for the button based on the orientation
             back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
         }
-
-
+        
         panel.revalidate();
         panel.repaint();
     }
@@ -936,12 +918,6 @@ public class InGameScreen extends JPanel {
             } else if (i == 2) {
                 playerScoreLabel.setIcon(scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
             }
-
-            if (i == 0 && (!(player instanceof Computer))){
-                youWinSound();
-            } else if(i == 0) {
-                youLoseSound();;
-            }
             winPanel.add(playerScoreLabel);
         }
         // "Play Again?" button
@@ -949,7 +925,6 @@ public class InGameScreen extends JPanel {
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
             controller.startNewGame();
-            stopSound();
         });
 
         // "Close Game" button
