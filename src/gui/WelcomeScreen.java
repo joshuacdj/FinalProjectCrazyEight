@@ -146,11 +146,7 @@ public class WelcomeScreen extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 1;
         playButton = createCustomButton("Play", 300, 60);
-        playButton.addMouseListener(new MouseAdapter() {
-        public void mouseClicked(MouseEvent e) {
-
-        }
-    });
+        
         backgroundPanel.add(playButton, gbc);
 
         gbc.gridx = 1;
