@@ -219,13 +219,6 @@ public class WelcomeScreen extends JFrame {
         button.setContentAreaFilled(false); // Tell Swing to not fill the content area
         button.setOpaque(false); // Make the button non-opaque
 
-        // Customize font, e.g., button.setFont(new Font("Arial", Font.BOLD, 12));
-
-//        // Action listener for button's functionality
-//        button.addActionListener(e -> {
-//            // Your action logic here
-//            System.out.println(text + " button clicked.");
-//        });
 
         return button;
     }
@@ -238,45 +231,7 @@ public class WelcomeScreen extends JFrame {
         return exitButton;
     }
 
-    public JButton getHelpButton(){
-        return helpButton;
-    }
-
-
-    private static class CustomButton extends JPanel {
-        private Color backgroundColor;
-        private Color borderColor;
-
-        public CustomButton(Color backgroundColor, Color borderColor) {
-            this.backgroundColor = backgroundColor;
-            this.borderColor = borderColor;
-            setOpaque(false); // Indicate that we'll paint our own background
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            // Background
-            g2d.setColor(backgroundColor);
-            g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
-            // Border
-            g2d.setColor(borderColor);
-            g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 30, 30);
-            g2d.dispose();
-        }
-
-        @Override
-        public void setBackground(Color bg) {
-            super.setBackground(bg);
-            backgroundColor = bg;
-            repaint();
-        }
-    }
-
     public static void main(String[] args) {
-
 
         SwingUtilities.invokeLater(() -> new WelcomeScreen().setVisible(true));
     }
