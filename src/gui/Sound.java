@@ -20,7 +20,7 @@ public class Sound {
     }
 
     public static void youWinSound() {
-        playSound("audio/youWin.wav", 3);
+        playSound("audio/youWin.wav", 1);
     }
 
     public static void welcomeSound() {
@@ -32,7 +32,7 @@ public class Sound {
     }
 
     public static void youLoseSound() {
-        playSound("audio/youLose.wav", 3);
+        playSound("audio/youLose.wav", 1);
     }
 
     public static void dealCardEightSound() {

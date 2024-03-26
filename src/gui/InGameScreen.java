@@ -780,6 +780,9 @@ public class InGameScreen extends JPanel {
 
         // Step 3: Populate the panel with sorted scores and player rankings
         List<Player> sortedPlayers = getSortedPlayersByHandValue();
+
+        boolean winSoundPlayed = false;
+
         for (int i = 0; i < sortedPlayers.size(); i++) {
             Player player = sortedPlayers.get(i);
             String rankText = (i + 1) + getPositionSuffix(i + 1) + " - " + player.getName() + ": " + player.calculatePoints();
@@ -795,11 +798,15 @@ public class InGameScreen extends JPanel {
             } else if (i == 2) {
                 playerScoreLabel.setIcon(scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
             }
-            if (i == 0 && (!(player instanceof Computer))) {
-                youWinSound();
-//                break;
-            } else {
-                youLoseSound();
+
+            // For the first player only, check if its a Human to decide the sound
+            if (i == 0 && player instanceof Human) {
+
+                youWinSound(); // Play the win sound for Human first place
+                winSoundPlayed = true; // Set the flag since the win sound is played
+
+            } else if (!winSoundPlayed) { // Only play the lose sound if the win sound hasnt been played
+                youLoseSound(); // This ensures the lose sound is played only if the win sound hasnt been
             }
             winPanel.add(playerScoreLabel);
         }
@@ -807,9 +814,9 @@ public class InGameScreen extends JPanel {
         JButton playAgainButton = createCustomButton("Play Again", 300, 60);
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
+            stopSound();
             welcomeClickSound();
             controller.startNewGame();
-            stopSound();
         });
 
         // "Close Game" button
