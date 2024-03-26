@@ -255,12 +255,12 @@ public class InGameScreen extends JPanel {
         playerPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                positionCardButtons(playerPanel, orientation);
+                setupAndPositionCardButtons(playerPanel);
             }
         });
 
         // Initial card buttons setup
-        setupCardButtons(playerPanel);
+        setupAndPositionCardButtons(playerPanel);
         updateDrawPileButton();
 
         return playerPanel;
@@ -274,214 +274,172 @@ public class InGameScreen extends JPanel {
 //        gameEnd = bool;
 //    }
 
-    private void setupCardButtons(JPanel panel) {
-        int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
-        round.getListOfPlayers().getFirst().setPlayableCards(discardPile.getTopCard());
 
-        System.out.println(numCards);
-        List<Card> currentHand = round.getListOfPlayers().getFirst().getHand();
+    private void setupAndPositionCardButtons(JPanel panel) {
+        // Clear existing card buttons from the panel
+        panel.removeAll();
+        panel.setLayout(null);
 
-        for (int i = 0; i < numCards; i++) {
-            JButton cardButton = new JButton(); // Create button without icon initially
-            cardButton.setBorderPainted(false);
-            cardButton.setContentAreaFilled(false);
-            cardButton.setFocusPainted(false);
-            cardButton.setOpaque(false);
+        List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
+        int numCards = humanHand.size();
+        if (numCards == 0) return;
 
-            // Add the card button to the panel
+        int panelHeight = panel.getHeight();
+        //change to const
+        int cardWidth =  110; // Adjusted card width for better layout
+        int cardHeight =  160; // Adjusted card height for better layout
+
+        // Determine the starting x and y offset for card positioning
+//        int xOffsetStart = (panelWidth - (numCards * cardWidth + (numCards - 1) * 10)) / 2;
+        int yOffset = panelHeight - cardHeight; // Adjust yOffset for vertical orientation if necessary
+
+        for(int i = 0; i < numCards; i++){
+            int xOffset = (cardWidth - 90) * i;
+            Card card = humanHand.get(i);
+            JButton cardButton = createCardButton(card, cardWidth, cardHeight);
+            addCardButtonListeners(cardButton, card, panel);
+            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
             panel.add(cardButton);
-            
-            cardButton.addMouseListener(new MouseAdapter() {
+            panel.setComponentZOrder(panel.getComponent(i), 0);
+        }
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    cardButton.setLocation(cardButton.getX(), cardButton.getY() + 40);
-                    // Card is not raised, raise it up
-                }
-                @Override
-                public void mouseEntered (MouseEvent e) {
-                        // Card is already raised, lower it back down
-                        cardButton.setLocation(cardButton.getX(), cardButton.getY() - 40);
-                }
+        // Refresh the panel to display the new buttons
+        panel.revalidate();
+        panel.repaint();
+    }
 
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    if (cardPlayedByHuman) {
-                        return;
-                    }
-                    //Initialise the cards the human is able to play
-                    //First get the player whose turn it is
-                    Player currentPlayer = round.getListOfPlayers().getFirst();
-                    //Get the current topcard
-                    Card currentTopCard = discardPile.getTopCard();
+    private JButton createCardButton(Card card, int cardWidth, int cardHeight) {
+        JButton cardButton = new JButton();
+//         Set the icon for the card
+        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, false);
+        cardButton.setIcon(icon);
 
-                    //Initialise the card being clicked
-                    String[] s = cardButton.getName().split("_");
-                    int value = Integer.parseInt(s[0]);
-                    Suit suit = Suit.valueOf(s[1]);
-                    Card chosenCard = new Card(value, suit);
-                    //Check whether the card clicked is playable
-                    boolean cardIsPlayable = currentPlayer.isPlayable(chosenCard, currentTopCard);
+        cardButton.setName(card.getValue() + "_" + card.getSuit().toString());
+        cardButton.setBorderPainted(false);
+        cardButton.setContentAreaFilled(false);
+        cardButton.setFocusPainted(false);
+        cardButton.setOpaque(false);
 
-                    // remove card from hand if it is a valid card
-                    if (cardIsPlayable) {
-                        cardPlayedByHuman = true;
-                        for (Card c : currentHand) {
-                            if (chosenCard.equals(c)) {
-                                currentHand.remove(c);
-                                discardPile.addCard(c);
-                                updateDiscardPileImage();
-                                dealCardSound();
+        return cardButton;
+    }
+    //
+    private void addCardButtonListeners(JButton cardButton, Card card, JPanel panel) {
+        cardButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Card is not raised, lower it back down
+                cardButton.setLocation(cardButton.getX(), cardButton.getY() + 40);
+            }
 
-                                panelMap.get("South").removeAll();
-                                panelMap.get("South").revalidate();
-                                panelMap.get("South").repaint();
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Card is already raised, raise it up
+                cardButton.setLocation(cardButton.getX(), cardButton.getY() - 40);
+            }
 
-                                setupCardButtons(panelMap.get("South"));
-                                positionCardButtons(panelMap.get("South"), "South");
-                                if (currentPlayer.getHand().isEmpty()) {
-//                                    gameEnd = true;
-                                    controller.endGame();
-                                    cardButton.removeMouseListener(this);
-                                    return;
-                                }
-                                //DEBUGGING PRINT STATEMENTS
-                                System.out.println("top card is " + discardPile.getTopCard());
-                                System.out.println("after adding card");
-                                System.out.println(currentHand);
-                                break;
-                            }
-                        }
-                        if (chosenCard.getValue() == 8) {
-                            showSuitsButton();
-                            return;
-                        }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                handleCardSelection(card, panel);
+            }
+        });
+    }
 
-                    } else {
-                        System.out.println("INVALID CARD");
-                        return;
-                    }
+    private void handleCardSelection(Card selectedCard, JPanel panel) {
+        if (cardPlayedByHuman) {
+            return;
+        }
 
-                    System.out.println("tempcard after " + discardPile.getTopCard());
-                    controller.compPlay();
-                }
+        Player currentPlayer = round.getListOfPlayers().get(0);
+        boolean cardIsPlayable = currentPlayer.isPlayable(selectedCard, discardPile.getTopCard());
 
-
-            });
+        if (cardIsPlayable) {
+            cardPlayedByHuman = true;
+            currentPlayer.getHand().remove(selectedCard);
+            discardPile.addCard(selectedCard);
+            updateDiscardPileImage();
+            dealCardSound();
+            if (selectedCard.getValue() == 8) {
+                showSuitsButton();
+            } else {
+                controller.compPlay();
+            }
+            // Refresh the card buttons to reflect the current hand after a card is played
+            setupAndPositionCardButtons(panel);
+        } else {
+            System.out.println("INVALID CARD");
+            // Optionally, show an error message or some feedback
         }
     }
 
     private void showSuitsButton() {
+        // Constants for button sizing and layout
+        final int buttonWidth = 140;
+        final int buttonHeight = 70;
+        final Suit[] suits = {Suit.DIAMONDS, Suit.CLUBS, Suit.HEARTS, Suit.SPADES};
 
-        final int SUITBUTTONFONTSIZE = 30;
+        // Calculate spacing based on the total button width
+        int totalButtonWidth = suits.length * buttonWidth;
+        int spacing = (layeredPane.getWidth() - totalButtonWidth) / (suits.length + 1);
 
-        final int BUTTONWIDTH = 140;
-        final int BUTTONHEIGHT = 70;
-        int totalButtonWidth = 4 * BUTTONWIDTH; // For 4 buttons
-        int spacing = (layeredPane.getWidth() - totalButtonWidth) / 5; // Dividing the remaining space into 5 parts
+        int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Y position for all buttons
 
-        JButton play1Button = new JButton("♦");
-        play1Button.setFont(new Font("♦", Font.BOLD, SUITBUTTONFONTSIZE));
-        play1Button.setForeground(Color.RED);
-        int play1ButtonX = spacing;
-        int buttonY = layeredPane.getHeight() - BUTTONHEIGHT - 10; // Adjusting Y to position buttons at the bottom
-        play1Button.setBounds(play1ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
+        // Clear previous suit buttons if they exist
+        clearSuitButtons();
 
-        JButton play2Button = new JButton("♣");
-        play2Button.setFont(new Font("♣", Font.BOLD, SUITBUTTONFONTSIZE));
-        int play2ButtonX = play1ButtonX + BUTTONWIDTH + spacing;
-        play2Button.setBounds(play2ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
-
-        JButton play3Button = new JButton("♥");
-        play3Button.setFont(new Font("♥", Font.BOLD, SUITBUTTONFONTSIZE));
-        play3Button.setForeground(Color.RED);
-        int play3ButtonX = play2ButtonX + BUTTONWIDTH + spacing;
-        play3Button.setBounds(play3ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
-
-        JButton play4Button = new JButton("♠");
-        play4Button.setFont(new Font("♠", Font.BOLD, SUITBUTTONFONTSIZE));
-        int play4ButtonX = play3ButtonX + BUTTONWIDTH + spacing;
-        play4Button.setBounds(play4ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
-
-        // removing of all buttons once a suit is clicked
-        play1Button.addActionListener(e -> {
-            // Your action logic
-            layeredPane.remove(play4Button);
-            layeredPane.remove(play3Button);
-            layeredPane.remove(play2Button);
-            layeredPane.remove(play1Button);
-            layeredPane.repaint();
-            discardPile.setTopCard(new Card(0, Suit.DIAMONDS));
-            updateDiscardPileImage();
-            dealCardEightSound();
-            controller.compPlay();
-        });
-
-        play2Button.addActionListener(e -> {
-            // Your action logic
-            layeredPane.remove(play4Button);
-            layeredPane.remove(play3Button);
-            layeredPane.remove(play2Button);
-            layeredPane.remove(play1Button);
-            layeredPane.repaint();
-            discardPile.setTopCard(new Card(0, Suit.CLUBS));
-            updateDiscardPileImage();
-            dealCardEightSound();
-            controller.compPlay();
-        });
-
-        play3Button.addActionListener(e -> {
-            // Your action logic
-            layeredPane.remove(play4Button);
-            layeredPane.remove(play3Button);
-            layeredPane.remove(play2Button);
-            layeredPane.remove(play1Button);
-            layeredPane.repaint();
-            discardPile.setTopCard(new Card(0, Suit.HEARTS));
-            updateDiscardPileImage();
-            dealCardEightSound();
-            controller.compPlay();
-        });
-
-        play4Button.addActionListener(e -> {
-            // Your action logic
-            layeredPane.remove(play4Button);
-            layeredPane.remove(play3Button);
-            layeredPane.remove(play2Button);
-            layeredPane.remove(play1Button);
-            layeredPane.repaint();
-            discardPile.setTopCard(new Card(0, Suit.SPADES));
-            updateDiscardPileImage();
-            dealCardEightSound();
-            controller.compPlay();
-        });
-
-        // Ensure any existing play button is removed before adding a new one
-        for (Component comp : layeredPane.getComponents()) {
-            if (comp instanceof JButton && "♦".equals(((JButton) comp).getText())) {
-                layeredPane.remove(comp);
-            }
-            if (comp instanceof JButton && "♣".equals(((JButton) comp).getText())) {
-                layeredPane.remove(comp);
-            }
-            if (comp instanceof JButton && "♥".equals(((JButton) comp).getText())) {
-                layeredPane.remove(comp);
-            }
-            if (comp instanceof JButton && "♠".equals(((JButton) comp).getText())) {
-                layeredPane.remove(comp);
-            }
+        // Create and add buttons for each suit
+        for (int i = 0; i < suits.length; i++) {
+            int buttonX = spacing + (i * (buttonWidth + spacing));
+            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, buttonWidth, buttonHeight);
+            layeredPane.add(suitButton, Integer.valueOf(2));
+            layeredPane.moveToFront(suitButton);
         }
 
-        layeredPane.add(play1Button, Integer.valueOf(2)); // Add playButton above centerPanel
-        layeredPane.add(play2Button, Integer.valueOf(2)); // Add playButton above centerPanel
-        layeredPane.add(play3Button, Integer.valueOf(2)); // Add playButton above centerPanel
-        layeredPane.add(play4Button, Integer.valueOf(2)); // Add playButton above centerPanel
+        layeredPane.revalidate();
+        layeredPane.repaint();
+    }
 
-        layeredPane.moveToFront(play1Button);
-        layeredPane.moveToFront(play2Button);
-        layeredPane.moveToFront(play3Button);
-        layeredPane.moveToFront(play4Button);
+    private void clearSuitButtons() {
+        // List of suit symbols as strings to check against existing buttons
+        String[] suitSymbols = {"♦", "♣", "♥", "♠"};
+        for (Component comp : layeredPane.getComponents()) {
+            if (comp instanceof JButton) {
+                String buttonText = ((JButton) comp).getText();
+                if (Arrays.asList(suitSymbols).contains(buttonText)) {
+                    layeredPane.remove(comp);
+                }
+            }
+        }
+    }
 
+    private JButton createSuitButton(Suit suit, int x, int y, int width, int height) {
+        JButton button = new JButton(suitSymbol(suit));
+        button.setFont(new Font("Dialog", Font.BOLD, 30));
+        button.setBounds(x, y, width, height);
+
+        button.addActionListener(e -> {
+            updateGameAfterSuitSelected(suit);
+        });
+
+        return button;
+    }
+
+    private String suitSymbol(Suit suit) {
+        switch (suit) {
+            case DIAMONDS: return "♦";
+            case CLUBS: return "♣";
+            case HEARTS: return "♥";
+            case SPADES: return "♠";
+            default: return "?";
+        }
+    }
+
+    private void updateGameAfterSuitSelected(Suit suit) {
+        // Logic to update the game state after a suit is selected
+        clearSuitButtons();
+        discardPile.setTopCard(new Card(0, suit));
+        updateDiscardPileImage();
+        dealCardEightSound();
+        controller.compPlay();
         layeredPane.revalidate();
         layeredPane.repaint();
     }
@@ -503,71 +461,6 @@ public class InGameScreen extends JPanel {
             // Add the card button to the panel
             panel.add(cardLabel, gbc);
         }
-    }
-
-    private void positionCardButtons(JPanel panel, String orientation) {
-
-        //Initialise a listofcards to be a hand
-        List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
-
-//        int numCards = humanHand.size();
-//        if (numCards == 0) return;
-
-        boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
-
-        int panelWidth = panel.getWidth();
-        int panelHeight = panel.getHeight();
-
-        // Adjust the card dimensions based on the orientation
-        int cardWidth = isVertical ? panelHeight / 5 : panelWidth / 8;
-        int cardHeight = isVertical ? panelWidth - 20 : panelHeight - 20;
-//        int overlap = cardWidth / 2;
-
-        if ("South".equals(orientation) || "North".equals(orientation)) {
-            cardWidth = 110;
-            cardHeight = 160;
-        }
-        if ("East".equals(orientation) || "West".equals(orientation)) {
-            cardWidth = 160;
-            cardHeight = 110;
-        }
-
-        // For vertical panels, adjust the height for stacking with overlap
-//        if (isVertical) {
-//            overlap = cardHeight / 2;
-//        }
-
-        // Set the initial offset for the first card
-        int xOffset = 0;
-        int yOffset = panelHeight - cardHeight;
-
-        if ("South".equals(orientation)) {
-            for (int i = 0; i < humanHand.size(); i++) {
-
-                JButton cardButton = (JButton) panel.getComponent(i);
-                cardButton.setName(humanHand.get(i).getValue() + "_" + humanHand.get(i).getSuit());
-                ImageIcon icon = loadAndScaleCardImage(humanHand.get(i).getFilepath(), cardWidth, cardHeight, isVertical);
-
-                cardButton.setIcon(icon);
-                cardButton.setBorderPainted(false);
-                cardButton.setContentAreaFilled(false);
-                cardButton.setFocusPainted(false);
-                cardButton.setOpaque(false);
-
-                // Position the cards with proper offset
-                xOffset = (cardWidth - 90) * i;
-
-
-                // Set the bounds for the button based on the orientation
-                cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
-
-                // Make sure that the cards added on later are set to the front to overlap nicely
-                panel.setComponentZOrder(panel.getComponent(i), 0);
-            }
-        }
-
-        panel.revalidate();
-        panel.repaint();
     }
 
     private void positionCardLabel(JPanel panel, String orientation) {
@@ -798,8 +691,7 @@ public class InGameScreen extends JPanel {
             // Utilize existing setup methods based on orientation
             if ("South".equals(orientation)) {
                 // Assuming South is always the human player in your game setup
-                setupCardButtons(playerPanel); // If this method sets up the human player's cards
-                positionCardButtons(playerPanel, "South");
+                setupAndPositionCardButtons(playerPanel);
             } else {
                 // For computer players
                 setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
