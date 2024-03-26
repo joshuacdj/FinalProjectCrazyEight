@@ -265,35 +265,35 @@ public class InGameScreen extends JPanel {
         playerPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                positionCardButtons(playerPanel, orientation);
+                setupAndPositionCardButtons(playerPanel);
             }
         });
 
         // Initial card buttons setup
-        setupCardButtons(playerPanel);
+        setupAndPositionCardButtons(playerPanel);
         updateDrawPileButton();
 
         return playerPanel;
     }
 
-    private void setupSuitButtons(JLayeredPane centerPanel) {
-        int numSuits = 4;
-
-        for (int i = 0; i < numSuits; i ++) {
-            JButton suitButton = new JButton();
-            suitButton.setBorderPainted(false);
-            suitButton.setContentAreaFilled(false);
-            suitButton.setFocusPainted(false);
-            suitButton.setOpaque(false);
-
-            centerPanel.add(suitButton);
-
-            suitButton.addMouseListener(new MouseAdapter() {
-
-            });
-
-        }
-    }
+//    private void setupSuitButtons(JLayeredPane centerPanel) {
+//        int numSuits = 4;
+//
+//        for (int i = 0; i < numSuits; i ++) {
+//            JButton suitButton = new JButton();
+//            suitButton.setBorderPainted(false);
+//            suitButton.setContentAreaFilled(false);
+//            suitButton.setFocusPainted(false);
+//            suitButton.setOpaque(false);
+//
+//            centerPanel.add(suitButton);
+//
+//            suitButton.addMouseListener(new MouseAdapter() {
+//
+//            });
+//
+//        }
+//    }
 
     public void setCardPlayedByHumanToFalse() {
         cardPlayedByHuman = false;
@@ -319,7 +319,7 @@ public class InGameScreen extends JPanel {
 
             // Add the card button to the panel
             panel.add(cardButton);
-            
+
             cardButton.addMouseListener(new MouseAdapter() {
 
                 @Override
@@ -508,25 +508,6 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    private void setupCardLabel(JPanel panel, String orientation) {
-        int numCards;
-        if(orientation.equals("West")){
-            numCards = round.getListOfPlayers().get(1).getHand().size();
-        }else if(orientation.equals("North")){
-            numCards = round.getListOfPlayers().get(2).getHand().size();
-        }else{
-            numCards = round.getListOfPlayers().get(3).getHand().size();
-        }
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.LAST_LINE_END;
-        for (int i = 0; i < numCards; i++) {
-            JLabel cardLabel = new JLabel(); // Create button without icon initially
-            // Add the card button to the panel
-            panel.add(cardLabel, gbc);
-        }
-    }
-
     private void positionCardButtons(JPanel panel, String orientation) {
 
         //Initialise a listofcards to be a hand
@@ -592,8 +573,26 @@ public class InGameScreen extends JPanel {
 
         panel.revalidate();
         panel.repaint();
+    }
+
+    private void setupCardLabel(JPanel panel, String orientation) {
+        int numCards;
+        if(orientation.equals("West")){
+            numCards = round.getListOfPlayers().get(1).getHand().size();
+        }else if(orientation.equals("North")){
+            numCards = round.getListOfPlayers().get(2).getHand().size();
+        }else{
+            numCards = round.getListOfPlayers().get(3).getHand().size();
         }
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.LAST_LINE_END;
+        for (int i = 0; i < numCards; i++) {
+            JLabel cardLabel = new JLabel(); // Create button without icon initially
+            // Add the card button to the panel
+            panel.add(cardLabel, gbc);
+        }
+    }
     private void positionCardLabel(JPanel panel, String orientation) {
 
         //numCards is dependent on the panel
@@ -650,6 +649,176 @@ public class InGameScreen extends JPanel {
 
         panel.revalidate();
         panel.repaint();
+    }
+
+
+    private void setupAndPositionCardButtons(JPanel panel) {
+        // Clear existing card buttons from the panel
+        panel.removeAll();
+        panel.setLayout(null);
+
+        List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
+        int numCards = humanHand.size();
+        if (numCards == 0) return;
+
+        int panelHeight = panel.getHeight();
+        //change to const
+        int cardWidth =  110; // Adjusted card width for better layout
+        int cardHeight =  160; // Adjusted card height for better layout
+
+        // Determine the starting x and y offset for card positioning
+//        int xOffsetStart = (panelWidth - (numCards * cardWidth + (numCards - 1) * 10)) / 2;
+        int yOffset = panelHeight - cardHeight; // Adjust yOffset for vertical orientation if necessary
+
+        for(int i = 0; i < numCards; i++){
+            int xOffset = (cardWidth - 90) * i;
+            Card card = humanHand.get(i);
+            JButton cardButton = createCardButton(card, cardWidth, cardHeight);
+            addCardButtonListeners(cardButton, card, panel);
+            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+            panel.add(cardButton);
+            panel.setComponentZOrder(panel.getComponent(i), 0);
+        }
+
+        // Refresh the panel to display the new buttons
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    private JButton createCardButton(Card card, int cardWidth, int cardHeight) {
+        JButton cardButton = new JButton();
+//         Set the icon for the card
+        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, false);
+        cardButton.setIcon(icon);
+
+        cardButton.setName(card.getValue() + "_" + card.getSuit().toString());
+        cardButton.setBorderPainted(false);
+        cardButton.setContentAreaFilled(false);
+        cardButton.setFocusPainted(false);
+        cardButton.setOpaque(false);
+
+        return cardButton;
+    }
+//
+    private void addCardButtonListeners(JButton cardButton, Card card, JPanel panel) {
+        cardButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Card is not raised, lower it back down
+                cardButton.setLocation(cardButton.getX(), cardButton.getY() + 40);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Card is already raised, raise it up
+                cardButton.setLocation(cardButton.getX(), cardButton.getY() - 40);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                handleCardSelection(card, panel);
+            }
+        });
+    }
+
+    private void handleCardSelection(Card selectedCard, JPanel panel) {
+        if (cardPlayedByHuman) {
+            return;
+        }
+
+        Player currentPlayer = round.getListOfPlayers().get(0);
+        boolean cardIsPlayable = currentPlayer.isPlayable(selectedCard, discardPile.getTopCard());
+
+        if (cardIsPlayable) {
+            cardPlayedByHuman = true;
+            currentPlayer.getHand().remove(selectedCard);
+            discardPile.addCard(selectedCard);
+            updateDiscardPileImage();
+            dealCardSound();
+            if (selectedCard.getValue() == 8) {
+                showSuitsButton();
+            } else {
+                controller.compPlay();
+            }
+            // Refresh the card buttons to reflect the current hand after a card is played
+            setupAndPositionCardButtons(panel);
+        } else {
+            System.out.println("INVALID CARD");
+            // Optionally, show an error message or some feedback
+        }
+    }
+
+    private void showSuitsButton() {
+        // Constants for button sizing and layout
+        final int buttonWidth = 140;
+        final int buttonHeight = 70;
+        final Suit[] suits = {Suit.DIAMONDS, Suit.CLUBS, Suit.HEARTS, Suit.SPADES};
+
+        // Calculate spacing based on the total button width
+        int totalButtonWidth = suits.length * buttonWidth;
+        int spacing = (layeredPane.getWidth() - totalButtonWidth) / (suits.length + 1);
+
+        int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Y position for all buttons
+
+        // Clear previous suit buttons if they exist
+        clearSuitButtons();
+
+        // Create and add buttons for each suit
+        for (int i = 0; i < suits.length; i++) {
+            int buttonX = spacing + (i * (buttonWidth + spacing));
+            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, buttonWidth, buttonHeight);
+            layeredPane.add(suitButton, Integer.valueOf(2));
+            layeredPane.moveToFront(suitButton);
+        }
+
+        layeredPane.revalidate();
+        layeredPane.repaint();
+    }
+
+    private void clearSuitButtons() {
+        // List of suit symbols as strings to check against existing buttons
+        String[] suitSymbols = {"♦", "♣", "♥", "♠"};
+        for (Component comp : layeredPane.getComponents()) {
+            if (comp instanceof JButton) {
+                String buttonText = ((JButton) comp).getText();
+                if (Arrays.asList(suitSymbols).contains(buttonText)) {
+                    layeredPane.remove(comp);
+                }
+            }
+        }
+    }
+
+    private JButton createSuitButton(Suit suit, int x, int y, int width, int height) {
+        JButton button = new JButton(suitSymbol(suit));
+        button.setFont(new Font("Dialog", Font.BOLD, 30));
+        button.setBounds(x, y, width, height);
+
+        button.addActionListener(e -> {
+            updateGameAfterSuitSelected(suit);
+        });
+
+        return button;
+    }
+
+    private String suitSymbol(Suit suit) {
+        switch (suit) {
+            case DIAMONDS: return "♦";
+            case CLUBS: return "♣";
+            case HEARTS: return "♥";
+            case SPADES: return "♠";
+            default: return "?";
+        }
+    }
+
+    private void updateGameAfterSuitSelected(Suit suit) {
+        // Logic to update the game state after a suit is selected
+        clearSuitButtons();
+        discardPile.setTopCard(new Card(0, suit));
+        updateDiscardPileImage();
+        dealCardEightSound();
+        controller.compPlay();
+        layeredPane.revalidate();
+        layeredPane.repaint();
     }
 
     private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
@@ -787,67 +956,16 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    public void updateDrawCard(Player player) {
-        SwingUtilities.invokeLater(() -> {
-            String orientation = "North"; // Default, you might need to determine this based on the player
-            JPanel panelToUpdate = null;
-
-            // Determine the panel orientation based on the player
-            if (player instanceof Computer) {
-                // Assuming you have a way to determine the position of the computer player
-                orientation = determineOrientation(player);
-            }
-
-            panelToUpdate = panelMap.get(orientation);
-
-            // If no specific panel is found, exit the method
-            if (panelToUpdate == null) return;
-
-            // For simplicity, let's just re-setup the card labels for the updated panel
-            if ("North".equals(orientation) || "East".equals(orientation) || "West".equals(orientation)) {
-                setupCardLabel(panelToUpdate, orientation);
-                positionCardLabel(panelToUpdate, orientation);
-            }
-        });
-    }
-
-//    public void refreshPlayerPanel(String orientation) {
-//        // Assuming orientation is something like "North", "South", "East", "West"
-//        JPanel playerPanel = panelMap.get(orientation);
-//        if (playerPanel != null) {
-//            // Clear the panel before re-adding updated content
-//            playerPanel.removeAll();
-//
-//            // Utilize existing setup methods based on orientation
-//            if ("South".equals(orientation)) {
-//                // Assuming South is always the human player in your game setup
-//                setupCardButtons(playerPanel); // If this method sets up the human player's cards
-//                positionCardButtons(playerPanel, "South");
-//            } else {
-//                // For computer players
-//                setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
-//                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
-//            }
-//
-//            // Reposition labels or buttons as needed, potentially reusing existing logic
-//
-//            playerPanel.revalidate();
-//            playerPanel.repaint();
-//        }
-//    }
-
     public void refreshPlayerPanel(String orientation) {
         // Assuming orientation is something like "North", "South", "East", "West"
         JPanel playerPanel = panelMap.get(orientation);
         if (playerPanel != null) {
             // Clear the panel before re-adding updated content
             playerPanel.removeAll();
-
             // Utilize existing setup methods based on orientation
             if ("South".equals(orientation)) {
                 // Assuming South is always the human player in your game setup
-                setupCardButtons(playerPanel); // If this method sets up the human player's cards
-                positionCardButtons(playerPanel, "South");
+                setupAndPositionCardButtons(playerPanel);
             } else {
                 // For computer players
                 setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
