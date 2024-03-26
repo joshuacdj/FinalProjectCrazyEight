@@ -40,18 +40,19 @@ public class Sound {
     }
 
 
-    private static void playSound(String filePath, int loop) {
+    private static void playSound(String filePath, int loopCount) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
 
-            while (loop != 0) {
-                clip.start();
-                soundClip = clip;
-                loop--;
+            if (loopCount > 0) {
+                clip.loop(loopCount - 1); // Loop count is the number of additional loops after the initial playback
+            } else {
+                clip.start(); // If loop count is zero or negative, play once
             }
-            clip.start();
+
+            soundClip = clip;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
