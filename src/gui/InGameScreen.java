@@ -395,6 +395,7 @@ public class InGameScreen extends JPanel {
 
                     JButton play1Button = new JButton("♦");
                     play1Button.setFont(new Font("♦", Font.BOLD, 30));
+                    play1Button.setForeground(Color.RED);
                     int play1ButtonX = spacing;
                     int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Adjusting Y to position buttons at the bottom
                     play1Button.setBounds(play1ButtonX, buttonY, buttonWidth, buttonHeight);
@@ -406,6 +407,7 @@ public class InGameScreen extends JPanel {
 
                     JButton play3Button = new JButton("♥");
                     play3Button.setFont(new Font("♥", Font.BOLD, 30));
+                    play3Button.setForeground(Color.RED);
                     int play3ButtonX = play2ButtonX + buttonWidth + spacing;
                     play3Button.setBounds(play3ButtonX, buttonY, buttonWidth, buttonHeight);
 
