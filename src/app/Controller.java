@@ -104,7 +104,7 @@ public class Controller implements DrawActionListener{
 
                     // If the computer's hand size is empty, end the game
                     if(c.getHand().isEmpty()){
-                        inGameScreen.setGameEnd(true);
+//                        inGameScreen.setGameEnd(true);
                         endGame();
                         break;
                     }

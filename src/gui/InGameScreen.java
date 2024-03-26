@@ -31,7 +31,7 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
     private final Controller controller;
     private boolean cardPlayedByHuman = false;
-    private boolean gameEnd = false;
+//    private boolean gameEnd = false;
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
 
@@ -270,9 +270,9 @@ public class InGameScreen extends JPanel {
         cardPlayedByHuman = false;
     }
 
-    public void setGameEnd(boolean bool) {
-        gameEnd = bool;
-    }
+//    public void setGameEnd(boolean bool) {
+//        gameEnd = bool;
+//    }
 
     private void setupCardButtons(JPanel panel) {
         int numCards = round.getListOfPlayers().getFirst().getHand().size(); // The number of cards to display
@@ -338,7 +338,7 @@ public class InGameScreen extends JPanel {
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
                                 if (currentPlayer.getHand().isEmpty()) {
-                                    gameEnd = true;
+//                                    gameEnd = true;
                                     controller.endGame();
                                     cardButton.removeMouseListener(this);
                                     return;
