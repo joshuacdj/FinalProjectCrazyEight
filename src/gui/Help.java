@@ -10,13 +10,13 @@ import java.awt.GradientPaint;
 
 public class Help extends JFrame {
 
-    private Font titleFont = new Font("Segoe Script", Font.BOLD, 18); // Elegant font
+    private Font titleFont = new Font("Chalkboard", Font.BOLD, 26); // Elegant font
 
     public Help() {
 
         setTitle("Help");
-        setSize(1000, 600);
-        setMinimumSize(new Dimension(800,500));
+        setSize(800, 500);
+        setMinimumSize(new Dimension(850,600));
         setLocationRelativeTo(null); // Center the window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Dispose the window on close
 
@@ -35,28 +35,28 @@ public class Help extends JFrame {
         textBox.setWrapStyleWord(true);
 
         // Add some sample text to the text box
-        textBox.setText("Objective: \nThe goal of the game is to have the least number of points when someone clears their hand!\n\n\n" +
-                "How to Play: \nEach player takes turns playing a maximum of 1 card per turn.\n" +
-                "You can play any card that matches the SUIT or VALUE of the top card of the discard pile.\n" +
-                "BUT an 8 can be played anytime and upon playing an 8, you can set the current suit to any suit you want!\n" +
-                "If you don't have any playable cards, you can draw up to 5 cards. If you still don't have any cards to play, your turn will be skipped!\n\n\n" +
-                "How to Win: \nThe game ends when someone empties their entire hand and the loser is determined by the number of points he/she has at the end of the game.\n" +
-                "Aces are 1 point, Kings are 13 points. Any 8 cards are worth 50 POINTS!\n\n\n" +
+        textBox.setText("Objective:\nThe goal of the game is to have the least number of points when someone clears their hand!\n\n" +
+                "How to Play:\nEach player takes turns playing 1 card per turn.\n" +
+                "You can play any card that matches the SUIT or VALUE of the latest played card.\n" +
+                "HOWEVER! An 8 card has a special effect that can be played anytime. It lets you set the current game's suit to any suit you want!\n" +
+                "A maximum of 5 cards can be drawn per turn if you do not have any playable cards.\n\n" +
+                "How to Win:\nThe game ends when a player empties his/her hand. The loser is determined by the number of points he/she has at the end of the game.\n" +
+                "Aces are 1 point, Jacks, Queens and Kings are 10 points each. Any 8 cards are worth 50 POINTS. So make sure you use it fast!\n\n" +
                 "Have fun playing!\n");
 
 
         // Set the background color of the text box to match the JFrame's background
         textBox.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        Font textFont = textBox.getFont();
-        textBox.setFont(new Font(textFont.getName(), textFont.getStyle(), 15));
+        Font textFont = new Font("Chalkboard", Font.PLAIN,18);
+        textBox.setFont(textFont);
 
         // Add a border to the text box to create a visible outline
-        textBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        textBox.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
         JPanel panel = new JPanel(new GridBagLayout()); // Use GridBagLayout for flexible component positioning
 
         // Add an empty border with a small gap at the top
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 15, 15, 15));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 15, 15, 16));
 
         // Add the helpLabel and textBox to the panel
         GridBagConstraints gbc = new GridBagConstraints();
@@ -83,8 +83,8 @@ public class Help extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
 
                 // Define the gradient colors
-                Color color1 = new Color(0xA49A7F);
-                Color color2 = new Color(164, 154, 127);
+                Color color1 = new Color(0x033D15);
+                Color color2 = new Color(3, 61, 21);
 
                 // Create the gradient paint
                 GradientPaint gradientPaint = new GradientPaint(0, 0, color1, getWidth(), getHeight(), color2);

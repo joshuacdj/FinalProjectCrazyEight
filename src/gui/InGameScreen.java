@@ -40,7 +40,7 @@ public class InGameScreen extends JPanel {
         drawPile = round.getDrawPile();
 
         // add the help jbutton
-        JButton helpButton = new JButton("Help");
+        JButton helpButton = new JButton("How to play");
         add(helpButton, BorderLayout.WEST);
         helpButton.addActionListener(new ActionListener() {
             @Override
