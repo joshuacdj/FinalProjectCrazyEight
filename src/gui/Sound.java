@@ -1,54 +1,66 @@
 package gui;
 
+import javax.sound.sampled.*;
 import java.io.File;
 
-import javax.sound.sampled.*;
 public class Sound {
 
-    private static Clip backgroundMusicClip;
+    private static Clip soundClip;
 
     public static void dealCardSound() {
-        playSound("audio/dealingcardsound.wav");
+        playSound("audio/dealCard.wav", 1);
     }
 
     public static void drawCardSound() {
-        playSound("audio/flipcard.wav");
+        playSound("audio/drawCard.wav", 1);
     }
 
     public static void backGroundMusic() {
-        playSound("audio/backgroundmusic.wav", true);
+        playSound("audio/backGroundMusic.wav", 30);
+    }
+
+    public static void youWinSound() {
+        playSound("audio/youWin.wav", 3);
+    }
+
+    public static void welcomeSound() {
+        playSound("audio/welcomeSound.wav", 1);
+    }
+
+    public static void welcomeClickSound() {
+        playSound("audio/welcomeClickSound.wav", 1);
+    }
+
+    public static void youLoseSound() {
+        playSound("audio/youLose.wav", 3);
     }
 
     public static void dealCardEightSound() {
-        playSound("audio/dealcardeight.wav");
+        playSound("audio/dealEightCard.wav", 1);
     }
 
-    private static void playSound(String filePath) {
-        playSound(filePath, false);
-    }
 
-    private static void playSound(String filePath, boolean loop) {
+    private static void playSound(String filePath, int loop) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
 
-            if (loop) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-                backgroundMusicClip = clip;
-            } else {
+            while (loop != 0) {
                 clip.start();
+                soundClip = clip;
+                loop--;
             }
+            clip.start();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    // Stop background music
-    public static void stopBackgroundMusic() {
-        if (backgroundMusicClip != null) {
-            backgroundMusicClip.stop();
+    // Method to stop sound
+    public static void stopSound() {
+        if (soundClip != null) {
+            soundClip.stop();
         }
     }
-
 }

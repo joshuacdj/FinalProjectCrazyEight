@@ -14,6 +14,7 @@ public class Controller implements DrawActionListener{
 
     public Controller() {
         backGroundMusic();
+        welcomeSound();
         currentRound.roundStart();
         // After creating Computer instances
         for (Player player : currentRound.getListOfPlayers()) {
@@ -120,6 +121,7 @@ public class Controller implements DrawActionListener{
     }
 
     private void startGame() {
+        welcomeClickSound();
         showScreen(inGameScreen);
     }
     

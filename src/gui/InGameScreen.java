@@ -282,7 +282,11 @@ public class InGameScreen extends JPanel {
 
         List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
         int numCards = humanHand.size();
-        if (numCards == 0) return;
+        if (numCards == 0) {
+            controller.endGame();
+            disableInteractions();
+            return;
+        }
 
         int panelHeight = panel.getHeight();
         //change to const
@@ -414,6 +418,10 @@ public class InGameScreen extends JPanel {
     private JButton createSuitButton(Suit suit, int x, int y, int width, int height) {
         JButton button = new JButton(suitSymbol(suit));
         button.setFont(new Font("Dialog", Font.BOLD, 30));
+
+        switch (suit) {
+            case Suit.DIAMONDS, Suit.HEARTS -> button.setForeground(Color.RED);
+        }
         button.setBounds(x, y, width, height);
 
         button.addActionListener(e -> {
@@ -810,6 +818,12 @@ public class InGameScreen extends JPanel {
             } else if (i == 2) {
                 playerScoreLabel.setIcon(scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
             }
+            if (i == 0 && (!(player instanceof Computer))) {
+                youWinSound();
+                break;
+            } else {
+                youLoseSound();
+            }
             winPanel.add(playerScoreLabel);
         }
         // "Play Again?" button
@@ -817,6 +831,7 @@ public class InGameScreen extends JPanel {
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
             controller.startNewGame();
+            stopSound();
         });
 
         // "Close Game" button

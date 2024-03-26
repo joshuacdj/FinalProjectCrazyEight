@@ -18,6 +18,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.GradientPaint;
 import java.io.*;
 
+import static gui.Sound.welcomeClickSound;
+
 public class WelcomeScreen extends JFrame {
 
     private final static int TITLEBUTTONWIDTH = 300;
@@ -119,6 +121,7 @@ public class WelcomeScreen extends JFrame {
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                welcomeClickSound();
                 Help helpWindow = new Help();
                 helpWindow.setVisible(true);
             }
