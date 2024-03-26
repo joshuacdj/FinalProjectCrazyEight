@@ -3,6 +3,8 @@ package GUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
@@ -152,21 +154,24 @@ public class WelcomeScreen extends JFrame {
         gbc.gridy = 1;
         playButton = createCustomButton("Play", 300, 60);
         playButton.addMouseListener(new MouseAdapter() {
-                                        public void mouseClicked(MouseEvent e) {
-//                                            if (text.equals("Play")) {
-//                                                // Assuming this code is inside an ActionListener in your WelcomeScreen
-//                                                getContentPane().removeAll();
-//                                                add(new GUI.InGameScreen());
-//                                                revalidate();
-//                                                repaint();
-//                                            }
-                                        }
-                                    });
+        public void mouseClicked(MouseEvent e) {
+
+        }
+    });
         backgroundPanel.add(playButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
         helpButton = createCustomButton("Help", 300, 60);
+
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Help helpWindow = new Help();
+                helpWindow.setVisible(true);
+            }
+        });
+
         backgroundPanel.add(helpButton, gbc);
 
         gbc.gridx = 1;
@@ -243,7 +248,6 @@ public class WelcomeScreen extends JFrame {
     public JButton getHelpButton(){
         return helpButton;
     }
-
 
 
     private static class CustomButton extends JPanel {
