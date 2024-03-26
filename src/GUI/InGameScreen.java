@@ -46,15 +46,15 @@ public class InGameScreen extends JPanel {
         drawPile = round.getDrawPile();
 
         // add the help jbutton
-        JButton helpButton = new JButton("Help");
-        add(helpButton, BorderLayout.WEST);
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Help help = new Help();
-                help.setVisible(true);
-            }
-        });
+//        JButton helpButton = new JButton("Help");
+//        add(helpButton, BorderLayout.WEST);
+//        helpButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                Help help = new Help();
+//                help.setVisible(true);
+//            }
+//        });
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -229,19 +229,19 @@ public class InGameScreen extends JPanel {
 
                 if ("East".equals(orientation)) {
                     // For East orientation
-                    g2d.translate(22, getHeight() / 2);
+                    g2d.translate(fm.getFont().getSize(), getHeight() / 2);
                     g2d.rotate(-Math.PI / 2);
                     x = (int) (-textBounds.getWidth() / 2);
                     y = 0;
                 } else if ("West".equals(orientation)) {
                     // For vertical orientation, rotate the graphics object
-                    g2d.translate(getWidth() - 22, getHeight() / 2);
+                    g2d.translate(getWidth() - fm.getFont().getSize(), getHeight() / 2);
                     g2d.rotate(Math.PI / 2);
                     x = (int) (-textBounds.getWidth() / 2);
 //                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
                     y = 0;
                 } else {
-                    g2d.translate(getWidth() / 2, getHeight() - 22);
+                    g2d.translate((getWidth() + textBounds.getWidth()) / 2 , getHeight() - fm.getFont().getSize());
                     g2d.rotate(Math.PI);
                     x = 0;
                     y = 0;
