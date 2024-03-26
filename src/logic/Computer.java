@@ -21,7 +21,7 @@ public class Computer extends Player {
 //        set list of playable cards
         setPlayableCards(lastPlayedCard);
 //        check if there are no playable cards in hand
-        while (getPlayableCards().isEmpty() && cardsDrawn < 5) {
+        while (getPlayableCards().isEmpty() && cardsDrawn < MAXDRAWCOUNT) {
             drawCard(deck.getTopCard());
             if (drawActionListener != null) {
                 drawActionListener.onCardDrawn(this); // Notify about the draw
