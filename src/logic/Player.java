@@ -12,13 +12,9 @@ public abstract class Player {
     private String name;
 
     public Player(String name) {
-
         this.hand = new ArrayList<>();
-
         this.playableCards = new ArrayList<>();
-
         this.name = name;
-
     }
 
     // Return the current hand of the player

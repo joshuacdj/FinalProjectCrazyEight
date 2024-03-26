@@ -49,12 +49,10 @@ public class Card {
         return c.getValue() == value && c.getSuit().equals(suit);
     }
 
-
     // To print out the value and suit for card for debugging
     @Override
     public String toString() {
         return String.format("value: %d suit: %s%n", value, suit);
     }
-
 }
 

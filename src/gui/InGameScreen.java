@@ -83,8 +83,6 @@ public class InGameScreen extends JPanel {
         layeredPane.add(helpButton,Integer.valueOf(1));
         layeredPane.moveToFront(helpButton);
 
-
-
         // Setup the GridBagConstraints for layeredPane
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -134,7 +132,6 @@ public class InGameScreen extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -507,11 +504,10 @@ public class InGameScreen extends JPanel {
     private void positionCardButtons(JPanel panel, String orientation) {
 
         //Initialise a listofcards to be a hand
-
         List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
 
-        int numCards = humanHand.size();
-        if (numCards == 0) return;
+//        int numCards = humanHand.size();
+//        if (numCards == 0) return;
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
 
@@ -565,7 +561,6 @@ public class InGameScreen extends JPanel {
                 panel.setComponentZOrder(panel.getComponent(i), 0);
             }
         }
-
 
         panel.revalidate();
         panel.repaint();
@@ -623,8 +618,7 @@ public class InGameScreen extends JPanel {
             // Set the bounds for the button based on the orientation
             back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
         }
-
-
+        
         panel.revalidate();
         panel.repaint();
     }

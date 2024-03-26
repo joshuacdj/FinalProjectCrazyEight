@@ -3,7 +3,7 @@ package logic;
 import java.util.*;
 
 public class Round {
-    private static final int MAXDRAWCOUNT = 5;
+    private static final int STARTINGDRAWCOUNT = 5;
     private ArrayList<Player> listOfPlayers;
     private DrawPile drawPile;
     private DiscardPile discardPile;
@@ -34,7 +34,6 @@ public class Round {
 
     // set the first card of the round
     public void setFirstCard(DrawPile drawPile, DiscardPile discardPile) {
-
         // obtain starting card
         Card startingCard = drawPile.getTopCard();
 
@@ -49,14 +48,13 @@ public class Round {
     }
 
     public void roundStart() {
-
         // shuffle a new deck
         drawPile.shuffleDeck();
 
         // set the first playing card of the game
         setFirstCard(drawPile, discardPile);
 
-        for (int i = 0; i < MAXDRAWCOUNT; i++) {
+        for (int i = 0; i < STARTINGDRAWCOUNT; i++) {
             for (Player p : listOfPlayers) {
                 p.drawCard(drawPile.getTopCard());
             }

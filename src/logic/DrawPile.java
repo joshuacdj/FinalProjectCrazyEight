@@ -4,13 +4,13 @@ import java.util.*;
 import java.util.Collections;
 
 public class DrawPile implements Deck {
-    private final static int CARDSINSUIT = 13;
+    private final static int CARDSPERSUIT = 13;
     private ArrayList<Card> listOfCards;
 
     public DrawPile() {
         
         listOfCards = new ArrayList<>();
-        for (int i = 1; i <= CARDSINSUIT; i++) {
+        for (int i = 1; i <= CARDSPERSUIT; i++) {
             for (Suit suit : Suit.values()) {
                 listOfCards.add(new Card(i, suit));
             }

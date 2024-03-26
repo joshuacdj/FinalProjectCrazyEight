@@ -16,13 +16,20 @@ public class Computer extends Player {
     }
 
     public ArrayList<Object> action(Card lastPlayedCard, DrawPile deck) {
+        // Initialise the number of cards drawn in a computer action
         int cardsDrawn = 0;
+
+        // Initialise the card and suit chosen by the computer
         ArrayList<Object> output = new ArrayList<>();
-//        set list of playable cards
+
+        // Set list of playable cards
         setPlayableCards(lastPlayedCard);
-//        check if there are no playable cards in hand
+
+        // Check if there are no playable cards in hand and if cards drawn is less than the allowed maximum
         while (getPlayableCards().isEmpty() && cardsDrawn < MAXDRAWCOUNT) {
+            // Draw a card and update playable cards and cards drawn
             drawCard(deck.getTopCard());
+//WILL DRAW ACTIONLISTENER EVER BE NULL?
             if (drawActionListener != null) {
                 drawActionListener.onCardDrawn(this); // Notify about the draw
             }
@@ -40,38 +47,28 @@ public class Computer extends Player {
             }
         }
         System.out.println(getHand());
-//        check if player drew 5 cards
+        // Check if player has at least one playable card
         if (!getPlayableCards().isEmpty()) {
-//            choose to discard the card worth the most points
-//            if 8 present, return 8 and choose suit which is most common in hand
+            // Choose to discard the card worth the most points
+            // If 8 present, return 8 and choose suit which is most common in hand
             for (Card card : getPlayableCards()) {
                 if (card.getValue() == 8) {
                     removeCard(card);
                     dealCardEightSound();
 
-//                    find which suit is most common in computer's hand
-                    HashMap<Suit, Integer> suitCount = new HashMap<>();
-                    suitCount.put(Suit.DIAMONDS, 0);
-                    suitCount.put(Suit.CLUBS, 0);
-                    suitCount.put(Suit.HEARTS, 0);
-                    suitCount.put(Suit.SPADES, 0);
-
-                    for (Card c: getHand()) {
-                        if (c.equals(card)) { break; } // exclude current 8 card from suit count
-                        suitCount.put(c.getSuit(), suitCount.get(c.getSuit()) + 1);
-                    }
-                    Suit desiredSuit = Collections.max(suitCount.entrySet(), HashMap.Entry.comparingByValue()).getKey();
+                    // Set the suit to the one the computer has the most number of cards
+                    Suit desiredSuit = findHighestFrequencySuit();
                     output.add(card);
                     output.add(desiredSuit);
                     return output;
                 }
             }
-//            else choose the highest face value card
+
+            // Else choose the highest face value card
             Card cardPlayed = null;
             if(getPlayableCards().size() == 1){ // Handle the case if comp only has 1 playable card. He must play it.
                 cardPlayed = getPlayableCards().getFirst();
-            }
-            else {
+            } else {
                 cardPlayed = Collections.max(getPlayableCards(), new CardCompare());    // If more than 1 card, play the highest valued card
             }
             removeCard(cardPlayed);
@@ -80,6 +77,22 @@ public class Computer extends Player {
             return output;
         }
         return null;
+    }
+
+    public Suit findHighestFrequencySuit() {
+        // Find which suit is most common in computer's hand
+        HashMap<Suit, Integer> suitCount = new HashMap<>();
+        suitCount.put(Suit.DIAMONDS, 0);
+        suitCount.put(Suit.CLUBS, 0);
+        suitCount.put(Suit.HEARTS, 0);
+        suitCount.put(Suit.SPADES, 0);
+
+        for (Card c: getHand()) {
+            if (c.getValue() == 8) { break; } // exclude any 8 card from suit count
+            suitCount.put(c.getSuit(), suitCount.get(c.getSuit()) + 1);
+        }
+
+        return Collections.max(suitCount.entrySet(), HashMap.Entry.comparingByValue()).getKey();
     }
 }
 
