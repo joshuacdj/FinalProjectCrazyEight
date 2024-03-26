@@ -57,7 +57,10 @@ public class Round {
 
         for (int i = 0; i < 5; i++) {
             for (Player p : listOfPlayers) {
-                p.drawCard(drawPile.getTopCard());
+                if (!(p instanceof Computer)) {
+                    p.drawCard(drawPile.getTopCard());
+                    break;
+                }
             }
         }
     }

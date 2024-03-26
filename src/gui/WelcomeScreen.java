@@ -18,6 +18,9 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.GradientPaint;
 import java.io.*;
 
+import static gui.Sound.welcomeClickSound;
+import static gui.Sound.welcomeSound;
+
 public class WelcomeScreen extends JFrame {
 
     private Color darkGreen= new Color(0x00512C); // Light green
@@ -160,6 +163,7 @@ public class WelcomeScreen extends JFrame {
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                welcomeClickSound();
                 Help helpWindow = new Help();
                 helpWindow.setVisible(true);
             }

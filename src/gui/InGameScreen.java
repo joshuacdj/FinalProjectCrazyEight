@@ -80,7 +80,7 @@ public class InGameScreen extends JPanel {
 
         });
 
-        layeredPane.add(helpButton,Integer.valueOf(1));
+        layeredPane.add(helpButton);
         layeredPane.moveToFront(helpButton);
 
 
@@ -483,10 +483,10 @@ public class InGameScreen extends JPanel {
                         }
                     }
 
-                    layeredPane.add(play1Button, Integer.valueOf(2)); // Add playButton above centerPanel
-                    layeredPane.add(play2Button, Integer.valueOf(2)); // Add playButton above centerPanel
-                    layeredPane.add(play3Button, Integer.valueOf(2)); // Add playButton above centerPanel
-                    layeredPane.add(play4Button, Integer.valueOf(2)); // Add playButton above centerPanel
+                    layeredPane.add(play1Button); // Add playButton above centerPanel
+                    layeredPane.add(play2Button); // Add playButton above centerPanel
+                    layeredPane.add(play4Button); // Add playButton above centerPanel
+                    layeredPane.add(play3Button); // Add playButton above centerPanel
 
                     layeredPane.moveToFront(play1Button);
                     layeredPane.moveToFront(play2Button);
@@ -936,6 +936,12 @@ public class InGameScreen extends JPanel {
             } else if (i == 2) {
                 playerScoreLabel.setIcon(scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
             }
+
+            if (i == 0 && (!(player instanceof Computer))){
+                youWinSound();
+            } else if(i == 0) {
+                youLoseSound();;
+            }
             winPanel.add(playerScoreLabel);
         }
         // "Play Again?" button
@@ -943,6 +949,7 @@ public class InGameScreen extends JPanel {
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
             controller.startNewGame();
+            stopSound();
         });
 
         // "Close Game" button
