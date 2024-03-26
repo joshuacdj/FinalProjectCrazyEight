@@ -74,6 +74,7 @@ public class InGameScreen extends JPanel {
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                welcomeClickSound();
                 Help help = new Help();
                 help.setVisible(true);
             }
@@ -214,7 +215,7 @@ public class InGameScreen extends JPanel {
 
             @Override
             public void doLayout() {
-                positionCardLabel(this, orientation);
+                setupAndPositionCardLabels(this, orientation);
             }
         };
         computer1Panel.setOpaque(false);
@@ -223,7 +224,7 @@ public class InGameScreen extends JPanel {
         computer1Panel.setBorder(roundedBorder);
 
         // Setup card labels or any other initial setup
-        setupCardLabel(computer1Panel, orientation);
+        setupAndPositionCardLabels(computer1Panel, orientation);
 
         return computer1Panel;
     }
@@ -452,39 +453,18 @@ public class InGameScreen extends JPanel {
         layeredPane.repaint();
     }
 
-    private void setupCardLabel(JPanel panel, String orientation) {
-        int numCards;
-        if(orientation.equals("West")){
-            numCards = round.getListOfPlayers().get(1).getHand().size();
-        }else if(orientation.equals("North")){
-            numCards = round.getListOfPlayers().get(2).getHand().size();
-        }else{
-            numCards = round.getListOfPlayers().get(3).getHand().size();
-        }
+    private void setupAndPositionCardLabels(JPanel panel, String orientation) {
+        List<Card> computerHand = switch (orientation) {
+            case "West" -> round.getListOfPlayers().get(1).getHand();
+            case "North" -> round.getListOfPlayers().get(2).getHand();
+            case "East" -> round.getListOfPlayers().get(3).getHand();
+            default -> null;
+        };
+
+        int numCards = computerHand.size();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.LAST_LINE_END;
-        for (int i = 0; i < numCards; i++) {
-            JLabel cardLabel = new JLabel(); // Create button without icon initially
-            // Add the card button to the panel
-            panel.add(cardLabel, gbc);
-        }
-    }
-
-    private void positionCardLabel(JPanel panel, String orientation) {
-
-        //numCards is dependent on the panel
-        //East is 1, north is 2 and west is 3
-        int numCards = switch (orientation) {
-            case "East" -> round.getListOfPlayers().get(3).getHand().size();
-            case "North" -> round.getListOfPlayers().get(2).getHand().size();
-            case "West" -> round.getListOfPlayers().get(1).getHand().size();
-            default -> 0;
-        };
-
-        if (numCards == 0){
-            System.out.println("someone won");
-        }
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
 
@@ -494,16 +474,18 @@ public class InGameScreen extends JPanel {
         // Adjust the card dimensions based on the orientation
         int cardWidth = isVertical ? 160 : 110;
         int cardHeight = isVertical ? 110 : 160;
-//        int overlap = cardWidth / 2;
+        int overlap = cardWidth / 2;
 
         // Set the initial offset for the first card
         int xOffset = 0;
         int yOffset = 0;
 
         for (int i = 0; i < numCards; i++) {
-            JLabel back_card = (JLabel) panel.getComponent(i);
+            // create label method
+            JLabel cardLabel = createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
+
             ImageIcon icon = loadAndScaleCardImage("images/back_card.png", cardWidth, cardHeight, isVertical);
-            back_card.setIcon(icon);
+            cardLabel.setIcon(icon);
 
             // Adjust the offset for the north panel to position cards at the top right
             if ("North".equals(orientation)) {
@@ -520,12 +502,21 @@ public class InGameScreen extends JPanel {
                 yOffset = (cardHeight - 90) * i;
             }
 
-            // Set the bounds for the button based on the orientation
-            back_card.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+            // Set the bounds for the label based on the orientation
+            cardLabel.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+
+            panel.add(cardLabel, gbc);
         }
-        
+
         panel.revalidate();
         panel.repaint();
+    }
+
+    private JLabel createCardLabel(Card card, int cardWidth, int cardHeight, boolean isVertical) {
+        JLabel cardLabel = new JLabel();
+        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, isVertical);
+        cardLabel.setIcon(icon);
+        return cardLabel;
     }
 
     private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
@@ -683,8 +674,7 @@ public class InGameScreen extends JPanel {
 
             // For simplicity, let's just re-setup the card labels for the updated panel
             if ("North".equals(orientation) || "East".equals(orientation) || "West".equals(orientation)) {
-                setupCardLabel(panelToUpdate, orientation);
-                positionCardLabel(panelToUpdate, orientation);
+                setupAndPositionCardLabels(panelToUpdate, orientation);
             }
         });
     }
@@ -702,8 +692,7 @@ public class InGameScreen extends JPanel {
                 setupAndPositionCardButtons(playerPanel);
             } else {
                 // For computer players
-                setupCardLabel(playerPanel, orientation); // Reuse your method to set up computer player labels
-                positionCardLabel(playerPanel, orientation); // Assuming this positions card JLabels
+                setupAndPositionCardLabels(playerPanel, orientation);
             }
 
             // Reposition labels or buttons as needed, potentially reusing existing logic
@@ -830,6 +819,7 @@ public class InGameScreen extends JPanel {
         JButton playAgainButton = createCustomButton("Play Again", 300, 60);
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
+            welcomeClickSound();
             controller.startNewGame();
             stopSound();
         });
@@ -838,6 +828,7 @@ public class InGameScreen extends JPanel {
         JButton closeGameButton = createCustomButton("Quit Game", 300, 60);
         closeGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         closeGameButton.addActionListener(e -> {
+            welcomeClickSound();
             // Display a confirmation dialog
             int confirm = JOptionPane.showConfirmDialog(
                     this, // Assuming 'inGameScreen' is the component you want to anchor the dialog to

@@ -27,6 +27,7 @@ public class Controller implements DrawActionListener{
         welcomeScreen.setVisible(true);
         welcomeScreen.getPlayButton().addActionListener(e -> startGame());
         welcomeScreen.getExitButton().addActionListener(e -> {
+            welcomeClickSound();
             // Display a confirmation dialog
             int confirm = JOptionPane.showConfirmDialog(
                     welcomeScreen, // Assuming 'inGameScreen' is the component you want to anchor the dialog to
