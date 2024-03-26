@@ -12,7 +12,7 @@ public class Sound {
     }
 
     public static void drawCardSound() {
-        playSound("audio/flipcard-91468.wav");
+        playSound("audio/flipcard.wav");
     }
 
     public static void backGroundMusic() {

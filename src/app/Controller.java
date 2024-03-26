@@ -1,9 +1,10 @@
-package gui;
+package app;
 
 import java.util.*;
 import javax.swing.*;
 
 import static gui.Sound.*;
+import gui.*;
 import logic.*;
 
 public class Controller implements DrawActionListener{

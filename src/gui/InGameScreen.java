@@ -14,9 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.border.Border;
 
+import app.Controller;
 import logic.*;
 import static gui.Sound.*;
 
