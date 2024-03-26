@@ -328,13 +328,15 @@ public class InGameScreen extends JPanel {
                         cardPlayedByHuman = true;
                         for (Card c : currentHand) {
                             if (chosenCard.equals(c)) {
-                                panelMap.get("South").removeAll();
                                 currentHand.remove(c);
                                 discardPile.addCard(c);
                                 updateDiscardPileImage();
                                 dealCardSound();
+
+                                panelMap.get("South").removeAll();
                                 panelMap.get("South").revalidate();
                                 panelMap.get("South").repaint();
+
                                 setupCardButtons(panelMap.get("South"));
                                 positionCardButtons(panelMap.get("South"), "South");
                                 if (currentPlayer.getHand().isEmpty()) {
@@ -371,33 +373,35 @@ public class InGameScreen extends JPanel {
 
     private void showSuitsButton() {
 
-        int buttonWidth = 140;
-        int buttonHeight = 70;
-        int totalButtonWidth = 4 * buttonWidth; // For 4 buttons
+        final int SUITBUTTONFONTSIZE = 30;
+
+        final int BUTTONWIDTH = 140;
+        final int BUTTONHEIGHT = 70;
+        int totalButtonWidth = 4 * BUTTONWIDTH; // For 4 buttons
         int spacing = (layeredPane.getWidth() - totalButtonWidth) / 5; // Dividing the remaining space into 5 parts
 
         JButton play1Button = new JButton("♦");
-        play1Button.setFont(new Font("♦", Font.BOLD, 30));
+        play1Button.setFont(new Font("♦", Font.BOLD, SUITBUTTONFONTSIZE));
         play1Button.setForeground(Color.RED);
         int play1ButtonX = spacing;
-        int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Adjusting Y to position buttons at the bottom
-        play1Button.setBounds(play1ButtonX, buttonY, buttonWidth, buttonHeight);
+        int buttonY = layeredPane.getHeight() - BUTTONHEIGHT - 10; // Adjusting Y to position buttons at the bottom
+        play1Button.setBounds(play1ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
 
         JButton play2Button = new JButton("♣");
-        play2Button.setFont(new Font("♣", Font.BOLD, 30));
-        int play2ButtonX = play1ButtonX + buttonWidth + spacing;
-        play2Button.setBounds(play2ButtonX, buttonY, buttonWidth, buttonHeight);
+        play2Button.setFont(new Font("♣", Font.BOLD, SUITBUTTONFONTSIZE));
+        int play2ButtonX = play1ButtonX + BUTTONWIDTH + spacing;
+        play2Button.setBounds(play2ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
 
         JButton play3Button = new JButton("♥");
-        play3Button.setFont(new Font("♥", Font.BOLD, 30));
+        play3Button.setFont(new Font("♥", Font.BOLD, SUITBUTTONFONTSIZE));
         play3Button.setForeground(Color.RED);
-        int play3ButtonX = play2ButtonX + buttonWidth + spacing;
-        play3Button.setBounds(play3ButtonX, buttonY, buttonWidth, buttonHeight);
+        int play3ButtonX = play2ButtonX + BUTTONWIDTH + spacing;
+        play3Button.setBounds(play3ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
 
         JButton play4Button = new JButton("♠");
-        play4Button.setFont(new Font("♠", Font.BOLD, 30));
-        int play4ButtonX = play3ButtonX + buttonWidth + spacing;
-        play4Button.setBounds(play4ButtonX, buttonY, buttonWidth, buttonHeight);
+        play4Button.setFont(new Font("♠", Font.BOLD, SUITBUTTONFONTSIZE));
+        int play4ButtonX = play3ButtonX + BUTTONWIDTH + spacing;
+        play4Button.setBounds(play4ButtonX, buttonY, BUTTONWIDTH, BUTTONHEIGHT);
 
         // removing of all buttons once a suit is clicked
         play1Button.addActionListener(e -> {
@@ -515,9 +519,9 @@ public class InGameScreen extends JPanel {
         int panelHeight = panel.getHeight();
 
         // Adjust the card dimensions based on the orientation
-        int cardWidth = isVertical ? panelHeight/5 : panelWidth / 8;
+        int cardWidth = isVertical ? panelHeight / 5 : panelWidth / 8;
         int cardHeight = isVertical ? panelWidth - 20 : panelHeight - 20;
-        int overlap = cardWidth / 2;
+//        int overlap = cardWidth / 2;
 
         if ("South".equals(orientation) || "North".equals(orientation)) {
             cardWidth = 110;
@@ -529,9 +533,9 @@ public class InGameScreen extends JPanel {
         }
 
         // For vertical panels, adjust the height for stacking with overlap
-        if (isVertical) {
-            overlap = cardHeight / 2;
-        }
+//        if (isVertical) {
+//            overlap = cardHeight / 2;
+//        }
 
         // Set the initial offset for the first card
         int xOffset = 0;
@@ -564,7 +568,7 @@ public class InGameScreen extends JPanel {
 
         panel.revalidate();
         panel.repaint();
-        }
+    }
 
     private void positionCardLabel(JPanel panel, String orientation) {
 
@@ -589,7 +593,7 @@ public class InGameScreen extends JPanel {
         // Adjust the card dimensions based on the orientation
         int cardWidth = isVertical ? 160 : 110;
         int cardHeight = isVertical ? 110 : 160;
-        int overlap = cardWidth / 2;
+//        int overlap = cardWidth / 2;
 
         // Set the initial offset for the first card
         int xOffset = 0;
