@@ -24,15 +24,6 @@ public class DrawPile implements Deck {
         return listOfCards.getFirst();
     }
 
-    public void add(Card c){
-        listOfCards.add(c);
-    }
-
-    @Override
-    public void shuffleDeck(){
-        Collections.shuffle(listOfCards);
-    }
-
     public Card getTopCard(){
         //attain top card (i.e. last of list)
         Card c = listOfCards.getLast();
@@ -41,7 +32,13 @@ public class DrawPile implements Deck {
         return c;
     }
 
-    public int getNoOfCardsRemaining(){
-        return listOfCards.size();
+    public void add(Card c){
+        listOfCards.add(c);
+    }
+
+
+    @Override
+    public void shuffleDeck(){
+        Collections.shuffle(listOfCards);
     }
 }

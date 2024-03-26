@@ -2,8 +2,7 @@ package logic;
 
 import java.util.*;
 
-import static gui.Sound.dealCardEightSound;
-import static gui.Sound.drawCardSound;
+import static gui.Sound.*;
 
 public class Computer extends Player {
     private DrawActionListener drawActionListener;
@@ -49,12 +48,14 @@ public class Computer extends Player {
                 if (card.getValue() == 8) {
                     removeCard(card);
                     dealCardEightSound();
+
 //                    find which suit is most common in computer's hand
                     HashMap<Suit, Integer> suitCount = new HashMap<>();
                     suitCount.put(Suit.DIAMONDS, 0);
                     suitCount.put(Suit.CLUBS, 0);
                     suitCount.put(Suit.HEARTS, 0);
                     suitCount.put(Suit.SPADES, 0);
+
                     for (Card c: getHand()) {
                         if (c.equals(card)) { break; } // exclude current 8 card from suit count
                         suitCount.put(c.getSuit(), suitCount.get(c.getSuit()) + 1);
