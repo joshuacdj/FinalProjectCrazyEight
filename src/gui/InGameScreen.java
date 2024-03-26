@@ -414,12 +414,6 @@ public class InGameScreen extends JPanel {
     private JButton createSuitButton(Suit suit, int x, int y, int width, int height) {
         JButton button = new JButton(suitSymbol(suit));
         button.setFont(new Font("Dialog", Font.BOLD, 30));
-
-        switch(suit) {
-            case Suit.HEARTS, Suit.DIAMONDS -> button.setForeground(Color.RED);
-        }
-
-
         button.setBounds(x, y, width, height);
 
         button.addActionListener(e -> {
@@ -430,13 +424,13 @@ public class InGameScreen extends JPanel {
     }
 
     private String suitSymbol(Suit suit) {
-        return switch (suit) {
-            case DIAMONDS -> "♦";
-            case CLUBS -> "♣";
-            case HEARTS -> "♥";
-            case SPADES -> "♠";
-            default -> "?";
-        };
+        switch (suit) {
+            case DIAMONDS: return "♦";
+            case CLUBS: return "♣";
+            case HEARTS: return "♥";
+            case SPADES: return "♠";
+            default: return "?";
+        }
     }
 
     private void updateGameAfterSuitSelected(Suit suit) {
