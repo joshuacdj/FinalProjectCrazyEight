@@ -35,8 +35,11 @@ public class Card {
     // Calculate the points associated to each card. Points will be tallied at the endgame to determine player rankings
     public int calculatePoints() {
         return switch (value) {
+            // If value is 8, the points are equivalent to 50
             case 8 -> 50;
+            // If Jack, Queen or King, the points are equivalent to 10
             case 11, 12, 13 -> 10;
+            // Else, use the face value of the cards as the points
             default -> value;
         };
     }
