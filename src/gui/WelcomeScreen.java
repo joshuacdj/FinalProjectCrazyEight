@@ -19,53 +19,17 @@ import java.awt.GradientPaint;
 import java.io.*;
 
 public class WelcomeScreen extends JFrame {
+
+    private final static int TITLEBUTTONWIDTH = 300;
+    private final static int TITLEBUTTONHEIGHT = 60;
+
     private Color darkGreen= new Color(0x00512C); // Light green
     private Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
-//    private Color orange = new Color(0xFF4C29);
 
     private JButton playButton;
     private JButton helpButton;
     private JButton exitButton;
 
-//    private class TitlePanel extends JPanel {
-//        private String titleText;
-//        private Font titleFont;
-//        private Color shadowColor;
-//        private int shadowOffset;
-//
-//        public TitlePanel(String text, Font font, Color shadowColor, int shadowOffset) {
-//            this.titleText = text;
-//            this.titleFont = font;
-//            this.shadowColor = shadowColor;
-//            this.shadowOffset = shadowOffset;
-//            setOpaque(false);
-//        }
-//
-//        @Override
-//        protected void paintComponent(Graphics g) {
-//            super.paintComponent(g);
-//            Graphics2D g2d = (Graphics2D) g.create();
-//            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//            // Create a shadow effect
-//            g2d.setFont(titleFont);
-//            AttributedString attributedString = new AttributedString(titleText);
-//            attributedString.addAttribute(TextAttribute.FONT, titleFont);
-//            attributedString.addAttribute(TextAttribute.FOREGROUND, shadowColor, 0, titleText.length());
-//
-//            FontMetrics fm = g2d.getFontMetrics();
-//            int x = (getWidth() - fm.stringWidth(titleText)) / 2;
-//            int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
-//
-//            // Draw the shadow
-//            g2d.drawString(attributedString.getIterator(), x + shadowOffset, y + shadowOffset);
-//            // Draw the actual text
-//            attributedString.addAttribute(TextAttribute.FOREGROUND, orange, 0, titleText.length());
-//            g2d.drawString(attributedString.getIterator(), x, y);
-//
-//            g2d.dispose();
-//        }
-//    }
     public WelcomeScreen() {
 
         // Set the apple dock icon
@@ -103,8 +67,7 @@ public class WelcomeScreen extends JFrame {
         getContentPane().add(backgroundPanel, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.gridwidth = GridBagConstraints.REMAINDER; // commented this out and managed to place cards at the side
-//        gbc.anchor = GridBagConstraints.CENTER;
+
         gbc.insets = new Insets(10, 0, 10, 0);
 
         // Replace the old titleLabel with the new custom TitlePanel
@@ -114,27 +77,29 @@ public class WelcomeScreen extends JFrame {
         gbc.gridy = 0;
         backgroundPanel.add(titlePanel, gbc);
 
-        // Card images
-        ImageIcon icon1 = new ImageIcon(new ImageIcon("images/8_of_clubs.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+        // Card images to decorate welcome screen
+        final int DISPLAYCARDWIDTH = -1;
+        final int DISPLAYCARDHEIGHT = 120;
+
+        ImageIcon icon1 = new ImageIcon(new ImageIcon("images/8_of_clubs.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
         JLabel cardLabel1 = new JLabel(icon1);
         gbc.gridx = 0;
         gbc.gridy = 0;
         backgroundPanel.add(cardLabel1, gbc);
 
-        ImageIcon icon2 = new ImageIcon(new ImageIcon("images/8_of_spades.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
-//        Test cardLabel2 = new Test(icon2, 45);
+        ImageIcon icon2 = new ImageIcon(new ImageIcon("images/8_of_spades.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
         JLabel cardLabel2 = new JLabel(icon2);
         gbc.gridx = 2;
         gbc.gridy = 2;
         backgroundPanel.add(cardLabel2, gbc);
 
-        ImageIcon icon3 = new ImageIcon(new ImageIcon("images/8_of_hearts.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+        ImageIcon icon3 = new ImageIcon(new ImageIcon("images/8_of_hearts.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
         JLabel cardLabel3 = new JLabel(icon3);
         gbc.gridx = 0;
         gbc.gridy = 2;
         backgroundPanel.add(cardLabel3, gbc);
 
-        ImageIcon icon4 = new ImageIcon(new ImageIcon("images/8_of_diamonds.png").getImage().getScaledInstance(-1, 120 , Image.SCALE_SMOOTH));
+        ImageIcon icon4 = new ImageIcon(new ImageIcon("images/8_of_diamonds.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
         JLabel cardLabel4 = new JLabel(icon4);
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -143,13 +108,13 @@ public class WelcomeScreen extends JFrame {
         // action buttons
         gbc.gridx = 1;
         gbc.gridy = 1;
-        playButton = createCustomButton("Play", 300, 60);
+        playButton = createCustomButton("Play", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
         
         backgroundPanel.add(playButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        helpButton = createCustomButton("Help", 300, 60);
+        helpButton = createCustomButton("Help", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
 
         helpButton.addActionListener(new ActionListener() {
             @Override
@@ -163,7 +128,7 @@ public class WelcomeScreen extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        exitButton = createCustomButton("Exit", 300, 60);
+        exitButton = createCustomButton("Exit", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
         backgroundPanel.add(exitButton, gbc);
 
         pack();
