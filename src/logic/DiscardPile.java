@@ -3,10 +3,10 @@ package logic;
 import java.util.*;
 
 public class DiscardPile implements Deck {
-    private ArrayList<Card> listOfCards = new ArrayList<>();
+    private List<Card> listOfCards = new ArrayList<>();
     private Card topCard;
 
-    public ArrayList<Card> getCards(){
+    public List<Card> getCards(){
         return listOfCards;
     }
 
