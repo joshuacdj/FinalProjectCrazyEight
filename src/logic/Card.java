@@ -7,7 +7,7 @@ public class Card {
     // Instance of value, suit and filepath. Filepath refers to the filepath of the image that we are using to display each card
     private final int value;
     private final Suit suit;
-    private String filepath;
+    private final String filepath;
 
     // Card constructor
     public Card(int value, Suit suit) {

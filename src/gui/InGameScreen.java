@@ -19,21 +19,22 @@ import logic.*;
 import static gui.Sound.*;
 
 public class InGameScreen extends JPanel {
-    private JPanel centerPanel; // Instance variable for the center panel
-    private JLayeredPane layeredPane;
-    private Round round;
-    private DiscardPile discardPile;
-    private Map<String, JPanel> panelMap = new HashMap<>();
-    private JLabel discardPileLabel = new JLabel();
-    private DrawPile drawPile;
+    private final JPanel centerPanel; // Instance variable for the center panel
+    private final JLayeredPane layeredPane;
+    private final Round round;
+    private final DiscardPile discardPile;
+    private final Map<String, JPanel> panelMap = new HashMap<>();
+    private final JLabel discardPileLabel = new JLabel();
+    private final DrawPile drawPile;
     private JButton drawPileButton;
-    private Controller controller;
+    private final Controller controller;
     private boolean cardPlayedByHuman = false;
     private boolean gameEnd = false;
-    private Color darkGreen= new Color(0x00512C); // Light green
-    private Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
+    private final Color darkGreen= new Color(0x00512C); // Light green
+    private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
 
     public InGameScreen(Round round, Controller controller) {
+
         this.round = round;
         this.controller = controller;
         discardPile = round.getDiscardPile();
@@ -139,8 +140,7 @@ public class InGameScreen extends JPanel {
         // Find the "Play card?" button and adjust its position
 
         for (Component comp : layeredPane.getComponents()) {
-            if (comp instanceof JButton) {
-                JButton playButton = (JButton) comp;
+            if (comp instanceof JButton playButton) {
                 if ("♦".equals(((JButton) comp).getText())) {
                     playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
                 } else if ("♣".equals(((JButton) comp).getText())) {
@@ -153,46 +153,6 @@ public class InGameScreen extends JPanel {
             }
         }
     }
-
-//    private JPanel createPlayerPanel(String orientation) {
-//        JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
-////            @Override
-////            public void doLayout() {
-////                positionCardButtons(this, orientation);
-////            }
-//        };
-//        playerPanel.setOpaque(false);
-//        playerPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3)); // Remove later
-//
-//        // Add a component listener to resize the card buttons when the panel is resized
-//        playerPanel.addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentResized(ComponentEvent e) {
-//                positionCardButtons(playerPanel, orientation);
-//            }
-//        });
-//
-//        // Initial card buttons setup
-//        setupCardButtons(playerPanel);
-//        updateDrawPileButton();
-//
-//        return playerPanel;
-//    }
-//
-//    private JPanel createComputer1Panel(String orientation) {
-//        JPanel computer1Panel = new JPanel(null) { // Use null layout for absolute positioning
-//            @Override
-//            public void doLayout() {
-//                positionCardLabel(this, orientation);
-//            }
-//        };
-//        computer1Panel.setOpaque(false);
-//
-//        // Initial card buttons setup
-//        setupCardLabel(computer1Panel, orientation);
-//
-//        return computer1Panel;
-//    }
 
     private JPanel createComputer1Panel(String orientation) {
         // Create an anonymous subclass of JPanel with custom painting and layout
@@ -570,10 +530,7 @@ public class InGameScreen extends JPanel {
     private void positionCardButtons(JPanel panel, String orientation) {
 
         //Initialise a listofcards to be a hand
-        /*
-        * NOTE HUMAN MAY NOT ALWAYS BE FIRST PLAYER IN LIST OF PLAYERS
-        * The index will change after every round
-        */
+
         List<Card> humanHand = round.getListOfPlayers().getFirst().getHand();
 
         int numCards = humanHand.size();
@@ -609,9 +566,9 @@ public class InGameScreen extends JPanel {
 
         if ("South".equals(orientation)) {
             for (int i = 0; i < humanHand.size(); i++) {
-                //TODO! Figure out why there are 2x print
+
                 JButton cardButton = (JButton) panel.getComponent(i);
-                cardButton.setName("" + humanHand.get(i).getValue() + "_" + humanHand.get(i).getSuit());
+                cardButton.setName(humanHand.get(i).getValue() + "_" + humanHand.get(i).getSuit());
                 ImageIcon icon = loadAndScaleCardImage(humanHand.get(i).getFilepath(), cardWidth, cardHeight, isVertical);
 
                 cardButton.setIcon(icon);
@@ -649,7 +606,7 @@ public class InGameScreen extends JPanel {
         };
 
         if (numCards == 0){
-            System.out.println("someone won");;
+            System.out.println("someone won");
         }
 
         boolean isVertical = "East".equals(orientation) || "West".equals(orientation);
@@ -1077,8 +1034,7 @@ public class InGameScreen extends JPanel {
 
     private void removePanelListeners(JPanel panel) {
         for (Component comp : panel.getComponents()) {
-            if (comp instanceof JButton) {
-                JButton button = (JButton) comp;
+            if (comp instanceof JButton button) {
                 Arrays.stream(button.getMouseListeners()).forEach(button::removeMouseListener);
             }
         }
