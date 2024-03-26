@@ -181,17 +181,24 @@ public class InGameScreen extends JPanel {
 
                 int x, y;
 
-                if ("West".equals(orientation) || "East".equals(orientation)) {
+                if ("East".equals(orientation)) {
+                    // For East orientation
+                    g2d.translate(fm.getFont().getSize(), getHeight() / 2);
+                    g2d.rotate(-Math.PI / 2);
+                    x = (int) (-textBounds.getWidth() / 2);
+                    y = 0;
+                } else if ("West".equals(orientation)) {
                     // For vertical orientation, rotate the graphics object
-                    g2d.translate(getWidth() / 2, getHeight() / 2);
-                    g2d.rotate("West".equals(orientation) ? -Math.PI / 2 : Math.PI / 2);
+                    g2d.translate(getWidth() - fm.getFont().getSize(), getHeight() / 2);
+                    g2d.rotate(Math.PI / 2);
                     x = (int) (-textBounds.getWidth() / 2);
 //                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
                     y = 0;
                 } else {
-                    // For horizontal orientation, no rotation is needed
-                    x = (getWidth() - (int) textBounds.getWidth()) / 2;
-                    y = (getHeight() - (int) textBounds.getHeight()) / 2 + fm.getAscent();
+                    g2d.translate((getWidth() + textBounds.getWidth()) / 2 , getHeight() - fm.getFont().getSize());
+                    g2d.rotate(Math.PI);
+                    x = 0;
+                    y = 0;
                 }
 
                 // Draw the string such that it is centered on the panel
