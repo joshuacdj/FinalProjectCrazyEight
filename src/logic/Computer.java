@@ -68,11 +68,11 @@ public class Computer extends Player {
             }
 //            else choose the highest face value card
             Card cardPlayed = null;
-            if(getPlayableCards().size() < 2){
+            if(getPlayableCards().size() == 1){ // Handle the case if comp only has 1 playable card. He must play it.
                 cardPlayed = getPlayableCards().getFirst();
             }
             else {
-                cardPlayed = Collections.max(getPlayableCards(), new CardCompare());
+                cardPlayed = Collections.max(getPlayableCards(), new CardCompare());    // If more than 1 card, play the highest valued card
             }
             removeCard(cardPlayed);
             output.add(cardPlayed);

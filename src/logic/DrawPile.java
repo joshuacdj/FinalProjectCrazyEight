@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class DrawPile implements Deck {
     private final static int CARDSINSUIT = 13;
-    private List<Card> listOfCards;
+    private ArrayList<Card> listOfCards;
 
     public DrawPile() {
         
@@ -17,7 +17,7 @@ public class DrawPile implements Deck {
         }
     }
 
-    public List<Card> getListOfCards() {
+    public ArrayList<Card> getListOfCards() {
         return listOfCards;
     }
 
