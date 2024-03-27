@@ -31,7 +31,6 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
     private final Controller controller;
     private boolean cardPlayedByHuman = false;
-//    private boolean gameEnd = false;
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
 
@@ -898,7 +897,7 @@ public class InGameScreen extends JPanel {
         // Clone the list of players to avoid modifying the original list
         List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
         // Sort the cloned list based on hand value in ascending order
-        sortedPlayers.sort(Comparator.comparingInt(Player::calculatePoints));
+        sortedPlayers.sort(Comparator.comparingInt(Player::calculatePoints).thenComparing(Player::getHandSize));
         return sortedPlayers;
     }
 
