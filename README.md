@@ -75,3 +75,6 @@ If 2 players have the same points after the game ends, the higher ranked player 
 ![suitsScreen](screenshots/suitsScreen.png) <br>
 #### End-Game Screen
 ![endGameScreen](screenshots/endGameScreen.png) <br>
+
+## Citation
+This application was programmed with the slight aid of AI Tools such as ChatGPT for the purpose of debugging, and also for the generation of the application's icon.
