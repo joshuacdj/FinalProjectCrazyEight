@@ -74,7 +74,7 @@ public class InGameScreen extends JPanel {
                 helpWindow.setVisible(true);
         });
 
-        LAYERED_PANE.add(helpButton,Integer.valueOf(1)); // TODO: yo what this do cuh
+        LAYERED_PANE.add(helpButton,Integer.valueOf(1));
         LAYERED_PANE.moveToFront(helpButton);
 
         // Setup the GridBagConstraints for layered pane
@@ -261,7 +261,6 @@ public class InGameScreen extends JPanel {
     }
 
     private void setupCardButtons(JPanel panel) {
-//        TODO: can remove panel argument since it will always be referring to south panel
         // Clear existing card buttons from the panel
         panel.removeAll();
         panel.setLayout(null);

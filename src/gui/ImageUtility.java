@@ -55,6 +55,7 @@ public class ImageUtility {
     }
 
     private static AffineTransform findTranslation(AffineTransform at, int width, int height) {
+        // Shifts the card images and flips it about the horizontal and the vertical axes
         Point2D p2dIn, p2dOut;
 
         p2dIn = new Point2D.Double(0.0, 0.0);
