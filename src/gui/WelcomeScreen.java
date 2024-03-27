@@ -44,11 +44,17 @@ public class WelcomeScreen extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Crazy Eights - Card Game");
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Start maximized
-        setMinimumSize(new Dimension(1000, 800)); // Minimum size of the window
+
+        // Start the window maximized
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        // Set the minimum size of the window
+        setMinimumSize(new Dimension(1000, 800));
         getContentPane().setLayout(new BorderLayout());
 
+        // Create a new panel for the welcome screen background
         JPanel backgroundPanel = new JPanel(new GridBagLayout()) {
+            // Set the background of the welcome screen to gradient green
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -58,6 +64,8 @@ public class WelcomeScreen extends JFrame {
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
         };
+
+        // Add the green background to the window
         getContentPane().add(backgroundPanel, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -66,7 +74,9 @@ public class WelcomeScreen extends JFrame {
 
         // Replace the old titleLabel with the new custom TitlePanel
         TitlePanel titlePanel = new TitlePanel("Crazy Eights", new Font("Serif", Font.BOLD | Font.ITALIC, 60), Color.BLACK, 2);
-        titlePanel.setPreferredSize(new Dimension(800, 100)); // Set your preferred size
+
+        // Setting size of the title
+        titlePanel.setPreferredSize(new Dimension(800, 100));
         gbc.gridx = 1;
         gbc.gridy = 0;
         backgroundPanel.add(titlePanel, gbc);
@@ -75,6 +85,7 @@ public class WelcomeScreen extends JFrame {
         final int DISPLAYCARDWIDTH = -1;
         final int DISPLAYCARDHEIGHT = 120;
 
+        // Adding each 8 card to the different sides of the screen
         ImageIcon icon1 = new ImageIcon(new ImageIcon("images/8_of_clubs.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
         JLabel cardLabel1 = new JLabel(icon1);
         gbc.gridx = 0;
@@ -99,44 +110,51 @@ public class WelcomeScreen extends JFrame {
         gbc.gridy = 0;
         backgroundPanel.add(cardLabel4, gbc);
 
-        // action buttons
+        // Create play button
         gbc.gridx = 1;
         gbc.gridy = 1;
         playButton = ButtonUtility.createCustomButton("Play", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
-        
+
+        // Adding play button to welcome screen
         backgroundPanel.add(playButton, gbc);
 
+        // Create help button
         gbc.gridx = 1;
         gbc.gridy = 2;
         helpButton = ButtonUtility.createCustomButton("Help", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
 
+        // Action listener for help button
         helpButton.addActionListener(e -> {
                 welcomeClickSound();
                 Help helpWindow = gui.Help.getInstance();
                 helpWindow.setVisible(true);
         });
 
+        // Adding help button to welcome screen
         backgroundPanel.add(helpButton, gbc);
 
+        // Create quit button
         gbc.gridx = 1;
         gbc.gridy = 3;
         exitButton = ButtonUtility.createCustomButton("Exit", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
+
+        // Adding quit button to welcome screen
         backgroundPanel.add(exitButton, gbc);
 
+        // Resizes the window to fit the components - buttons and images
         pack();
+
+        // Centers the frame on the screen
         setLocationRelativeTo(null);
     }
 
+    // Getter for play button
     public JButton getPlayButton(){
         return playButton;
     }
 
+    // Getter for exit button
     public JButton getExitButton(){
         return exitButton;
-    }
-
-    public static void main(String[] args) {
-
-        SwingUtilities.invokeLater(() -> new WelcomeScreen().setVisible(true));
     }
 }
