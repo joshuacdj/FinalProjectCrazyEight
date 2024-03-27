@@ -2,45 +2,46 @@ package gui;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sound {
 
-    private static Clip soundClip;
+    private static Map<String, Clip> soundClips = new HashMap<>();
 
     public static void dealCardSound() {
-        playSound("audio/dealCard.wav", 1);
+        playSound("dealCard", "audio/dealCard.wav", 1);
     }
 
     public static void drawCardSound() {
-        playSound("audio/drawCard.wav", 1);
+        playSound("drawCard", "audio/drawCard.wav", 1);
     }
 
     public static void backGroundMusic() {
-        playSound("audio/backGroundMusic.wav", 30);
+        playSound("backGroundMusic", "audio/backGroundMusic.wav", 30);
     }
 
     public static void youWinSound() {
-        playSound("audio/youWin.wav", 1);
+        playSound("youWin", "audio/youWin.wav", 1);
     }
 
     public static void welcomeSound() {
-        playSound("audio/welcomeSound.wav", 1);
+        playSound("welcomeSound", "audio/welcomeSound.wav", 1);
     }
 
     public static void welcomeClickSound() {
-        playSound("audio/welcomeClickSound.wav", 1);
+        playSound("welcomeClickSound", "audio/welcomeClickSound.wav", 1);
     }
 
     public static void youLoseSound() {
-        playSound("audio/youLose.wav", 1);
+        playSound("youLose", "audio/youLose.wav", 1);
     }
 
     public static void dealCardEightSound() {
-        playSound("audio/dealEightCard.wav", 1);
+        playSound("dealCardEight", "audio/dealEightCard.wav", 1);
     }
 
-
-    private static void playSound(String filePath, int loopCount) {
+    private static void playSound(String soundKey, String filePath, int loopCount) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
             Clip clip = AudioSystem.getClip();
@@ -52,16 +53,17 @@ public class Sound {
                 clip.start(); // If loop count is zero or negative, play once
             }
 
-            soundClip = clip;
+            soundClips.put(soundKey, clip);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    // Method to stop sound
-    public static void stopSound() {
-        if (soundClip != null) {
-            soundClip.stop();
+    // Method to stop a specific sound
+    public static void stopSound(String soundKey) {
+        Clip clip = soundClips.get(soundKey);
+        if (clip != null) {
+            clip.stop();
         }
     }
 }
