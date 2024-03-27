@@ -3,7 +3,7 @@ package logic;
 import java.util.*;
 
 public class Round {
-    private static final int STARTINGDRAWCOUNT = 5;
+    private static final int STARTING_DRAW_COUNT = 5;
     private ArrayList<Player> listOfPlayers;
     private DrawPile drawPile;
     private DiscardPile discardPile;
@@ -59,7 +59,7 @@ public class Round {
         setFirstCard(drawPile, discardPile);
 
         // Give out 5 cards from the draw pile to each of the 4 players, one at a time
-        for (int i = 0; i < STARTINGDRAWCOUNT; i++) {
+        for (int i = 0; i < STARTING_DRAW_COUNT; i++) {
             for (Player p : listOfPlayers) {
                 p.drawCard(drawPile.getTopCard());
             }

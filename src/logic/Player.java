@@ -5,7 +5,7 @@ import java.util.*;
 public abstract class Player {
 
     // Each player will have a hand, a name and their total points for a game
-    protected static final int MAXDRAWCOUNT = 5;
+    protected static final int MAX_DRAW_COUNT = 5;
     private ArrayList<Card> hand;
     private ArrayList<Card> playableCards;
     private String name;

@@ -4,13 +4,13 @@ import java.util.*;
 import java.util.Collections;
 
 public class DrawPile implements Deck {
-    private final static int CARDSPERSUIT = 13;
+    private final static int CARDS_PER_SUIT = 13;
     private ArrayList<Card> listOfCards;
 
     public DrawPile() {
         // Initialise the deck of 52 cards, 13 per suit
         listOfCards = new ArrayList<>();
-        for (int i = 1; i <= CARDSPERSUIT; i++) {
+        for (int i = 1; i <= CARDS_PER_SUIT; i++) {
             for (Suit suit : Suit.values()) {
                 listOfCards.add(new Card(i, suit));
             }
