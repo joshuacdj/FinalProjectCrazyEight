@@ -32,6 +32,7 @@ public class InGameScreen extends JPanel {
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
     private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
+    private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
     public InGameScreen(Round round, Controller controller) {
 
         this.round = round;
@@ -61,13 +62,12 @@ public class InGameScreen extends JPanel {
 
         // Create and add centerPanel to layeredPane
         centerPanel = createCenterPanel();
-        centerPanel.setBounds(0, 0, 600, 600); // Initial bounds, will adjust with componentListener
         layeredPane.add(centerPanel, JLayeredPane.DEFAULT_LAYER);
 
         // add the helpButton
         JButton helpButton = new JButton("How to play");
         // creating the size of the helpButton
-        helpButton.setBounds(0,0,120,30);
+        helpButton.setBounds(0,0,HELPBUTTON_DIMENSION.width,HELPBUTTON_DIMENSION.height);
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
