@@ -9,7 +9,7 @@ public class Human extends Player {
 
     public void drawCard(DrawPile drawPile) {
         if (cardsDrawnThisTurn < MAXDRAWCOUNT) {
-            Card drawnCard = drawPile.getTopCard(); // Assume DrawPile has a method to draw a card.
+            Card drawnCard = drawPile.getTopCard();
             this.getHand().add(drawnCard);
             cardsDrawnThisTurn++;
         }
@@ -22,6 +22,4 @@ public class Human extends Player {
     public void resetDrawCounter() {
         cardsDrawnThisTurn = 0;
     }
-
-
 }

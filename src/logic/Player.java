@@ -3,10 +3,8 @@ package logic;
 import java.util.*;
 
 public abstract class Player {
-
     protected static final int MAXDRAWCOUNT = 5;
 
-    // Each player will have a hand, a name and their total points for a game
     private ArrayList<Card> hand;
     private ArrayList<Card> playableCards;
     private String name;
@@ -17,7 +15,6 @@ public abstract class Player {
         this.name = name;
     }
 
-    // Return the current hand of the player
     public ArrayList<Card> getHand() {
         return hand;
     }
@@ -28,13 +25,10 @@ public abstract class Player {
         return playableCards;
     }
 
-    // Return name of player
     public String getName() {
         return name;
     }
 
-
-    // Calculate the points in player's hand
     public int calculatePoints() {
         int points = 0;
         for (Card c : hand) {
@@ -43,22 +37,19 @@ public abstract class Player {
         return points;
     }
 
-    // Draw a card from the deck
     public void drawCard(Card card) {
         hand.add(card);
     }
 
-    // Remove the card from current hand
     public void removeCard(Card card) {
         hand.remove(card);
     }
 
-    //    Create playable cards list
     public void setPlayableCards (Card lastPlayedCard) {
-
-        // Clear the previous list of playable cards. Basically clear it for each start of the new turn
+        // Clear the previous list of playable cards
         playableCards.clear();
 
+        // Loop through every card in hand to and add to playableCards if card is playable
         for (Card card : hand) {
             if (isPlayable(card, lastPlayedCard)) {
                 playableCards.add(card);
@@ -66,7 +57,6 @@ public abstract class Player {
         }
     }
 
-    //This method returns true if a card is playable
     public boolean isPlayable (Card currCard, Card lastPlayedCard) {
         System.out.println("Curr card:" + currCard + " Last played:" + lastPlayedCard);
         if (currCard.getValue() == lastPlayedCard.getValue()) {
