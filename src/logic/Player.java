@@ -48,16 +48,10 @@ public abstract class Player {
     }
 
     public void setPlayableCards (Card lastPlayedCard) {
-
         // Clear the previous list of playable cards
         playableCards.clear();
 
         // Loop through every card in hand to and add to playableCards if card is playable
-
-        // Clear the previous list of playable cards. Basically clear it for each start of the new turn
-        playableCards.clear();
-        // Create playable cards list according to the lastPlayedCard
-
         for (Card card : hand) {
             if (isPlayable(card, lastPlayedCard)) {
                 playableCards.add(card);
@@ -73,5 +67,4 @@ public abstract class Player {
             return true;
         } else return currCard.getValue() == 8;
     }
-
 }
