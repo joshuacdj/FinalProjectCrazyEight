@@ -26,7 +26,7 @@ public class InGameScreen extends JPanel {
     private final DrawPile drawPile;
     private JButton drawPileButton;
     private final Controller controller;
-    private boolean cardPlayedByHuman = false;
+    private boolean cardAlreadyPlayedByHuman = false;
 
 //    CONSTANTS
     private final Color darkGreen= new Color(0x00512C); // Light green
@@ -34,6 +34,8 @@ public class InGameScreen extends JPanel {
     private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
     private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
     private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
+    private static final Dimension CARD_DIMENSION = new Dimension(110, 160);
+    private static final int CARD_XOFFSET = 20;
     public InGameScreen(Round round, Controller controller) {
 
         this.round = round;
@@ -210,8 +212,8 @@ public class InGameScreen extends JPanel {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Set the color and font for the text
+                g.setFont(PLAYERNAME_FONT); // Set the text font and size
                 g.setColor(Color.WHITE); // Set the text color
-                g.setFont(new Font("Arial", Font.BOLD, 22)); // Set the text font and size
 
                 // Calculate the position of the text to center it in the panel
                 FontMetrics metrics = g.getFontMetrics(g.getFont());
@@ -242,11 +244,12 @@ public class InGameScreen extends JPanel {
         return playerPanel;
     }
 
-    public void setCardPlayedByHumanToFalse() {
-        cardPlayedByHuman = false;
+    public void setCardAlreadyPlayedByHumanToFalse() {
+        cardAlreadyPlayedByHuman = false;
     }
 
     private void setupAndPositionCardButtons(JPanel panel) {
+//        TODO: can remove panel argument since it will always be referring to south panel
         // Clear existing card buttons from the panel
         panel.removeAll();
         panel.setLayout(null);
@@ -255,20 +258,17 @@ public class InGameScreen extends JPanel {
         int numCards = humanHand.size();
 
         int panelHeight = panel.getHeight();
-        //change to const
-        int cardWidth =  110; // Adjusted card width for better layout
-        int cardHeight =  160; // Adjusted card height for better layout
 
         // Determine the starting x and y offset for card positioning
 //        int xOffsetStart = (panelWidth - (numCards * cardWidth + (numCards - 1) * 10)) / 2;
-        int yOffset = panelHeight - cardHeight; // Adjust yOffset for vertical orientation if necessary
+        int yOffset = panelHeight - CARD_DIMENSION.height; // Adjust yOffset for vertical orientation if necessary
 
         for(int i = 0; i < numCards; i++){
-            int xOffset = (cardWidth - 90) * i;
+            int xOffset = CARD_XOFFSET * i;
             Card card = humanHand.get(i);
-            JButton cardButton = createCardButton(card, cardWidth, cardHeight);
+            JButton cardButton = createCardButton(card, CARD_DIMENSION.width, CARD_DIMENSION.height);
             addCardButtonListeners(cardButton, card, panel);
-            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+            cardButton.setBounds(xOffset, yOffset, CARD_DIMENSION.width, CARD_DIMENSION.height);
             panel.add(cardButton);
             panel.setComponentZOrder(panel.getComponent(i), 0);
         }
@@ -292,7 +292,7 @@ public class InGameScreen extends JPanel {
 
         return cardButton;
     }
-    //
+
     private void addCardButtonListeners(JButton cardButton, Card card, JPanel panel) {
         cardButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -315,7 +315,7 @@ public class InGameScreen extends JPanel {
     }
 
     private void handleCardSelection(Card selectedCard, JPanel panel) {
-        if (cardPlayedByHuman) {
+        if (cardAlreadyPlayedByHuman) {
             return;
         }
 
@@ -323,13 +323,13 @@ public class InGameScreen extends JPanel {
         boolean cardIsPlayable = currentPlayer.isPlayable(selectedCard, discardPile.getTopCard());
 
         if (cardIsPlayable) {
-            cardPlayedByHuman = true;
+            cardAlreadyPlayedByHuman = true;
             currentPlayer.getHand().remove(selectedCard);
             discardPile.addCard(selectedCard);
             updateDiscardPileImage();
             dealCardSound();
             setupAndPositionCardButtons(panel);
-            if(currentPlayer.getHand().size() == 0){
+            if(currentPlayer.getHand().isEmpty()){
                 //win
                 controller.endGame();
                 return;

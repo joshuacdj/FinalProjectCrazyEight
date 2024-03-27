@@ -100,7 +100,7 @@ public class Controller implements DrawActionListener{
                         // Once Comp 3 has played, update the ability to draw and/or play cards by human
                         if(c.getName().equals("Comp 3")){
                             inGameScreen.updateDrawPileButton();
-                            inGameScreen.setCardPlayedByHumanToFalse();
+                            inGameScreen.setCardAlreadyPlayedByHumanToFalse();
                         }
                     });
 
