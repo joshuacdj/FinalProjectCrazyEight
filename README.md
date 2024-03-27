@@ -1,10 +1,12 @@
 # Crazy Eights
+_Authors: Chia Jin Jun, Ian Hoe, Jered Wong, Jeremaine Cheong, Joshua Cheung, Teh Jing Wei_
 
-<p>Crazy Eights is a classic card game brought to life through Java Swing. This project aims to recreate the engaging experience of Crazy Eights, emphasizing intuitive gameplay and the strategic depth that has made the card game a favorite for generations.<br>
+
+<p>Crazy Eights is a classic card game brought to life through Java Swing. This project aims to recreate the engaging experience of Crazy Eights, emphasising intuitive gameplay and the strategic depth that has made the card game a favourite for generations.<br>
 
 <p></p>
 
-<p>Crazy Eights is a shedding-type card game where players take turns to match the rank or suit of the previously played card, aiming to be the first to empty their hand. Special cards add twists and strategic depth to the gameplay. Our implementation in Java Swing not only brings these game mechanics to life but also adds a layer of graphical interface to enhance the playing experience.<br>
+<p>Crazy Eights is a shedding-type card game where players take turns to match the rank or suit of the previously played card, aiming to be the first to empty their hand. The "Crazy Eight" adds twists and strategic depth to the gameplay. Our implementation in Java Swing not only brings these game mechanics to life but also adds a layer of graphical interface to enhance the playing experience.<br>
 
 ## Prerequisites
 
