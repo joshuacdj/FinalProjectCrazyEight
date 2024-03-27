@@ -29,9 +29,9 @@ public class InGameScreen extends JPanel {
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
     private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
     private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
-    private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
     private static final Dimension CARD_DIMENSION = new Dimension(110, 160);
     private static final Dimension SUITBUTTON_DIMENSION = new Dimension(140, 70);
+    private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
     private static final int CARD_XOFFSET = 20;
     public InGameScreen(Round round, Controller controller) {
 
@@ -70,7 +70,7 @@ public class InGameScreen extends JPanel {
         helpButton.setBounds(0,0,HELPBUTTON_DIMENSION.width,HELPBUTTON_DIMENSION.height);
         helpButton.addActionListener(e -> {
                 welcomeClickSound();
-                Help helpWindow = gui.Help.getInstance();
+                HelpFrame helpWindow = HelpFrame.getInstance();
                 helpWindow.setVisible(true);
         });
 
@@ -482,17 +482,10 @@ public class InGameScreen extends JPanel {
         // drawpilebutton
         // Example of adding a component to the centerPanel
         // You can add more components similarly, adjusting the gridx, gridy, weightx, weighty as needed
-        ImageIcon drawPileIcon = new ImageIcon(new ImageIcon("images/back_card.png").getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
 
-        drawPileButton = new JButton(drawPileIcon);
-        // Make buttons transparent
-        drawPileButton.setBorder(BorderFactory.createEmptyBorder());
-        drawPileButton.setContentAreaFilled(false);
+        drawPileButton = ButtonUtility.createDrawPileButton(CARD_DIMENSION.width, CARD_DIMENSION.height);
         gbc.gridx = 0;
-        centerPanel.add(drawPileButton, gbc );
-
-        // Action History Label
-
+        centerPanel.add(drawPileButton, gbc);
 
         // Prepare discard pile icon and label, and place it within a panel for centering
         String filePath = discardPile.getCards().getLast().getFilepath();
@@ -602,7 +595,7 @@ public class InGameScreen extends JPanel {
         }else if (humanPlayer.canDrawCard()){
             drawPileButton.setEnabled(true);
             drawPileButton.addActionListener(drawListener);
-        }else if(!humanPlayer.canDrawCard()){
+        }else {
             drawPileButton.setEnabled(false);
             if(humanPlayer.getPlayableCards().isEmpty()){
                 humanPlayer.resetDrawCounter();
@@ -610,10 +603,10 @@ public class InGameScreen extends JPanel {
             }
         }
 
-        System.out.println("Human has " + humanPlayer.getPlayableCards().size() + " cards to play");
-        System.out.println("Human hand is " + humanPlayer.getHand());
-        System.out.println("Top card is " + discardPile.getTopCard());
-        System.out.println(humanPlayer.getPlayableCards());
+//        System.out.println("Human has " + humanPlayer.getPlayableCards().size() + " cards to play");
+//        System.out.println("Human hand is " + humanPlayer.getHand());
+//        System.out.println("Top card is " + discardPile.getTopCard());
+//        System.out.println(humanPlayer.getPlayableCards());
 
         drawPileButton.revalidate();
         drawPileButton.repaint();
