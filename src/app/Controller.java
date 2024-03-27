@@ -123,6 +123,7 @@ public class Controller implements DrawActionListener{
 
     private void startGame() {
         welcomeClickSound();
+        stopSound("welcomeSound");
         showScreen(inGameScreen);
     }
     
