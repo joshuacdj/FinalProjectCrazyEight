@@ -65,7 +65,7 @@ public class InGameScreen extends JPanel {
         layeredPane.add(centerPanel, JLayeredPane.DEFAULT_LAYER);
 
         // add the helpButton
-        JButton helpButton = new JButton("How to play");
+        JButton helpButton = new JButton("How To Play");
         // creating the size of the helpButton
         helpButton.setBounds(0,0,HELPBUTTON_DIMENSION.width,HELPBUTTON_DIMENSION.height);
         helpButton.addActionListener(e -> {

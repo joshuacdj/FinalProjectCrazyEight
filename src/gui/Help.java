@@ -9,64 +9,65 @@ import java.awt.RenderingHints;
 import java.awt.GradientPaint;
 
 public class Help extends JFrame {
-
-    private Font titleFont = new Font("Chalkboard", Font.BOLD, 26); // Elegant font
     private static volatile Help instance = null;
 
-    public static Help getInstance() {
-        if (instance == null) {
-            synchronized (Help.class) {
-                if (instance == null) {
-                    instance = new Help();
-                }
-            }
-        }
-        return instance;
-    }
-
     private Help() {
-
         setTitle("Help");
-        setSize(800, 500);
-        setMinimumSize(new Dimension(850,600));
+        setSize(800, 550);
         setResizable(false);
-        setLocationRelativeTo(null); // Center the window
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Dispose the window on close
+        // Center the window when it opens
+        setLocationRelativeTo(null);
+        // Dispose the window on close
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JLabel helpLabel = new JLabel("How to play Crazy Eight");
-        helpLabel.setFont(titleFont); // Set the font of helpLabel
+        Font titleFont = new Font("Chalkboard", Font.BOLD, 26);
+        // Setting the font,colour and border of helpLabel
+        helpLabel.setFont(titleFont);
         helpLabel.setForeground(Color.WHITE);
         helpLabel.setBorder(BorderFactory.createEmptyBorder(0,0,20,0));
-        helpLabel.setHorizontalAlignment(SwingConstants.CENTER); // Align label text to the center
+        // Align helpLabel to the center of JFrame
+        helpLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        // creating 'How to Play' textBox
         JTextArea textBox = new JTextArea();
-        textBox.setEditable(false); // Make the text box read-only
+        // Make the text box read-only and remove unnecessary focus line in textBox
+        textBox.setEditable(false);
         textBox.setFocusable(false);
-        textBox.setOpaque(false); // Make the text box transparent
-        textBox.setForeground(Color.WHITE); // Set text color to white
-        textBox.setLineWrap(true); // Enable line wrapping
+        // Make the text box transparent and set the font colour white
+        textBox.setOpaque(false);
+        textBox.setForeground(Color.WHITE);
+        // Enable line wrapping
+        textBox.setLineWrap(true);
         textBox.setWrapStyleWord(true);
 
-        // Add the instructions to the game to the text box
-        textBox.setText("Objective:\nThe goal of the game is to have the least number of points when someone clears their hand!\n\n" +
-                "How to Play:\nEach player takes turns playing 1 card per turn.\n" +
-                "You can play any card that matches the SUIT or VALUE of the latest played card.\n" +
-                "HOWEVER! An 8 card has a special effect that can be played anytime. It lets you set the current game's suit to any suit you want!\n" +
-                "A maximum of 5 cards can be drawn per turn if you do not have any playable cards.\n\n" +
-                "How to Win:\nThe game ends when a player empties his/her hand. The loser is determined by the number of points he/she has at the end of the game.\n" +
-                "Aces are 1 point, Jacks, Queens and Kings are 10 points each. Any 8 cards are worth 50 POINTS. So make sure you use it fast!\n\n" +
-                "Have fun playing!\n");
+        // Add the instructions of the game to the text box
+        textBox.setText("""
+                Objective:
+                The goal of the game is to have the least number of points when someone clears their hand!
 
+                How to Play:
+                Each player takes turns playing 1 card per turn.
+                You can play any card that matches the SUIT or VALUE of the latest played card.
+                HOWEVER! An 8 card has a special effect that can be played anytime. It lets you set the current game's suit to any suit you want!
+                A maximum of 5 cards can be drawn per turn if you do not have any playable cards.
 
-        // Set the background color of the text box to match the JFrame's background
-        textBox.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+                How to Win:
+                The game ends when a player empties his/her hand. The loser is determined by the number of points he/she has at the end of the game.
+                Aces are 1 point, Jacks, Queens and Kings are 10 points each. Any 8 cards are worth 50 POINTS. So make sure you use it fast!
+
+                Have fun playing!
+                """);
+
+        // set the textBox's font
         Font textFont = new Font("Chalkboard", Font.PLAIN,18);
         textBox.setFont(textFont);
 
-        // Add a border to the text box to create a visible outline
+        // Add a white border to textBox to create a visible outline
         textBox.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
-        JPanel panel = new JPanel(new GridBagLayout()); // Use GridBagLayout for flexible component positioning
+        // Use GridBagLayout for flexible component positioning
+        JPanel panel = new JPanel(new GridBagLayout());
 
         // Add an empty border with a small gap at the top
         panel.setBorder(BorderFactory.createEmptyBorder(20, 15, 15, 16));
@@ -75,18 +76,26 @@ public class Help extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1.0; // Expand horizontally
-        gbc.weighty = 0.0; // Do not expand vertically
-        gbc.anchor = GridBagConstraints.PAGE_START; // Align to the top
+        // Expand horizontally
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.0;
+        // Align to the top of the panel
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        // adding helpLabel to the panel
         panel.add(helpLabel, gbc);
 
-        gbc.gridy = 1; // Next row
-        gbc.weighty = 1.0; // Expand vertically
-        gbc.fill = GridBagConstraints.BOTH; // Fill both horizontal and vertical
+        // Next row
+        gbc.gridy = 1;
+        // Expand vertically
+        gbc.weighty = 1.0;
+        // Fill both horizontal and vertical
+        gbc.fill = GridBagConstraints.BOTH;
+        //adding textBox to the panel
         panel.add(textBox, gbc);
 
         // Set the background color gradient
-        panel.setOpaque(false); // Make the panel transparent to show the gradient background
+        // Make the panel transparent so that the gradient background can be shown
+        panel.setOpaque(false);
 
         // Override the paintComponent method to draw the gradient background
         JPanel gradientPanel = new JPanel() {
@@ -97,7 +106,7 @@ public class Help extends JFrame {
 
                 // Define the gradient colors
                 Color color1 = new Color(0x033D15);
-                Color color2 = new Color(3, 61, 21);
+                Color color2 = new Color(3, 40, 21);
 
                 // Create the gradient paint
                 GradientPaint gradientPaint = new GradientPaint(0, 0, color1, getWidth(), getHeight(), color2);
@@ -115,5 +124,16 @@ public class Help extends JFrame {
         gradientPanel.setLayout(new BorderLayout());
         gradientPanel.add(panel, BorderLayout.CENTER);
         setContentPane(gradientPanel);
+    }
+
+    public static Help getInstance() {
+        if (instance == null) {
+            synchronized (Help.class) {
+                if (instance == null) {
+                    instance = new Help();
+                }
+            }
+        }
+        return instance;
     }
 }
