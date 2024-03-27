@@ -5,10 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -541,7 +537,7 @@ public class InGameScreen extends JPanel {
 
         // move the image center to the same center position of the original image
         AffineTransform translationTransform;
-        translationTransform = findTranslation(transform, width, height);
+        translationTransform = findTranslation(transform, height);
         transform.preConcatenate(translationTransform);
 
         g2d.drawImage(originalImage, transform, null);
@@ -550,7 +546,7 @@ public class InGameScreen extends JPanel {
         return rotatedImage;
     }
 
-    private AffineTransform findTranslation(AffineTransform at, int width, int height) {
+    private AffineTransform findTranslation(AffineTransform at, int height) {
         Point2D p2din, p2dout;
 
         p2din = new Point2D.Double(0.0, 0.0);
