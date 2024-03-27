@@ -33,6 +33,7 @@ public class InGameScreen extends JPanel {
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
     private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
     private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
+    private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
     public InGameScreen(Round round, Controller controller) {
 
         this.round = round;
@@ -56,7 +57,6 @@ public class InGameScreen extends JPanel {
                 // Ensure the centerPanel fills the entire layeredPane
                 centerPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
                 // Adjust the "Play card?" button position dynamically
-                adjustPlayCardButtonPosition();
             }
         });
 
@@ -127,6 +127,7 @@ public class InGameScreen extends JPanel {
         gbc.weighty = 1.0;
     }
 
+//    Create gradient background for InGameScreen
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -136,27 +137,9 @@ public class InGameScreen extends JPanel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    private void adjustPlayCardButtonPosition() {
-        // Find the "Play card?" button and adjust its position
-
-        for (Component comp : layeredPane.getComponents()) {
-            if (comp instanceof JButton playButton) {
-                if ("♦".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                } else if ("♣".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                } else if ("♥".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                } else if ("♠".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                }
-            }
-        }
-    }
-
     private JPanel createComputerPanel(String orientation) {
         // Create an anonymous subclass of JPanel with custom painting and layout
-        JPanel computer1Panel = new JPanel(null) {
+        JPanel computerPanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -171,8 +154,7 @@ public class InGameScreen extends JPanel {
                 };
 
                 // Set the font and color for the name
-                Font font = new Font("Arial", Font.BOLD, 22);
-                g2d.setFont(font);
+                g2d.setFont(PLAYERNAME_FONT);
                 g2d.setColor(Color.WHITE);
 
                 // Get the FontMetrics for calculating text width and height
@@ -188,13 +170,13 @@ public class InGameScreen extends JPanel {
                     x = (int) (-textBounds.getWidth() / 2);
                     y = 0;
                 } else if ("West".equals(orientation)) {
-                    // For vertical orientation, rotate the graphics object
+                    // For West orientation
                     g2d.translate(getWidth() - fm.getFont().getSize(), getHeight() / 2);
                     g2d.rotate(Math.PI / 2);
                     x = (int) (-textBounds.getWidth() / 2);
-//                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
                     y = 0;
                 } else {
+                    // For North orientation
                     g2d.translate((getWidth() + textBounds.getWidth()) / 2 , getHeight() - fm.getFont().getSize());
                     g2d.rotate(Math.PI);
                     x = 0;
@@ -211,15 +193,15 @@ public class InGameScreen extends JPanel {
                 setupAndPositionCardLabels(this, orientation);
             }
         };
-        computer1Panel.setOpaque(false);
+        computerPanel.setOpaque(false);
 
         Border roundedBorder = new RoundedBorder(20, Color.white, 3);
-        computer1Panel.setBorder(roundedBorder);
+        computerPanel.setBorder(roundedBorder);
 
         // Setup card labels or any other initial setup
-        setupAndPositionCardLabels(computer1Panel, orientation);
+        setupAndPositionCardLabels(computerPanel, orientation);
 
-        return computer1Panel;
+        return computerPanel;
     }
 
     private JPanel createPlayerPanel() {
