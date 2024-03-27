@@ -6,12 +6,12 @@ import static gui.Sound.*;
 public class Computer extends Player {
     private DrawActionListener drawActionListener;
 
-    public void setDrawActionListener(DrawActionListener listener) {
-        this.drawActionListener = listener;
-    }
-
     public Computer(String name) {
         super(name);
+    }
+
+    public void setDrawActionListener(DrawActionListener listener) {
+        this.drawActionListener = listener;
     }
 
     public ArrayList<Object> action(Card lastPlayedCard, DrawPile deck) {
@@ -81,11 +81,12 @@ public class Computer extends Player {
 
     public Suit findHighestPointSuit() {
         // Find which suit has the highest point total in computer's hand
+        // Initialise a hashmap with the suit as the key and the point total for that suit as the value
         HashMap<Suit, Integer> suitPointCount = new HashMap<>();
 
         // Loop through every card in hand
         for (Card c: getHand()) {
-            if (c.getValue() == 8) { break; } // exclude any 8 card from suit count
+            if (c.getValue() == 8) { continue; } // exclude any 8 card from suit count
 
             // Calculate the points to put into map
             int points = suitPointCount.getOrDefault(c.getSuit(), 0) + c.calculatePoints();

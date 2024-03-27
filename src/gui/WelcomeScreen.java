@@ -147,13 +147,11 @@ public class WelcomeScreen extends JFrame {
         // Centers the frame on the screen
         setLocationRelativeTo(null);
     }
-
-    // Getter for play button
+    
     public JButton getPlayButton(){
         return playButton;
     }
 
-    // Getter for exit button
     public JButton getExitButton(){
         return exitButton;
     }
