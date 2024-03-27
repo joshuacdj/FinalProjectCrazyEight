@@ -93,7 +93,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel northPanel = createComputer1Panel("North");
+        JPanel northPanel = createComputerPanel("North");
         add(northPanel, gbc);
         panelMap.put("North", northPanel);
 
@@ -102,7 +102,8 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel southPanel = createPlayerPanel("South");
+        // Note there is no need to pass orientation as playerPanel is always the south panel
+        JPanel southPanel = createHumanPanel();
         add(southPanel, gbc);
         panelMap.put("South", southPanel);
 
@@ -111,7 +112,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel eastPanel = createComputer1Panel("East");
+        JPanel eastPanel = createComputerPanel("East");
         add(eastPanel, gbc);
         panelMap.put("East", eastPanel);
 
@@ -120,7 +121,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel westPanel = createComputer1Panel("West");
+        JPanel westPanel = createComputerPanel("West");
         add(westPanel, gbc);
         panelMap.put("West", westPanel);
 
@@ -150,9 +151,9 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    private JPanel createComputer1Panel(String orientation) {
+    private JPanel createComputerPanel(String orientation) {
         // Create an anonymous subclass of JPanel with custom painting and layout
-        JPanel computer1Panel = new JPanel(null) {
+        JPanel computerPanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -207,19 +208,19 @@ public class InGameScreen extends JPanel {
                 setupAndPositionCardLabels(this, orientation);
             }
         };
-        computer1Panel.setOpaque(false);
+        computerPanel.setOpaque(false);
 
         Border roundedBorder = new RoundedBorder(20, Color.white, 3);
-        computer1Panel.setBorder(roundedBorder);
+        computerPanel.setBorder(roundedBorder);
 
         // Setup card labels or any other initial setup
-        setupAndPositionCardLabels(computer1Panel, orientation);
+        setupAndPositionCardLabels(computerPanel, orientation);
 
-        return computer1Panel;
+        return computerPanel;
     }
 
-    private JPanel createPlayerPanel(String orientation) {
-        JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
+    private JPanel createHumanPanel() {
+        JPanel humanPanel = new JPanel(null) { // Use null layout for absolute positioning
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -237,23 +238,23 @@ public class InGameScreen extends JPanel {
                 g.drawString(text, x, y);
             }
         };
-        playerPanel.setOpaque(false);
+        humanPanel.setOpaque(false);
 
         Border roundedBorder = new RoundedBorder(20, Color.ORANGE, 3);
-        playerPanel.setBorder(roundedBorder);
+        humanPanel.setBorder(roundedBorder);
         // Add a component listener to resize the card buttons when the panel is resized
-        playerPanel.addComponentListener(new ComponentAdapter() {
+        humanPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                setupAndPositionCardButtons(playerPanel);
+                setupAndPositionCardButtons(humanPanel);
             }
         });
 
         // Initial card buttons setup
-        setupAndPositionCardButtons(playerPanel);
+        setupAndPositionCardButtons(humanPanel);
         updateDrawPileButton();
 
-        return playerPanel;
+        return humanPanel;
     }
 
     public void setCardPlayedByHumanToFalse() {
