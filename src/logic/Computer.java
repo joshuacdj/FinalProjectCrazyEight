@@ -85,7 +85,7 @@ public class Computer extends Player {
 
         // Loop through every card in hand
         for (Card c: getHand()) {
-            if (c.getValue() == 8) { break; } // exclude any 8 card from suit count
+            if (c.getValue() == 8) { continue; } // exclude any 8 card from suit count
 
             // Calculate the points to put into map
             int points = suitPointCount.getOrDefault(c.getSuit(), 0) + c.calculatePoints();
