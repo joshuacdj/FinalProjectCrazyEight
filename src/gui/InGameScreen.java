@@ -23,10 +23,8 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
     private final Controller CONTROLLER;
     private boolean cardAlreadyPlayedByHuman = false;
-
-//    CONSTANTS
-    private final Color DARK_GREEN = new Color(0x00512C); // Light green
-    private final Color LIGHT_GREEN = new Color(0, 153, 76); // Dark green for contrast
+    private final Color DARK_GREEN = new Color(0x00512C);
+    private final Color LIGHT_GREEN = new Color(0, 153, 76);
     private static final Dimension LAYERED_PANE_DIMENSION = new Dimension(830, 300);
     private static final Dimension HELP_BUTTON_DIMENSION = new Dimension(120, 30);
     private static final Dimension CARD_DIMENSION = new Dimension(110, 160);
@@ -80,8 +78,8 @@ public class InGameScreen extends JPanel {
         // Setup the GridBagConstraints for layered pane
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.weightx = 2; // Adjust based on your requirement
-        gbc.weighty = 1; // Adjust based on your requirement
+        gbc.weightx = 2;
+        gbc.weighty = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         add(LAYERED_PANE, gbc);
