@@ -81,13 +81,13 @@ public class Controller implements DrawActionListener{
                         if (cardNSuit != null) {
                             dealCardSound();
                             // Get the card and suit played
-                            Card cardy = (Card) cardNSuit.get(0);
+                            Card card = (Card) cardNSuit.get(0);
                             Suit s = (Suit) cardNSuit.get(1);
                             // Add the card played to the discard pile
-                            currentRound.getDiscardPile().addCard(cardy);
+                            currentRound.getDiscardPile().addCard(card);
                             // Set the top card accordingly if card played is not an 8
-                            if (cardy.getValue() != 8) {
-                                currentRound.getDiscardPile().setTopCard(cardy);
+                            if (card.getValue() != 8) {
+                                currentRound.getDiscardPile().setTopCard(card);
                             } else {
                                 // If the top card was an 8, indicate the appropriate suit that was set
                                 currentRound.getDiscardPile().setTopCard(new Card(0, s));
