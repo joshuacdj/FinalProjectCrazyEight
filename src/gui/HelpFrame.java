@@ -51,6 +51,7 @@ public class HelpFrame extends JFrame {
                 You can play any card that matches the SUIT or VALUE of the latest played card.
                 HOWEVER! An 8 card has a special effect that can be played anytime. It lets you set the current game's suit to any suit you want!
                 A maximum of 5 cards can be drawn per turn if you do not have any playable cards.
+                If 2 players have the same points after the game ends, the higher ranked player is determined by the one who has lesser cards in his hand.
 
                 How to Win:
                 The game ends when a player empties his/her hand. The loser is determined by the number of points he/she has at the end of the game.
