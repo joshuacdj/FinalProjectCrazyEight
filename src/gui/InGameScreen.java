@@ -27,11 +27,11 @@ public class InGameScreen extends JPanel {
 //    CONSTANTS
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
-    private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
-    private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
+    private static final Dimension LAYERED_PANE_DIMENSION = new Dimension(830, 300);
+    private static final Dimension HELP_BUTTON_DIMENSION = new Dimension(120, 30);
     private static final Dimension CARD_DIMENSION = new Dimension(110, 160);
-    private static final Dimension SUITBUTTON_DIMENSION = new Dimension(140, 70);
-    private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
+    private static final Dimension SUIT_BUTTON_DIMENSION = new Dimension(140, 70);
+    private static final Font PLAYER_NAME_DIMENSION = new Font("Arial", Font.BOLD, 22);
     private static final int CARD_XOFFSET = 20;
     public InGameScreen(Round round, Controller controller) {
 
@@ -47,7 +47,7 @@ public class InGameScreen extends JPanel {
 
         // Initialize the layered pane
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(LAYEREDPANE_DIMENSION);
+        layeredPane.setPreferredSize(LAYERED_PANE_DIMENSION);
 
         // Add a component listener to adjust bounds dynamically
         layeredPane.addComponentListener(new ComponentAdapter() {
@@ -67,7 +67,7 @@ public class InGameScreen extends JPanel {
         // add the helpButton
         JButton helpButton = new JButton("How To Play");
         // creating the size of the helpButton
-        helpButton.setBounds(0,0,HELPBUTTON_DIMENSION.width,HELPBUTTON_DIMENSION.height);
+        helpButton.setBounds(0,0,HELP_BUTTON_DIMENSION.width,HELP_BUTTON_DIMENSION.height);
         helpButton.addActionListener(e -> {
                 welcomeClickSound();
                 HelpFrame helpWindow = HelpFrame.getInstance();
@@ -167,7 +167,7 @@ public class InGameScreen extends JPanel {
                 };
 
                 // Set the font and color for the name
-                g2d.setFont(PLAYERNAME_FONT);
+                g2d.setFont(PLAYER_NAME_DIMENSION);
                 g2d.setColor(Color.WHITE);
 
                 // Get the FontMetrics for calculating text width and height
@@ -224,7 +224,7 @@ public class InGameScreen extends JPanel {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Set the color and font for the text
-                g.setFont(PLAYERNAME_FONT);
+                g.setFont(PLAYER_NAME_DIMENSION);
                 g.setColor(Color.WHITE);
 
                 // Calculate the position of the text to center it in the panel
@@ -351,19 +351,19 @@ public class InGameScreen extends JPanel {
         final Suit[] suits = {Suit.DIAMONDS, Suit.CLUBS, Suit.HEARTS, Suit.SPADES};
 
         // Calculate spacing based on the total button width
-        int totalButtonWidth = suits.length * SUITBUTTON_DIMENSION.width;
+        int totalButtonWidth = suits.length * SUIT_BUTTON_DIMENSION.width;
         int spacing = (layeredPane.getWidth() - totalButtonWidth) / (suits.length + 1);
 
         // Y position for all buttons
-        int buttonY = layeredPane.getHeight() - SUITBUTTON_DIMENSION.height - 10;
+        int buttonY = layeredPane.getHeight() - SUIT_BUTTON_DIMENSION.height - 10;
 
         // Clear previous suit buttons if they exist
         clearSuitButtons();
 
         // Create and add buttons for each suit
         for (int i = 0; i < suits.length; i++) {
-            int buttonX = spacing + (i * (SUITBUTTON_DIMENSION.width + spacing));
-            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, SUITBUTTON_DIMENSION.width, SUITBUTTON_DIMENSION.height);
+            int buttonX = spacing + (i * (SUIT_BUTTON_DIMENSION.width + spacing));
+            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, SUIT_BUTTON_DIMENSION.width, SUIT_BUTTON_DIMENSION.height);
             layeredPane.add(suitButton, Integer.valueOf(2));
             layeredPane.moveToFront(suitButton);
         }
@@ -488,7 +488,7 @@ public class InGameScreen extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         centerPanel.setOpaque(false);
 
-        // drawpilebutton
+        // Draw pile button
         // Example of adding a component to the centerPanel
         // You can add more components similarly, adjusting the gridx, gridy, weightx, weighty as needed
 
@@ -501,9 +501,12 @@ public class InGameScreen extends JPanel {
         ImageIcon discardPileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(-1, 160, Image.SCALE_SMOOTH));
         discardPileLabel.setIcon(discardPileIcon);
 
-        JPanel discardPilePanel = new JPanel(new GridBagLayout()); // Use GridBagLayout for auto-centering within the panel
+        // Use GridBagLayout for auto-centering within the panel
+        JPanel discardPilePanel = new JPanel(new GridBagLayout());
         discardPilePanel.setOpaque(false);
-        discardPilePanel.add(discardPileLabel); // This will center the label within the discardPilePanel
+
+        // This will center the label within the discardPilePanel
+        discardPilePanel.add(discardPileLabel);
         gbc.gridx = 2;
         centerPanel.add(discardPilePanel, gbc);
 
@@ -543,7 +546,7 @@ public class InGameScreen extends JPanel {
             case 1 -> "West";
             case 2 -> "North";
             case 3 -> "East";
-            default -> "South"; // Default or error case
+            default -> "South";
         };
     }
 
