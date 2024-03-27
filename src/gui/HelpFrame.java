@@ -13,7 +13,7 @@ public class HelpFrame extends JFrame {
 
     private HelpFrame() {
         setTitle("Help");
-        setSize(800, 550);
+        setSize(800, 580);
         setResizable(false);
         // Center the window when it opens
         setLocationRelativeTo(null);
@@ -30,42 +30,7 @@ public class HelpFrame extends JFrame {
         helpLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // creating 'How to Play' textBox
-        JTextArea textBox = new JTextArea();
-        // Make the text box read-only and remove unnecessary focus line in textBox
-        textBox.setEditable(false);
-        textBox.setFocusable(false);
-        // Make the text box transparent and set the font colour white
-        textBox.setOpaque(false);
-        textBox.setForeground(Color.WHITE);
-        // Enable line wrapping
-        textBox.setLineWrap(true);
-        textBox.setWrapStyleWord(true);
-
-        // Add the instructions of the game to the text box
-        textBox.setText("""
-                Objective:
-                The goal of the game is to clear your hand!
-
-                How to Play:
-                Each player takes turns playing 1 card per turn.
-                You can play any card that matches the SUIT or VALUE of the latest played card.
-                HOWEVER! An 8 card has a special effect that can be played anytime. It lets you set the current game's suit to any suit you want!
-                A maximum of 5 cards can be drawn per turn if you do not have any playable cards.
-                If 2 players have the same points after the game ends, the higher ranked player is determined by the one who has lesser cards in his hand.
-
-                How to Win:
-                The game ends when a player empties his/her hand. The loser is determined by the number of points he/she has at the end of the game.
-                Aces are 1 point, Jacks, Queens and Kings are 10 points each. Any 8 cards are worth 50 POINTS. So make sure you use it fast!
-
-                Have fun playing!
-                """);
-
-        // set the textBox's font
-        Font textFont = new Font("Chalkboard", Font.PLAIN,18);
-        textBox.setFont(textFont);
-
-        // Add a white border to textBox to create a visible outline
-        textBox.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        JTextArea textBox = getjTextArea();
 
         // Use GridBagLayout for flexible component positioning
         JPanel panel = new JPanel(new GridBagLayout());
@@ -125,6 +90,46 @@ public class HelpFrame extends JFrame {
         gradientPanel.setLayout(new BorderLayout());
         gradientPanel.add(panel, BorderLayout.CENTER);
         setContentPane(gradientPanel);
+    }
+
+    private static JTextArea getjTextArea() {
+        JTextArea textBox = new JTextArea();
+        // Make the text box read-only and remove unnecessary focus line in textBox
+        textBox.setEditable(false);
+        textBox.setFocusable(false);
+        // Make the text box transparent and set the font colour white
+        textBox.setOpaque(false);
+        textBox.setForeground(Color.WHITE);
+        // Enable line wrapping
+        textBox.setLineWrap(true);
+        textBox.setWrapStyleWord(true);
+
+        // Add the instructions of the game to the text box
+        textBox.setText("""
+                Objective:
+                The goal of the game is to clear your hand!
+
+                How to Play:
+                Each player takes turns playing 1 card per turn.
+                You can play any card that matches the SUIT or VALUE of the latest played card.
+                HOWEVER! An 8 card has a special effect that can be played anytime. It lets you set the current game's suit to any suit you want!
+                A maximum of 5 cards can be drawn per turn if you do not have any playable cards.
+                If 2 players have the same points after the game ends, the higher ranked player is determined by the one who has lesser cards in his hand.
+
+                How to Win:
+                The game ends when a player empties his/her hand. The loser is determined by the number of points he/she has at the end of the game.
+                Aces are 1 point, Jacks, Queens and Kings are 10 points each. Any 8 cards are worth 50 POINTS. So make sure you use it fast!
+
+                Have fun playing!
+                """);
+
+        // set the textBox's font
+        Font textFont = new Font("Chalkboard", Font.PLAIN,18);
+        textBox.setFont(textFont);
+
+        // Add a white border to textBox to create a visible outline
+        textBox.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        return textBox;
     }
 
     public static HelpFrame getInstance() {
