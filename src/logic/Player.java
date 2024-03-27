@@ -22,6 +22,8 @@ public abstract class Player {
         return hand;
     }
 
+    public int getHandSize() { return hand.size(); }
+
     public ArrayList<Card> getPlayableCards() {
         return playableCards;
     }

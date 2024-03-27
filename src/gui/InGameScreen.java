@@ -898,7 +898,7 @@ public class InGameScreen extends JPanel {
         // Clone the list of players to avoid modifying the original list
         List<Player> sortedPlayers = new ArrayList<>(round.getListOfPlayers());
         // Sort the cloned list based on hand value in ascending order
-        sortedPlayers.sort(Comparator.comparingInt(Player::calculatePoints));
+        sortedPlayers.sort(Comparator.comparingInt(Player::calculatePoints).thenComparing(Player::getHandSize));
         return sortedPlayers;
     }
 
