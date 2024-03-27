@@ -31,7 +31,6 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
     private final Controller controller;
     private boolean cardPlayedByHuman = false;
-//    private boolean gameEnd = false;
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
 
