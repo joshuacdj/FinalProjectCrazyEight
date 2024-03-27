@@ -36,12 +36,7 @@ public class ButtonUtility {
 
                 super.paintComponent(g);
             }
-
-            // Method to paint border if needed
-            @Override
-            protected void paintBorder(Graphics g) {
-                // Optional: Implement custom border painting if required
-            }
+            
         };
 
         button.setPreferredSize(new Dimension(width, height));
