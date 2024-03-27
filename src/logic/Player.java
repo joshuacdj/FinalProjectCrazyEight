@@ -4,9 +4,8 @@ import java.util.*;
 
 public abstract class Player {
 
-    protected static final int MAXDRAWCOUNT = 5;
-
     // Each player will have a hand, a name and their total points for a game
+    protected static final int MAXDRAWCOUNT = 5;
     private ArrayList<Card> hand;
     private ArrayList<Card> playableCards;
     private String name;
@@ -17,14 +16,17 @@ public abstract class Player {
         this.name = name;
     }
 
-    // Return the current hand of the player
     public ArrayList<Card> getHand() {
         return hand;
     }
 
-    public int getHandSize() { return hand.size(); }
+    public int getHandSize() {
+        // Returning the number of cards in the Player's hand
+        return hand.size();
+    }
 
     public ArrayList<Card> getPlayableCards() {
+        // Returning the list of playable cards in the Player's current turn
         return playableCards;
     }
 
@@ -34,8 +36,8 @@ public abstract class Player {
     }
 
 
-    // Calculate the points in player's hand
     public int calculatePoints() {
+        // Calculate the points in player's hand
         int points = 0;
         for (Card c : hand) {
             points += c.calculatePoints();
@@ -43,22 +45,20 @@ public abstract class Player {
         return points;
     }
 
-    // Draw a card from the deck
     public void drawCard(Card card) {
+        // Draw a card from the deck
         hand.add(card);
     }
 
-    // Remove the card from current hand
     public void removeCard(Card card) {
+        // Remove the card from current hand
         hand.remove(card);
     }
 
-    //    Create playable cards list
     public void setPlayableCards (Card lastPlayedCard) {
-
         // Clear the previous list of playable cards. Basically clear it for each start of the new turn
         playableCards.clear();
-
+        // Create playable cards list according to the lastPlayedCard
         for (Card card : hand) {
             if (isPlayable(card, lastPlayedCard)) {
                 playableCards.add(card);
@@ -66,9 +66,8 @@ public abstract class Player {
         }
     }
 
-    //This method returns true if a card is playable
     public boolean isPlayable (Card currCard, Card lastPlayedCard) {
-        System.out.println("Curr card:" + currCard + " Last played:" + lastPlayedCard);
+        //This method returns true if a card is playable
         if (currCard.getValue() == lastPlayedCard.getValue()) {
             return true;
         } else if (currCard.getSuit().equals(lastPlayedCard.getSuit())) {

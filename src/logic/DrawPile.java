@@ -8,7 +8,7 @@ public class DrawPile implements Deck {
     private ArrayList<Card> listOfCards;
 
     public DrawPile() {
-        
+        // Initialise the deck of 52 cards, 13 per suit
         listOfCards = new ArrayList<>();
         for (int i = 1; i <= CARDSPERSUIT; i++) {
             for (Suit suit : Suit.values()) {
@@ -26,20 +26,22 @@ public class DrawPile implements Deck {
     }
 
     public Card getTopCard(){
-        //attain top card (i.e. last of list)
+        // Attain top card (i.e. last of list)
         Card c = listOfCards.getLast();
-        //remove card from the DrawPile
+        // Remove card from the DrawPile
         listOfCards.removeLast();
         return c;
     }
 
     public void add(Card c){
+        // Add card to the top of the drawPile
         listOfCards.add(c);
     }
 
 
     @Override
     public void shuffleDeck(){
+        // Shuffle the drawPile
         Collections.shuffle(listOfCards);
     }
 }
