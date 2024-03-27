@@ -1,7 +1,6 @@
 package logic;
 
 import java.util.*;
-
 import static gui.Sound.*;
 
 public class Computer extends Player {
@@ -29,7 +28,6 @@ public class Computer extends Player {
         while (getPlayableCards().isEmpty() && cardsDrawn < MAXDRAWCOUNT) {
             // Draw a card and update playable cards and cards drawn
             drawCard(deck.getTopCard());
-//WILL DRAW ACTIONLISTENER EVER BE NULL?
             if (drawActionListener != null) {
                 drawActionListener.onCardDrawn(this); // Notify about the draw
             }
@@ -46,9 +44,12 @@ public class Computer extends Player {
                 break;
             }
         }
-        System.out.println(getHand());
+
         // Check if player has at least one playable card
         if (!getPlayableCards().isEmpty()) {
+            // Declare the card to be played
+            Card cardPlayed = null;
+
             // Choose to discard the card worth the most points
             // If 8 present, return 8 and choose suit which has the highest point total in hand
             for (Card card : getPlayableCards()) {
@@ -65,11 +66,10 @@ public class Computer extends Player {
             }
 
             // Else choose the highest face value card
-            Card cardPlayed = null;
             if(getPlayableCards().size() == 1){ // Handle the case if comp only has 1 playable card. He must play it.
                 cardPlayed = getPlayableCards().getFirst();
             } else {
-                cardPlayed = Collections.max(getPlayableCards(), new CardCompare());    // If more than 1 card, play the highest valued card
+                cardPlayed = Collections.max(getPlayableCards(), new CardCompare()); // If more than 1 card, play the highest valued card
             }
             removeCard(cardPlayed);
             output.add(cardPlayed);
@@ -81,18 +81,17 @@ public class Computer extends Player {
 
     public Suit findHighestPointSuit() {
         // Find which suit has the highest point total in computer's hand
-        HashMap<Suit, Integer> suitCount = new HashMap<>();
-        suitCount.put(Suit.DIAMONDS, 0);
-        suitCount.put(Suit.CLUBS, 0);
-        suitCount.put(Suit.HEARTS, 0);
-        suitCount.put(Suit.SPADES, 0);
+        HashMap<Suit, Integer> suitPointCount = new HashMap<>();
 
+        // Loop through every card in hand
         for (Card c: getHand()) {
             if (c.getValue() == 8) { break; } // exclude any 8 card from suit count
-            suitCount.put(c.getSuit(), suitCount.get(c.getSuit()) + c.calculatePoints());
-        }
 
-        return Collections.max(suitCount.entrySet(), HashMap.Entry.comparingByValue()).getKey();
+            // Calculate the points to put into map
+            int points = suitPointCount.getOrDefault(c.getSuit(), 0) + c.calculatePoints();
+            suitPointCount.put(c.getSuit(), points);
+        }
+        return Collections.max(suitPointCount.entrySet(), HashMap.Entry.comparingByValue()).getKey();
     }
 }
 
