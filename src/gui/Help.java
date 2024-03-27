@@ -29,6 +29,7 @@ public class Help extends JFrame {
         setTitle("Help");
         setSize(800, 500);
         setMinimumSize(new Dimension(850,600));
+        setResizable(false);
         setLocationRelativeTo(null); // Center the window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Dispose the window on close
 
