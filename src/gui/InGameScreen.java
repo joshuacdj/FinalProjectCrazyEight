@@ -35,6 +35,7 @@ public class InGameScreen extends JPanel {
     private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
     private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
     private static final Dimension CARD_DIMENSION = new Dimension(110, 160);
+    private static final Dimension SUITBUTTON_DIMENSION = new Dimension(140, 70);
     private static final int CARD_XOFFSET = 20;
     public InGameScreen(Round round, Controller controller) {
 
@@ -281,7 +282,7 @@ public class InGameScreen extends JPanel {
     private JButton createCardButton(Card card, int cardWidth, int cardHeight) {
         JButton cardButton = new JButton();
 //         Set the icon for the card
-        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, false);
+        ImageIcon icon = ImageUtility.loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, false);
         cardButton.setIcon(icon);
 
         cardButton.setName(card.getValue() + "_" + card.getSuit().toString());
@@ -319,7 +320,7 @@ public class InGameScreen extends JPanel {
             return;
         }
 
-        Player currentPlayer = round.getListOfPlayers().get(0);
+        Player currentPlayer = round.getListOfPlayers().getFirst();
         boolean cardIsPlayable = currentPlayer.isPlayable(selectedCard, discardPile.getTopCard());
 
         if (cardIsPlayable) {
@@ -348,24 +349,21 @@ public class InGameScreen extends JPanel {
     }
 
     private void showSuitsButton() {
-        // Constants for button sizing and layout
-        final int buttonWidth = 140;
-        final int buttonHeight = 70;
         final Suit[] suits = {Suit.DIAMONDS, Suit.CLUBS, Suit.HEARTS, Suit.SPADES};
 
         // Calculate spacing based on the total button width
-        int totalButtonWidth = suits.length * buttonWidth;
+        int totalButtonWidth = suits.length * SUITBUTTON_DIMENSION.width;
         int spacing = (layeredPane.getWidth() - totalButtonWidth) / (suits.length + 1);
 
-        int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Y position for all buttons
+        int buttonY = layeredPane.getHeight() - SUITBUTTON_DIMENSION.height - 10; // Y position for all buttons
 
         // Clear previous suit buttons if they exist
         clearSuitButtons();
 
         // Create and add buttons for each suit
         for (int i = 0; i < suits.length; i++) {
-            int buttonX = spacing + (i * (buttonWidth + spacing));
-            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, buttonWidth, buttonHeight);
+            int buttonX = spacing + (i * (SUITBUTTON_DIMENSION.width + spacing));
+            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, SUITBUTTON_DIMENSION.width, SUITBUTTON_DIMENSION.height);
             layeredPane.add(suitButton, Integer.valueOf(2));
             layeredPane.moveToFront(suitButton);
         }
@@ -453,9 +451,9 @@ public class InGameScreen extends JPanel {
 
         for (int i = 0; i < numCards; i++) {
             // create label method
-            JLabel cardLabel = createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
+            JLabel cardLabel = CardUtility.createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
 
-            ImageIcon icon = loadAndScaleCardImage("images/back_card.png", cardWidth, cardHeight, isVertical);
+            ImageIcon icon = ImageUtility.loadAndScaleCardImage("images/back_card.png", cardWidth, cardHeight, isVertical);
             cardLabel.setIcon(icon);
 
             // Adjust the offset for the north panel to position cards at the top right
@@ -483,72 +481,72 @@ public class InGameScreen extends JPanel {
         panel.repaint();
     }
 
-    private JLabel createCardLabel(Card card, int cardWidth, int cardHeight, boolean isVertical) {
-        JLabel cardLabel = new JLabel();
-        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, isVertical);
-        cardLabel.setIcon(icon);
-        return cardLabel;
-    }
-
-    private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
-        try {
-            // Load the original image from the specified path
-            BufferedImage originalImage = ImageIO.read(new File(imagePath));
-
-            // If the panel is vertical, rotate the image first
-            if (isVertical) {
-                originalImage = rotateImage(originalImage, 90);
-            }
-
-            // Scale the original image to the new dimensions
-            Image scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-
-            // Return the scaled image as an ImageIcon
-            return new ImageIcon(scaledImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Return a placeholder if the image fails to load
-            return new ImageIcon(new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB));
-        }
-    }
-
-    private BufferedImage rotateImage(BufferedImage originalImage, double angle) {
-        int width = originalImage.getWidth();
-        int height = originalImage.getHeight();
-
-        BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = rotatedImage.createGraphics();
-
-        // Calculate the rotation required and the center position of the original image
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(angle), width / 2.0, height / 2.0);
-
-        // move the image center to the same center position of the original image
-        AffineTransform translationTransform;
-        translationTransform = findTranslation(transform, width, height);
-        transform.preConcatenate(translationTransform);
-
-        g2d.drawImage(originalImage, transform, null);
-        g2d.dispose();
-
-        return rotatedImage;
-    }
-
-    private AffineTransform findTranslation(AffineTransform at, int width, int height) {
-        Point2D p2din, p2dout;
-
-        p2din = new Point2D.Double(0.0, 0.0);
-        p2dout = at.transform(p2din, null);
-        double ytrans = p2dout.getY();
-
-        p2din = new Point2D.Double(0, height);
-        p2dout = at.transform(p2din, null);
-        double xtrans = p2dout.getX();
-
-        AffineTransform tat = new AffineTransform();
-        tat.translate(-xtrans, -ytrans);
-        return tat;
-    }
+//    private JLabel createCardLabel(Card card, int cardWidth, int cardHeight, boolean isVertical) {
+//        JLabel cardLabel = new JLabel();
+//        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, isVertical);
+//        cardLabel.setIcon(icon);
+//        return cardLabel;
+//    }
+//
+//    private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
+//        try {
+//            // Load the original image from the specified path
+//            BufferedImage originalImage = ImageIO.read(new File(imagePath));
+//
+//            // If the panel is vertical, rotate the image first
+//            if (isVertical) {
+//                originalImage = rotateImage(originalImage, 90);
+//            }
+//
+//            // Scale the original image to the new dimensions
+//            Image scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+//
+//            // Return the scaled image as an ImageIcon
+//            return new ImageIcon(scaledImage);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            // Return a placeholder if the image fails to load
+//            return new ImageIcon(new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB));
+//        }
+//    }
+//
+//    private BufferedImage rotateImage(BufferedImage originalImage, double angle) {
+//        int width = originalImage.getWidth();
+//        int height = originalImage.getHeight();
+//
+//        BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D g2d = rotatedImage.createGraphics();
+//
+//        // Calculate the rotation required and the center position of the original image
+//        AffineTransform transform = new AffineTransform();
+//        transform.rotate(Math.toRadians(angle), width / 2.0, height / 2.0);
+//
+//        // move the image center to the same center position of the original image
+//        AffineTransform translationTransform;
+//        translationTransform = findTranslation(transform, width, height);
+//        transform.preConcatenate(translationTransform);
+//
+//        g2d.drawImage(originalImage, transform, null);
+//        g2d.dispose();
+//
+//        return rotatedImage;
+//    }
+//
+//    private AffineTransform findTranslation(AffineTransform at, int width, int height) {
+//        Point2D p2din, p2dout;
+//
+//        p2din = new Point2D.Double(0.0, 0.0);
+//        p2dout = at.transform(p2din, null);
+//        double ytrans = p2dout.getY();
+//
+//        p2din = new Point2D.Double(0, height);
+//        p2dout = at.transform(p2din, null);
+//        double xtrans = p2dout.getX();
+//
+//        AffineTransform tat = new AffineTransform();
+//        tat.translate(-xtrans, -ytrans);
+//        return tat;
+//    }
 
 
     private JPanel createCenterPanel() {
