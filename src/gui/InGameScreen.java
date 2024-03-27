@@ -5,11 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 
 import app.Controller;
@@ -26,10 +22,17 @@ public class InGameScreen extends JPanel {
     private final DrawPile drawPile;
     private JButton drawPileButton;
     private final Controller controller;
-    private boolean cardPlayedByHuman = false;
+    private boolean cardAlreadyPlayedByHuman = false;
+
+//    CONSTANTS
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
-
+    private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
+    private static final Dimension HELPBUTTON_DIMENSION = new Dimension(120, 30);
+    private static final Font PLAYERNAME_FONT = new Font("Arial", Font.BOLD, 22);
+    private static final Dimension CARD_DIMENSION = new Dimension(110, 160);
+    private static final Dimension SUITBUTTON_DIMENSION = new Dimension(140, 70);
+    private static final int CARD_XOFFSET = 20;
     public InGameScreen(Round round, Controller controller) {
 
         this.round = round;
@@ -44,7 +47,7 @@ public class InGameScreen extends JPanel {
 
         // Initialize the layered pane
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(830, 300)); // Adjust according to your layout
+        layeredPane.setPreferredSize(LAYEREDPANE_DIMENSION);
 
         // Add a component listener to adjust bounds dynamically
         layeredPane.addComponentListener(new ComponentAdapter() {
@@ -59,24 +62,19 @@ public class InGameScreen extends JPanel {
 
         // Create and add centerPanel to layeredPane
         centerPanel = createCenterPanel();
-        centerPanel.setBounds(0, 0, 600, 600); // Initial bounds, will adjust with componentListener
         layeredPane.add(centerPanel, JLayeredPane.DEFAULT_LAYER);
 
         // add the helpButton
         JButton helpButton = new JButton("How to play");
         // creating the size of the helpButton
-        helpButton.setBounds(0,0,120,30);
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        helpButton.setBounds(0,0,HELPBUTTON_DIMENSION.width,HELPBUTTON_DIMENSION.height);
+        helpButton.addActionListener(e -> {
                 welcomeClickSound();
                 Help helpWindow = gui.Help.getInstance();
                 helpWindow.setVisible(true);
-            }
-
         });
 
-        layeredPane.add(helpButton,Integer.valueOf(1));
+        layeredPane.add(helpButton,Integer.valueOf(1)); // TODO: yo what this do cuh
         layeredPane.moveToFront(helpButton);
 
         // Setup the GridBagConstraints for layeredPane
@@ -130,6 +128,7 @@ public class InGameScreen extends JPanel {
         gbc.weighty = 1.0;
     }
 
+//    Create gradient background for InGameScreen
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -168,8 +167,7 @@ public class InGameScreen extends JPanel {
                 };
 
                 // Set the font and color for the name
-                Font font = new Font("Arial", Font.BOLD, 22);
-                g2d.setFont(font);
+                g2d.setFont(PLAYERNAME_FONT);
                 g2d.setColor(Color.WHITE);
 
                 // Get the FontMetrics for calculating text width and height
@@ -185,13 +183,13 @@ public class InGameScreen extends JPanel {
                     x = (int) (-textBounds.getWidth() / 2);
                     y = 0;
                 } else if ("West".equals(orientation)) {
-                    // For vertical orientation, rotate the graphics object
+                    // For West orientation
                     g2d.translate(getWidth() - fm.getFont().getSize(), getHeight() / 2);
                     g2d.rotate(Math.PI / 2);
                     x = (int) (-textBounds.getWidth() / 2);
-//                    y = (int) (textBounds.getHeight() / 2) - fm.getDescent();
                     y = 0;
                 } else {
+                    // For North orientation
                     g2d.translate((getWidth() + textBounds.getWidth()) / 2 , getHeight() - fm.getFont().getSize());
                     g2d.rotate(Math.PI);
                     x = 0;
@@ -225,8 +223,8 @@ public class InGameScreen extends JPanel {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Set the color and font for the text
+                g.setFont(PLAYERNAME_FONT); // Set the text font and size
                 g.setColor(Color.WHITE); // Set the text color
-                g.setFont(new Font("Arial", Font.BOLD, 22)); // Set the text font and size
 
                 // Calculate the position of the text to center it in the panel
                 FontMetrics metrics = g.getFontMetrics(g.getFont());
@@ -257,11 +255,12 @@ public class InGameScreen extends JPanel {
         return humanPanel;
     }
 
-    public void setCardPlayedByHumanToFalse() {
-        cardPlayedByHuman = false;
+    public void setCardAlreadyPlayedByHumanToFalse() {
+        cardAlreadyPlayedByHuman = false;
     }
 
     private void setupAndPositionCardButtons(JPanel panel) {
+//        TODO: can remove panel argument since it will always be referring to south panel
         // Clear existing card buttons from the panel
         panel.removeAll();
         panel.setLayout(null);
@@ -270,20 +269,17 @@ public class InGameScreen extends JPanel {
         int numCards = humanHand.size();
 
         int panelHeight = panel.getHeight();
-        //change to const
-        int cardWidth =  110; // Adjusted card width for better layout
-        int cardHeight =  160; // Adjusted card height for better layout
 
         // Determine the starting x and y offset for card positioning
 //        int xOffsetStart = (panelWidth - (numCards * cardWidth + (numCards - 1) * 10)) / 2;
-        int yOffset = panelHeight - cardHeight; // Adjust yOffset for vertical orientation if necessary
+        int yOffset = panelHeight - CARD_DIMENSION.height; // Adjust yOffset for vertical orientation if necessary
 
         for(int i = 0; i < numCards; i++){
-            int xOffset = (cardWidth - 90) * i;
+            int xOffset = CARD_XOFFSET * i;
             Card card = humanHand.get(i);
-            JButton cardButton = createCardButton(card, cardWidth, cardHeight);
+            JButton cardButton = CardUtility.createCardButton(card, CARD_DIMENSION.width, CARD_DIMENSION.height);
             addCardButtonListeners(cardButton, card, panel);
-            cardButton.setBounds(xOffset, yOffset, cardWidth, cardHeight);
+            cardButton.setBounds(xOffset, yOffset, CARD_DIMENSION.width, CARD_DIMENSION.height);
             panel.add(cardButton);
             panel.setComponentZOrder(panel.getComponent(i), 0);
         }
@@ -293,21 +289,6 @@ public class InGameScreen extends JPanel {
         panel.repaint();
     }
 
-    private JButton createCardButton(Card card, int cardWidth, int cardHeight) {
-        JButton cardButton = new JButton();
-//         Set the icon for the card
-        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, false);
-        cardButton.setIcon(icon);
-
-        cardButton.setName(card.getValue() + "_" + card.getSuit().toString());
-        cardButton.setBorderPainted(false);
-        cardButton.setContentAreaFilled(false);
-        cardButton.setFocusPainted(false);
-        cardButton.setOpaque(false);
-
-        return cardButton;
-    }
-    //
     private void addCardButtonListeners(JButton cardButton, Card card, JPanel panel) {
         cardButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -330,7 +311,7 @@ public class InGameScreen extends JPanel {
     }
 
     private void handleCardSelection(Card selectedCard, JPanel panel) {
-        if (cardPlayedByHuman) {
+        if (cardAlreadyPlayedByHuman) {
             return;
         }
 
@@ -338,7 +319,7 @@ public class InGameScreen extends JPanel {
         boolean cardIsPlayable = currentPlayer.isPlayable(selectedCard, discardPile.getTopCard());
 
         if (cardIsPlayable) {
-            cardPlayedByHuman = true;
+            cardAlreadyPlayedByHuman = true;
             currentPlayer.getHand().remove(selectedCard);
             discardPile.addCard(selectedCard);
             updateDiscardPileImage();
@@ -363,24 +344,21 @@ public class InGameScreen extends JPanel {
     }
 
     private void showSuitsButton() {
-        // Constants for button sizing and layout
-        final int buttonWidth = 140;
-        final int buttonHeight = 70;
         final Suit[] suits = {Suit.DIAMONDS, Suit.CLUBS, Suit.HEARTS, Suit.SPADES};
 
         // Calculate spacing based on the total button width
-        int totalButtonWidth = suits.length * buttonWidth;
+        int totalButtonWidth = suits.length * SUITBUTTON_DIMENSION.width;
         int spacing = (layeredPane.getWidth() - totalButtonWidth) / (suits.length + 1);
 
-        int buttonY = layeredPane.getHeight() - buttonHeight - 10; // Y position for all buttons
+        int buttonY = layeredPane.getHeight() - SUITBUTTON_DIMENSION.height - 10; // Y position for all buttons
 
         // Clear previous suit buttons if they exist
         clearSuitButtons();
 
         // Create and add buttons for each suit
         for (int i = 0; i < suits.length; i++) {
-            int buttonX = spacing + (i * (buttonWidth + spacing));
-            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, buttonWidth, buttonHeight);
+            int buttonX = spacing + (i * (SUITBUTTON_DIMENSION.width + spacing));
+            JButton suitButton = createSuitButton(suits[i], buttonX, buttonY, SUITBUTTON_DIMENSION.width, SUITBUTTON_DIMENSION.height);
             layeredPane.add(suitButton, Integer.valueOf(2));
             layeredPane.moveToFront(suitButton);
         }
@@ -411,9 +389,7 @@ public class InGameScreen extends JPanel {
         }
         button.setBounds(x, y, width, height);
 
-        button.addActionListener(e -> {
-            updateGameAfterSuitSelected(suit);
-        });
+        button.addActionListener(e -> updateGameAfterSuitSelected(suit));
 
         return button;
     }
@@ -446,6 +422,7 @@ public class InGameScreen extends JPanel {
             default -> null;
         };
 
+        assert computerHand != null;
         int numCards = computerHand.size();
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -466,9 +443,9 @@ public class InGameScreen extends JPanel {
 
         for (int i = 0; i < numCards; i++) {
             // create label method
-            JLabel cardLabel = createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
+            JLabel cardLabel = CardUtility.createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
 
-            ImageIcon icon = loadAndScaleCardImage("images/back_card.png", cardWidth, cardHeight, isVertical);
+            ImageIcon icon = ImageUtility.loadAndScaleCardImage("images/back_card.png", cardWidth, cardHeight, isVertical);
             cardLabel.setIcon(icon);
 
             // Adjust the offset for the north panel to position cards at the top right
@@ -495,74 +472,6 @@ public class InGameScreen extends JPanel {
         panel.revalidate();
         panel.repaint();
     }
-
-    private JLabel createCardLabel(Card card, int cardWidth, int cardHeight, boolean isVertical) {
-        JLabel cardLabel = new JLabel();
-        ImageIcon icon = loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, isVertical);
-        cardLabel.setIcon(icon);
-        return cardLabel;
-    }
-
-    private ImageIcon loadAndScaleCardImage(String imagePath, int targetWidth, int targetHeight, boolean isVertical) {
-        try {
-            // Load the original image from the specified path
-            BufferedImage originalImage = ImageIO.read(new File(imagePath));
-
-            // If the panel is vertical, rotate the image first
-            if (isVertical) {
-                originalImage = rotateImage(originalImage, 90);
-            }
-
-            // Scale the original image to the new dimensions
-            Image scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-
-            // Return the scaled image as an ImageIcon
-            return new ImageIcon(scaledImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Return a placeholder if the image fails to load
-            return new ImageIcon(new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB));
-        }
-    }
-
-    private BufferedImage rotateImage(BufferedImage originalImage, double angle) {
-        int width = originalImage.getWidth();
-        int height = originalImage.getHeight();
-
-        BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = rotatedImage.createGraphics();
-
-        // Calculate the rotation required and the center position of the original image
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(angle), width / 2.0, height / 2.0);
-
-        // move the image center to the same center position of the original image
-        AffineTransform translationTransform;
-        translationTransform = findTranslation(transform, height);
-        transform.preConcatenate(translationTransform);
-
-        g2d.drawImage(originalImage, transform, null);
-        g2d.dispose();
-
-        return rotatedImage;
-    }
-
-    private AffineTransform findTranslation(AffineTransform at, int height) {
-        Point2D p2din, p2dout;
-
-        p2din = new Point2D.Double(0.0, 0.0);
-        p2dout = at.transform(p2din, null);
-        double ytrans = p2dout.getY();
-
-        p2din = new Point2D.Double(0, height);
-        p2dout = at.transform(p2din, null);
-        double xtrans = p2dout.getX();
-
-        AffineTransform tat = new AffineTransform();
-        tat.translate(-xtrans, -ytrans);
-        return tat;
-    }
-
 
     private JPanel createCenterPanel() {
 
@@ -640,29 +549,6 @@ public class InGameScreen extends JPanel {
         };
     }
 
-    public void updateDrawCard(Player player) {
-        SwingUtilities.invokeLater(() -> {
-            String orientation = "North"; // Default, you might need to determine this based on the player
-            JPanel panelToUpdate = null;
-
-            // Determine the panel orientation based on the player
-            if (player instanceof Computer) {
-                // Assuming you have a way to determine the position of the computer player
-                orientation = determineOrientation(player);
-            }
-
-            panelToUpdate = panelMap.get(orientation);
-
-            // If no specific panel is found, exit the method
-            if (panelToUpdate == null) return;
-
-            // For simplicity, let's just re-setup the card labels for the updated panel
-            if ("North".equals(orientation) || "East".equals(orientation) || "West".equals(orientation)) {
-                setupAndPositionCardLabels(panelToUpdate, orientation);
-            }
-        });
-    }
-
     public void refreshPlayerPanel(String orientation) {
         // Assuming orientation is something like "North", "South", "East", "West"
         JPanel playerPanel = panelMap.get(orientation);
@@ -734,68 +620,11 @@ public class InGameScreen extends JPanel {
     }
 
     public void displayWinPanel() {
-        // Step 1: Create the win panel with gradient background
-        JPanel winPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                int width = getWidth();
-                int height = getHeight();
-                Color color1 = new Color(36, 11, 54);
-                Color color2 = new Color(91, 76, 121);
-                GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, width, height);
-            }
-        };
-        winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.Y_AXIS));
-        winPanel.setSize(layeredPane.getWidth(), layeredPane.getHeight());
-        winPanel.setOpaque(false);
-        winPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Step 2: Create and style the title
-        JLabel titleLabel = new JLabel("Game Over - Leaderboard");
-        titleLabel.setForeground(new Color(255, 215, 0)); // Gold color
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
-
-        winPanel.add(titleLabel);
-
-        int iconWidth = 30; // Example width
-        int iconHeight = 30; // Example height
-
-        // Step 3: Populate the panel with sorted scores and player rankings
         List<Player> sortedPlayers = getSortedPlayersByHandValue();
+        JPanel winPanel= WinPanel.winPanel(layeredPane.getWidth(), layeredPane.getHeight(), sortedPlayers);
 
-        for (int i = 0; i < sortedPlayers.size(); i++) {
-            Player player = sortedPlayers.get(i);
-            String rankText = (i + 1) + getPositionSuffix(i + 1) + " - " + player.getName() + ": " + player.calculatePoints();
-            JLabel playerScoreLabel = new JLabel(rankText);
-            playerScoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-            playerScoreLabel.setForeground(Color.WHITE);
-            playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            playerScoreLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-            if (i == 0) {
-                playerScoreLabel.setIcon(scaleIcon("images/gold_medal.png", iconWidth, iconHeight));
-            } else if (i == 1) {
-                playerScoreLabel.setIcon(scaleIcon("images/silver_medal.png", iconWidth, iconHeight));
-            } else if (i == 2) {
-                playerScoreLabel.setIcon(scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
-            }
-
-            // For the first player only, check if its a Human to decide the sound
-            if (i == 0 && player instanceof Human) {
-                youWinSound(); // Play the win sound for Human first place
-
-            } else if (i == 0 && player instanceof Computer) { // Only play the lose sound if the win sound hasnt been played
-                youLoseSound(); // This ensures the lose sound is played only if the win sound hasnt been
-            }
-            winPanel.add(playerScoreLabel);
-        }
         // "Play Again?" button
-        JButton playAgainButton = createCustomButton("Play Again", 300, 60);
+        JButton playAgainButton = ButtonUtility.createCustomButton("Play Again", 300, 60);
         playAgainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playAgainButton.addActionListener(e -> {
             stopSound("youWin");
@@ -805,7 +634,7 @@ public class InGameScreen extends JPanel {
         });
 
         // "Close Game" button
-        JButton closeGameButton = createCustomButton("Quit Game", 300, 60);
+        JButton closeGameButton = ButtonUtility.createCustomButton("Quit Game", 300, 60);
         closeGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         closeGameButton.addActionListener(e -> {
             welcomeClickSound();
@@ -843,18 +672,6 @@ public class InGameScreen extends JPanel {
         layeredPane.repaint();
     }
 
-    private ImageIcon scaleIcon(String path, int width, int height) {
-        // Load the original image
-        ImageIcon originalIcon = new ImageIcon(path);
-        Image originalImage = originalIcon.getImage();
-
-        // Scale it to fit the UI
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-
-        // Return the new ImageIcon
-        return new ImageIcon(scaledImage);
-    }
-
     private void disableInteractions() {
         // Remove listeners from all player panels to prevent interaction
         panelMap.values().forEach(this::removePanelListeners);
@@ -868,15 +685,6 @@ public class InGameScreen extends JPanel {
                 Arrays.stream(button.getMouseListeners()).forEach(button::removeMouseListener);
             }
         }
-    }
-
-    private String getPositionSuffix(int position) {
-        return switch (position) {
-            case 1 -> "st";
-            case 2 -> "nd";
-            case 3 -> "rd";
-            default -> "th";
-        };
     }
 
     private List<Player> getSortedPlayersByHandValue() {
@@ -907,51 +715,5 @@ public class InGameScreen extends JPanel {
                 panel.repaint();
             });
         });
-    }
-
-    public JButton createCustomButton(String text, int width, int height) {
-        JButton button = new JButton(text) {
-            // Custom painting is handled here
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                // Set gradients or solid colors here
-                if (getModel().isPressed()) {
-                    // Gradient paint for pressed button
-                    g2.setPaint(new GradientPaint(0, 0, new Color(180, 180, 180, 200),
-                            0, getHeight(), new Color(150, 150, 150, 200)));
-                } else if (getModel().isRollover()) {
-                    // Gradient paint for hover button
-                    g2.setPaint(new GradientPaint(0, 0, new Color(255, 255, 255, 255),
-                            0, getHeight(), new Color(220, 220, 220, 255)));
-                } else {
-                    // Default gradient paint
-                    g2.setPaint(new GradientPaint(0, 0, new Color(255, 255, 255, 200),
-                            0, getHeight(), new Color(230, 230, 230, 200)));
-                }
-
-                // Draw the rounded rectangle button background
-                g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
-                g2.dispose();
-
-                super.paintComponent(g);
-            }
-
-            // Method to paint border if needed
-            @Override
-            protected void paintBorder(Graphics g) {
-                // Optional: Implement custom border painting if required
-            }
-        };
-
-        button.setPreferredSize(new Dimension(width, height));
-        button.setForeground(Color.DARK_GRAY); // Text color
-        button.setFocusPainted(false); // Remove the focus border
-        button.setContentAreaFilled(false); // Tell Swing to not fill the content area
-        button.setOpaque(false); // Make the button non-opaque
-
-        return button;
     }
 }
