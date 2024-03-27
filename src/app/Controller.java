@@ -16,7 +16,7 @@ public class Controller implements DrawActionListener{
         backGroundMusic();
         welcomeSound();
 
-        // Intialise the game state
+        // Initialise the game state
         currentRound.roundStart();
 
         // Implement the draw action listener

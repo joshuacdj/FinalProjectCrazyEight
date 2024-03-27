@@ -608,11 +608,6 @@ public class InGameScreen extends JPanel {
             }
         }
 
-//        System.out.println("Human has " + humanPlayer.getPlayableCards().size() + " cards to play");
-//        System.out.println("Human hand is " + humanPlayer.getHand());
-//        System.out.println("Top card is " + discardPile.getTopCard());
-//        System.out.println(humanPlayer.getPlayableCards());
-
         drawPileButton.revalidate();
         drawPileButton.repaint();
     }
@@ -638,11 +633,13 @@ public class InGameScreen extends JPanel {
             welcomeClickSound();
             // Display a confirmation dialog
             int confirm = JOptionPane.showConfirmDialog(
-                    this, // Assuming 'inGameScreen' is the component you want to anchor the dialog to
-                    "Are you sure you want to quit the game?", // The message to display
-                    "Quit Game", // The title of the dialog window
-                    JOptionPane.YES_NO_OPTION, // Option type (Yes/No)
-                    JOptionPane.QUESTION_MESSAGE // Message type
+                    this,
+                    "Are you sure you want to quit the game?",
+                    "Quit Game",
+                    // Option type (Yes/No)
+                    JOptionPane.YES_NO_OPTION,
+                    // Message type
+                    JOptionPane.QUESTION_MESSAGE
             );
 
             // Check if the user confirmed
@@ -654,16 +651,19 @@ public class InGameScreen extends JPanel {
         });
 
         // Add buttons to win panel
-        winPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Spacer
+        // Spacer
+        winPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         winPanel.add(playAgainButton);
-        winPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer
+        // Spacer
+        winPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         winPanel.add(closeGameButton);
 
         // Add the win panel to the layeredPane and make it visible
-        layeredPane.add(winPanel, Integer.valueOf(3)); // Ensuring it's at the top layer
+        // Ensuring it's at the top layer
+        layeredPane.add(winPanel, Integer.valueOf(3));
         winPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
 
-        // Step 4: Disable all interactions
+        // Disable all interactions
         disableInteractions();
 
         layeredPane.revalidate();
@@ -678,6 +678,7 @@ public class InGameScreen extends JPanel {
     }
 
     private void removePanelListeners(JPanel panel) {
+        // Remove all mouse listeners from the panel's components
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JButton button) {
                 Arrays.stream(button.getMouseListeners()).forEach(button::removeMouseListener);

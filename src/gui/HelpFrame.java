@@ -20,7 +20,7 @@ public class HelpFrame extends JFrame {
         // Dispose the window on close
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JLabel helpLabel = new JLabel("How to play Crazy Eight");
+        JLabel helpLabel = new JLabel("How to play Crazy Eights");
         Font titleFont = new Font("Chalkboard", Font.BOLD, 26);
         // Setting the font,colour and border of helpLabel
         helpLabel.setFont(titleFont);
@@ -44,7 +44,7 @@ public class HelpFrame extends JFrame {
         // Add the instructions of the game to the text box
         textBox.setText("""
                 Objective:
-                The goal of the game is to have the least number of points when someone clears their hand!
+                The goal of the game is to clear your hand!
 
                 How to Play:
                 Each player takes turns playing 1 card per turn.
