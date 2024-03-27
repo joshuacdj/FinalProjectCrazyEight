@@ -5,10 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -31,10 +27,11 @@ public class InGameScreen extends JPanel {
     private JButton drawPileButton;
     private final Controller controller;
     private boolean cardPlayedByHuman = false;
-//    private boolean gameEnd = false;
+
+//    CONSTANTS
     private final Color darkGreen= new Color(0x00512C); // Light green
     private final Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
-
+    private static final Dimension LAYEREDPANE_DIMENSION = new Dimension(830, 300);
     public InGameScreen(Round round, Controller controller) {
 
         this.round = round;
@@ -49,7 +46,7 @@ public class InGameScreen extends JPanel {
 
         // Initialize the layered pane
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(830, 300)); // Adjust according to your layout
+        layeredPane.setPreferredSize(LAYEREDPANE_DIMENSION);
 
         // Add a component listener to adjust bounds dynamically
         layeredPane.addComponentListener(new ComponentAdapter() {
