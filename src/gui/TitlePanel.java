@@ -10,8 +10,8 @@ class TitlePanel extends JPanel {
     private Font titleFont;
     private Color shadowColor;
     private int shadowOffset;
-    private Color orange = new Color(0xFF4C29);
-    private static Dimension TITLEPANEL_DIMENSION = new Dimension(800, 100);
+    private final Color ORANGE = new Color(0xFF4C29);
+    private static final Dimension TITLE_PANEL_DIMENSION = new Dimension(800, 100);
 
     public TitlePanel(String text, Font font, Color shadowColor, int shadowOffset) {
         this.titleText = text;
@@ -19,7 +19,7 @@ class TitlePanel extends JPanel {
         this.shadowColor = shadowColor;
         this.shadowOffset = shadowOffset;
         setOpaque(false);
-        this.setPreferredSize(TITLEPANEL_DIMENSION);
+        this.setPreferredSize(TITLE_PANEL_DIMENSION);
     }
 
     @Override
@@ -41,7 +41,7 @@ class TitlePanel extends JPanel {
         // Draw the shadow
         g2d.drawString(attributedString.getIterator(), x + shadowOffset, y + shadowOffset);
         // Draw the actual text
-        attributedString.addAttribute(TextAttribute.FOREGROUND, orange, 0, titleText.length());
+        attributedString.addAttribute(TextAttribute.FOREGROUND, ORANGE, 0, titleText.length());
         g2d.drawString(attributedString.getIterator(), x, y);
 
         g2d.dispose();

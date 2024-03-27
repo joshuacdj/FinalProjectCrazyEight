@@ -55,18 +55,18 @@ public class ImageUtility {
     }
 
     private static AffineTransform findTranslation(AffineTransform at, int width, int height) {
-        Point2D p2din, p2dout;
+        Point2D p2dIn, p2dOut;
 
-        p2din = new Point2D.Double(0.0, 0.0);
-        p2dout = at.transform(p2din, null);
-        double ytrans = p2dout.getY();
+        p2dIn = new Point2D.Double(0.0, 0.0);
+        p2dOut = at.transform(p2dIn, null);
+        double yTrans = p2dOut.getY();
 
-        p2din = new Point2D.Double(0, height);
-        p2dout = at.transform(p2din, null);
-        double xtrans = p2dout.getX();
+        p2dIn = new Point2D.Double(0, height);
+        p2dOut = at.transform(p2dIn, null);
+        double xTrans = p2dOut.getX();
 
         AffineTransform tat = new AffineTransform();
-        tat.translate(-xtrans, -ytrans);
+        tat.translate(-xTrans, -yTrans);
         return tat;
     }
 

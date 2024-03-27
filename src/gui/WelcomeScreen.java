@@ -14,11 +14,11 @@ import static gui.Sound.welcomeClickSound;
 
 public class WelcomeScreen extends JFrame {
 
-    private final static int TITLEBUTTONWIDTH = 300;
-    private final static int TITLEBUTTONHEIGHT = 60;
-    private final static Dimension DECORATIVECARD_DIMENSION = new Dimension(110, 160);
-    private final static Color DARKGREEN = new Color(0x00512C); // Light green
-    private final static Color LIGHTGREEN = new Color(0, 153, 76); // Dark green for contrast
+    private final static int TITLE_BUTTON_WIDTH = 300;
+    private final static int TITLE_BUTTON_HEIGHT = 60;
+    private final static Dimension DECORATIVE_CARD_DIMENSION = new Dimension(110, 160);
+    private final static Color DARK_GREEN = new Color(0x00512C); // Light green
+    private final static Color LIGHT_GREEN = new Color(0, 153, 76); // Dark green for contrast
     private static JButton playButton;
     private static JButton helpButton;
     private static JButton exitButton;
@@ -56,7 +56,7 @@ public class WelcomeScreen extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                GradientPaint gradientPaint = new GradientPaint(0, 0, DARKGREEN, 0, getHeight(), LIGHTGREEN);
+                GradientPaint gradientPaint = new GradientPaint(0, 0, DARK_GREEN, 0, getHeight(), LIGHT_GREEN);
                 g2d.setPaint(gradientPaint);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
@@ -79,24 +79,24 @@ public class WelcomeScreen extends JFrame {
         // Card images to decorate welcome screen
 
         // Adding each 8 card to the different sides of the screen
-        ImageIcon icon1 = ImageUtility.loadAndScaleCardImage("images/8_of_clubs.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
+        ImageIcon icon1 = ImageUtility.loadAndScaleCardImage("images/8_of_clubs.png", DECORATIVE_CARD_DIMENSION.width, DECORATIVE_CARD_DIMENSION.height, false);
         JLabel cardLabel1 = new JLabel(icon1);
         gbc.gridx = 0;
         gbc.gridy = 0;
         backgroundPanel.add(cardLabel1, gbc);
-        ImageIcon icon2 = ImageUtility.loadAndScaleCardImage("images/8_of_spades.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
+        ImageIcon icon2 = ImageUtility.loadAndScaleCardImage("images/8_of_spades.png", DECORATIVE_CARD_DIMENSION.width, DECORATIVE_CARD_DIMENSION.height, false);
         JLabel cardLabel2 = new JLabel(icon2);
         gbc.gridx = 2;
         gbc.gridy = 2;
         backgroundPanel.add(cardLabel2, gbc);
 
-        ImageIcon icon3 = ImageUtility.loadAndScaleCardImage("images/8_of_hearts.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
+        ImageIcon icon3 = ImageUtility.loadAndScaleCardImage("images/8_of_hearts.png", DECORATIVE_CARD_DIMENSION.width, DECORATIVE_CARD_DIMENSION.height, false);
         JLabel cardLabel3 = new JLabel(icon3);
         gbc.gridx = 0;
         gbc.gridy = 2;
         backgroundPanel.add(cardLabel3, gbc);
 
-        ImageIcon icon4 = ImageUtility.loadAndScaleCardImage("images/8_of_diamonds.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
+        ImageIcon icon4 = ImageUtility.loadAndScaleCardImage("images/8_of_diamonds.png", DECORATIVE_CARD_DIMENSION.width, DECORATIVE_CARD_DIMENSION.height, false);
         JLabel cardLabel4 = new JLabel(icon4);
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -105,7 +105,7 @@ public class WelcomeScreen extends JFrame {
         // Create play button
         gbc.gridx = 1;
         gbc.gridy = 1;
-        playButton = ButtonUtility.createCustomButton("Play", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
+        playButton = ButtonUtility.createCustomButton("Play", TITLE_BUTTON_WIDTH, TITLE_BUTTON_HEIGHT);
 
         // Adding play button to welcome screen
         backgroundPanel.add(playButton, gbc);
@@ -113,7 +113,7 @@ public class WelcomeScreen extends JFrame {
         // Create help button
         gbc.gridx = 1;
         gbc.gridy = 2;
-        helpButton = ButtonUtility.createCustomButton("Help", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
+        helpButton = ButtonUtility.createCustomButton("Help", TITLE_BUTTON_WIDTH, TITLE_BUTTON_HEIGHT);
 
         // Action listener for help button
         helpButton.addActionListener(e -> {
@@ -128,7 +128,7 @@ public class WelcomeScreen extends JFrame {
         // Create quit button
         gbc.gridx = 1;
         gbc.gridy = 3;
-        exitButton = ButtonUtility.createCustomButton("Exit", TITLEBUTTONWIDTH, TITLEBUTTONHEIGHT);
+        exitButton = ButtonUtility.createCustomButton("Exit", TITLE_BUTTON_WIDTH, TITLE_BUTTON_HEIGHT);
 
         // Adding quit button to welcome screen
         backgroundPanel.add(exitButton, gbc);
