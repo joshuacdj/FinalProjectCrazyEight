@@ -25,7 +25,7 @@ public class Computer extends Player {
         setPlayableCards(lastPlayedCard);
 
         // Check if there are no playable cards in hand and if cards drawn is less than the allowed maximum number of cards drawn
-        while (getPlayableCards().isEmpty() && cardsDrawn < MAXDRAWCOUNT) {
+        while (getPlayableCards().isEmpty() && cardsDrawn < MAX_DRAW_COUNT) {
             // Draw a card and update playable cards and the number of cards drawn
             drawCard(deck.getTopCard());
             if (drawActionListener != null) {
