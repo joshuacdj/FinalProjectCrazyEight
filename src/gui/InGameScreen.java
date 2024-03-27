@@ -68,17 +68,13 @@ public class InGameScreen extends JPanel {
         JButton helpButton = new JButton("How to play");
         // creating the size of the helpButton
         helpButton.setBounds(0,0,HELPBUTTON_DIMENSION.width,HELPBUTTON_DIMENSION.height);
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        helpButton.addActionListener(e -> {
                 welcomeClickSound();
                 Help helpWindow = gui.Help.getInstance();
                 helpWindow.setVisible(true);
-            }
-
         });
 
-        layeredPane.add(helpButton,Integer.valueOf(1));
+        layeredPane.add(helpButton,Integer.valueOf(1)); // TODO: yo what this do cuh
         layeredPane.moveToFront(helpButton);
 
         // Setup the GridBagConstraints for layeredPane
