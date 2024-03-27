@@ -16,17 +16,16 @@ public class WelcomeScreen extends JFrame {
 
     private final static int TITLEBUTTONWIDTH = 300;
     private final static int TITLEBUTTONHEIGHT = 60;
-
-    private Color darkGreen= new Color(0x00512C); // Light green
-    private Color lightGreen = new Color(0, 153, 76); // Dark green for contrast
-
-    private JButton playButton;
-    private JButton helpButton;
-    private JButton exitButton;
+    private final static Dimension DECORATIVECARD_DIMENSION = new Dimension(110, 160);
+    private final static Color DARKGREEN = new Color(0x00512C); // Light green
+    private final static Color LIGHTGREEN = new Color(0, 153, 76); // Dark green for contrast
+    private static JButton playButton;
+    private static JButton helpButton;
+    private static JButton exitButton;
 
     public WelcomeScreen() {
 
-        // Set the apple dock icon
+        // Set dock icon
         try {
             Image iconImage = ImageIO.read(new File("images/CrazyEightIcon.png"));
             setIconImage(iconImage);
@@ -48,8 +47,6 @@ public class WelcomeScreen extends JFrame {
         // Start the window maximized
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // Set the minimum size of the window
-        setMinimumSize(new Dimension(1000, 800));
         getContentPane().setLayout(new BorderLayout());
 
         // Create a new panel for the welcome screen background
@@ -59,7 +56,7 @@ public class WelcomeScreen extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                GradientPaint gradientPaint = new GradientPaint(0, 0, darkGreen, 0, getHeight(), lightGreen);
+                GradientPaint gradientPaint = new GradientPaint(0, 0, DARKGREEN, 0, getHeight(), LIGHTGREEN);
                 g2d.setPaint(gradientPaint);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
@@ -75,36 +72,31 @@ public class WelcomeScreen extends JFrame {
         // Replace the old titleLabel with the new custom TitlePanel
         TitlePanel titlePanel = new TitlePanel("Crazy Eights", new Font("Serif", Font.BOLD | Font.ITALIC, 60), Color.BLACK, 2);
 
-        // Setting size of the title
-        titlePanel.setPreferredSize(new Dimension(800, 100));
         gbc.gridx = 1;
         gbc.gridy = 0;
         backgroundPanel.add(titlePanel, gbc);
 
         // Card images to decorate welcome screen
-        final int DISPLAYCARDWIDTH = -1;
-        final int DISPLAYCARDHEIGHT = 120;
 
         // Adding each 8 card to the different sides of the screen
-        ImageIcon icon1 = new ImageIcon(new ImageIcon("images/8_of_clubs.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
+        ImageIcon icon1 = ImageUtility.loadAndScaleCardImage("images/8_of_clubs.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
         JLabel cardLabel1 = new JLabel(icon1);
         gbc.gridx = 0;
         gbc.gridy = 0;
         backgroundPanel.add(cardLabel1, gbc);
-
-        ImageIcon icon2 = new ImageIcon(new ImageIcon("images/8_of_spades.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
+        ImageIcon icon2 = ImageUtility.loadAndScaleCardImage("images/8_of_spades.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
         JLabel cardLabel2 = new JLabel(icon2);
         gbc.gridx = 2;
         gbc.gridy = 2;
         backgroundPanel.add(cardLabel2, gbc);
 
-        ImageIcon icon3 = new ImageIcon(new ImageIcon("images/8_of_hearts.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
+        ImageIcon icon3 = ImageUtility.loadAndScaleCardImage("images/8_of_hearts.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
         JLabel cardLabel3 = new JLabel(icon3);
         gbc.gridx = 0;
         gbc.gridy = 2;
         backgroundPanel.add(cardLabel3, gbc);
 
-        ImageIcon icon4 = new ImageIcon(new ImageIcon("images/8_of_diamonds.png").getImage().getScaledInstance(DISPLAYCARDWIDTH, DISPLAYCARDHEIGHT , Image.SCALE_SMOOTH));
+        ImageIcon icon4 = ImageUtility.loadAndScaleCardImage("images/8_of_diamonds.png", DECORATIVECARD_DIMENSION.width, DECORATIVECARD_DIMENSION.height, false);
         JLabel cardLabel4 = new JLabel(icon4);
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -126,7 +118,7 @@ public class WelcomeScreen extends JFrame {
         // Action listener for help button
         helpButton.addActionListener(e -> {
                 welcomeClickSound();
-                Help helpWindow = gui.Help.getInstance();
+                HelpFrame helpWindow = HelpFrame.getInstance();
                 helpWindow.setVisible(true);
         });
 

@@ -92,7 +92,7 @@ public class Controller implements DrawActionListener{
                                 // If the top card was an 8, indicate the appropriate suit that was set
                                 currentRound.getDiscardPile().setTopCard(new Card(0, s));
                             }
-                            // Update GUI after the Computer's tunr
+                            // Update GUI after the Computer's turn
                             inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));
                             inGameScreen.updateDiscardPileImage();
                         }

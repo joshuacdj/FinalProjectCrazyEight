@@ -67,4 +67,15 @@ public class ButtonUtility {
 
         return cardButton;
     }
+
+    public static JButton createDrawPileButton(int cardWidth, int cardHeight) {
+        ImageIcon drawPileIcon = new ImageIcon(new ImageIcon("images/back_card.png").getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH));
+
+        JButton drawPileButton = new JButton(drawPileIcon);
+        // Make buttons transparent
+        drawPileButton.setBorder(BorderFactory.createEmptyBorder());
+        drawPileButton.setContentAreaFilled(false);
+
+        return drawPileButton;
+    }
 }

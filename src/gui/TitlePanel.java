@@ -11,6 +11,7 @@ class TitlePanel extends JPanel {
     private Color shadowColor;
     private int shadowOffset;
     private Color orange = new Color(0xFF4C29);
+    private static Dimension TITLEPANEL_DIMENSION = new Dimension(800, 100);
 
     public TitlePanel(String text, Font font, Color shadowColor, int shadowOffset) {
         this.titleText = text;
@@ -18,6 +19,7 @@ class TitlePanel extends JPanel {
         this.shadowColor = shadowColor;
         this.shadowOffset = shadowOffset;
         setOpaque(false);
+        this.setPreferredSize(TITLEPANEL_DIMENSION);
     }
 
     @Override

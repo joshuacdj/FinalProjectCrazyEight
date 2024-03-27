@@ -52,11 +52,11 @@ public class WinPanel {
 
             // Sets images for 1st, 2nd and 3rd placed players
             if (i == 0) {
-                playerScoreLabel.setIcon(ImageUtility.scaleIcon("images/gold_medal.png", iconWidth, iconHeight));
+                playerScoreLabel.setIcon(ImageUtility.loadAndScaleCardImage("images/gold_medal.png", iconWidth, iconHeight, false));
             } else if (i == 1) {
-                playerScoreLabel.setIcon(ImageUtility.scaleIcon("images/silver_medal.png", iconWidth, iconHeight));
+                playerScoreLabel.setIcon(ImageUtility.loadAndScaleCardImage("images/silver_medal.png", iconWidth, iconHeight, false));
             } else if (i == 2) {
-                playerScoreLabel.setIcon(ImageUtility.scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
+                playerScoreLabel.setIcon(ImageUtility.loadAndScaleCardImage("images/bronze_medal.png", iconWidth, iconHeight, false));
             }
 
             // For the 1st placed player only, check if it's a Human to decide the sound

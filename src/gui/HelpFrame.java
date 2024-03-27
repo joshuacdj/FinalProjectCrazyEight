@@ -8,10 +8,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.GradientPaint;
 
-public class Help extends JFrame {
-    private static volatile Help instance = null;
+public class HelpFrame extends JFrame {
+    private static volatile HelpFrame instance = null;
 
-    private Help() {
+    private HelpFrame() {
         setTitle("Help");
         setSize(800, 550);
         setResizable(false);
@@ -126,11 +126,11 @@ public class Help extends JFrame {
         setContentPane(gradientPanel);
     }
 
-    public static Help getInstance() {
+    public static HelpFrame getInstance() {
         if (instance == null) {
-            synchronized (Help.class) {
+            synchronized (HelpFrame.class) {
                 if (instance == null) {
-                    instance = new Help();
+                    instance = new HelpFrame();
                 }
             }
         }
