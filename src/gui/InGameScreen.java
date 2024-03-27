@@ -91,7 +91,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel northPanel = createComputer1Panel("North");
+        JPanel northPanel = createComputerPanel("North");
         add(northPanel, gbc);
         panelMap.put("North", northPanel);
 
@@ -100,7 +100,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel southPanel = createPlayerPanel("South");
+        JPanel southPanel = createPlayerPanel();
         add(southPanel, gbc);
         panelMap.put("South", southPanel);
 
@@ -109,7 +109,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel eastPanel = createComputer1Panel("East");
+        JPanel eastPanel = createComputerPanel("East");
         add(eastPanel, gbc);
         panelMap.put("East", eastPanel);
 
@@ -118,7 +118,7 @@ public class InGameScreen extends JPanel {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        JPanel westPanel = createComputer1Panel("West");
+        JPanel westPanel = createComputerPanel("West");
         add(westPanel, gbc);
         panelMap.put("West", westPanel);
 
@@ -154,7 +154,7 @@ public class InGameScreen extends JPanel {
         }
     }
 
-    private JPanel createComputer1Panel(String orientation) {
+    private JPanel createComputerPanel(String orientation) {
         // Create an anonymous subclass of JPanel with custom painting and layout
         JPanel computer1Panel = new JPanel(null) {
             @Override
@@ -222,7 +222,7 @@ public class InGameScreen extends JPanel {
         return computer1Panel;
     }
 
-    private JPanel createPlayerPanel(String orientation) {
+    private JPanel createPlayerPanel() {
         JPanel playerPanel = new JPanel(null) { // Use null layout for absolute positioning
             @Override
             protected void paintComponent(Graphics g) {
