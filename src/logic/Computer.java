@@ -50,14 +50,14 @@ public class Computer extends Player {
         // Check if player has at least one playable card
         if (!getPlayableCards().isEmpty()) {
             // Choose to discard the card worth the most points
-            // If 8 present, return 8 and choose suit which is most common in hand
+            // If 8 present, return 8 and choose suit which has the highest point total in hand
             for (Card card : getPlayableCards()) {
                 if (card.getValue() == 8) {
                     removeCard(card);
                     dealCardEightSound();
 
                     // Set the suit to the one the computer has the most number of cards
-                    Suit desiredSuit = findHighestFrequencySuit();
+                    Suit desiredSuit = findHighestPointSuit();
                     output.add(card);
                     output.add(desiredSuit);
                     return output;
@@ -79,8 +79,8 @@ public class Computer extends Player {
         return null;
     }
 
-    public Suit findHighestFrequencySuit() {
-        // Find which suit is most common in computer's hand
+    public Suit findHighestPointSuit() {
+        // Find which suit has the highest point total in computer's hand
         HashMap<Suit, Integer> suitCount = new HashMap<>();
         suitCount.put(Suit.DIAMONDS, 0);
         suitCount.put(Suit.CLUBS, 0);
@@ -89,7 +89,7 @@ public class Computer extends Player {
 
         for (Card c: getHand()) {
             if (c.getValue() == 8) { break; } // exclude any 8 card from suit count
-            suitCount.put(c.getSuit(), suitCount.get(c.getSuit()) + 1);
+            suitCount.put(c.getSuit(), suitCount.get(c.getSuit()) + c.calculatePoints());
         }
 
         return Collections.max(suitCount.entrySet(), HashMap.Entry.comparingByValue()).getKey();
