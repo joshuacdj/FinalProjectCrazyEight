@@ -337,7 +337,7 @@ public class InGameScreen extends JPanel {
             return;
         }
 
-        Player currentPlayer = round.getListOfPlayers().get(0);
+        Player currentPlayer = round.getListOfPlayers().getFirst();
         boolean cardIsPlayable = currentPlayer.isPlayable(selectedCard, discardPile.getTopCard());
 
         if (cardIsPlayable) {
@@ -347,7 +347,7 @@ public class InGameScreen extends JPanel {
             updateDiscardPileImage();
             dealCardSound();
             setupAndPositionCardButtons(panel);
-            if(currentPlayer.getHand().size() == 0){
+            if(currentPlayer.getHand().isEmpty()){
                 //win
                 controller.endGame();
                 return;
