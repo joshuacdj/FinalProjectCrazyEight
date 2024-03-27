@@ -57,7 +57,7 @@ public class InGameScreen extends JPanel {
                 // Ensure the centerPanel fills the entire layeredPane
                 centerPanel.setBounds(0, 0, layeredPane.getWidth(), layeredPane.getHeight());
                 // Adjust the "Play card?" button position dynamically
-                adjustPlayCardButtonPosition();
+                adjustSuitsButtonPosition();
             }
         });
 
@@ -142,19 +142,13 @@ public class InGameScreen extends JPanel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    private void adjustPlayCardButtonPosition() {
-        // Find the "Play card?" button and adjust its position
-
+    private void adjustSuitsButtonPosition() {
+        // Find the suits button and adjust its position
         for (Component comp : layeredPane.getComponents()) {
             if (comp instanceof JButton playButton) {
-                if ("♦".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                } else if ("♣".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                } else if ("♥".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
-                } else if ("♠".equals(((JButton) comp).getText())) {
-                    playButton.setBounds(layeredPane.getWidth() - 110, layeredPane.getHeight() - 40, 100, 30);
+                switch (((JButton) comp).getText()) {
+                    case "♠", "♥", "♣", "♦" -> playButton.setBounds(layeredPane.getWidth() - 110,
+                                            layeredPane.getHeight() - 40,100, 30);
                 }
             }
         }
@@ -428,13 +422,12 @@ public class InGameScreen extends JPanel {
     }
 
     private String suitSymbol(Suit suit) {
-        switch (suit) {
-            case DIAMONDS: return "♦";
-            case CLUBS: return "♣";
-            case HEARTS: return "♥";
-            case SPADES: return "♠";
-            default: return "?";
-        }
+        return switch (suit) {
+            case DIAMONDS -> "♦";
+            case CLUBS -> "♣";
+            case HEARTS -> "♥";
+            case SPADES -> "♠";
+        };
     }
 
     private void updateGameAfterSuitSelected(Suit suit) {
@@ -469,7 +462,6 @@ public class InGameScreen extends JPanel {
         // Adjust the card dimensions based on the orientation
         int cardWidth = isVertical ? 160 : 110;
         int cardHeight = isVertical ? 110 : 160;
-        int overlap = cardWidth / 2;
 
         // Set the initial offset for the first card
         int xOffset = 0;
