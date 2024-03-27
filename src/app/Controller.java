@@ -13,28 +13,37 @@ public class Controller implements DrawActionListener{
     private InGameScreen inGameScreen;
 
     public Controller() {
+        // Play the background music
         backGroundMusic();
         welcomeSound();
+
+        // Intialise the game state
         currentRound.roundStart();
-        // After creating Computer instances
+
+        // Implement the draw action listener
         for (Player player : currentRound.getListOfPlayers()) {
             if (player instanceof Computer) {
                 ((Computer) player).setDrawActionListener(this);
             }
         }
+
+        // Instantiate the inGameScreen with the current game state
         inGameScreen = new InGameScreen(currentRound, this);
-        // Initialize the main JFrame to hold different screens (panels)
+
+        // Display the welcomeScreen
         welcomeScreen.setVisible(true);
+
+        // Attach listeners to the "Play" and "Exit" button
         welcomeScreen.getPlayButton().addActionListener(e -> startGame());
         welcomeScreen.getExitButton().addActionListener(e -> {
             welcomeClickSound();
             // Display a confirmation dialog
             int confirm = JOptionPane.showConfirmDialog(
-                    welcomeScreen, // Assuming 'inGameScreen' is the component you want to anchor the dialog to
-                    "Are you sure you want to quit the game?", // The message to display
-                    "Quit Game", // The title of the dialog window
-                    JOptionPane.YES_NO_OPTION, // Option type (Yes/No)
-                    JOptionPane.QUESTION_MESSAGE // Message type
+                    welcomeScreen,
+                    "Are you sure you want to quit the game?",
+                    "Quit Game",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
             );
 
             // Check if the user confirmed
@@ -57,9 +66,8 @@ public class Controller implements DrawActionListener{
                 if (p instanceof Computer c) {
                     try {
                         // Log computer action
-                        System.out.println("This is computer " + c.getName() + ":" + c.getHand());
                         inGameScreen.highlightPlayerTurn(inGameScreen.determineOrientation(c));
-                        // Wait for 3 seconds before proceeding to the next iteration
+                        // Wait for 2 seconds before proceeding to the next iteration
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
@@ -76,26 +84,19 @@ public class Controller implements DrawActionListener{
                             // Get the card and suit played
                             Card cardy = (Card) cardNSuit.get(0);
                             Suit s = (Suit) cardNSuit.get(1);
-                            // Updating GUI components must be done on the EDT
-
                             // Add the card played to the discard pile
                             currentRound.getDiscardPile().addCard(cardy);
                             // Set the top card accordingly if card played is not an 8
                             if (cardy.getValue() != 8) {
                                 currentRound.getDiscardPile().setTopCard(cardy);
-
-                            // If the top card was an 8, indicate the appropriate suit that was set
                             } else {
+                                // If the top card was an 8, indicate the appropriate suit that was set
                                 currentRound.getDiscardPile().setTopCard(new Card(0, s));
                             }
-                            // Update GUI here
+                            // Update GUI after the Computer's tunr
                             inGameScreen.refreshPlayerPanel(inGameScreen.determineOrientation(p));
                             inGameScreen.updateDiscardPileImage();
                         }
-                        //NOTE BOTTOM 3 LINES SHOULD BE UNNECESSARY
-//                        else if (c.getName().equals("Comp 3")) {
-//                                inGameScreen.setCardPlayedByHumanToFalse();
-//                        }
 
                         // Once Comp 3 has played, update the ability to draw and/or play cards by human
                         if(c.getName().equals("Comp 3")){
@@ -106,29 +107,33 @@ public class Controller implements DrawActionListener{
 
                     // If the computer's hand size is empty, end the game
                     if(c.getHand().isEmpty()){
-//                        inGameScreen.setGameEnd(true);
                         endGame();
                         break;
                     }
                 }
             }
-            // At the end of the third computer playing, highlight the player panel
-            // to indicate it is the human's turn
+            // At the end of the third computer playing, highlight the player panel to indicate it is the human's turn
             inGameScreen.highlightPlayerTurn("South");
         }).start();
     }
     public void endGame(){
+        // Someone has won the game. End the game and display the leaderboard of the players
         inGameScreen.displayWinPanel();
     }
 
     private void startGame() {
+        // Attach the sound for the "Play" button
         welcomeClickSound();
+
+        // Stop the welcomeScreen's attached sound
         stopSound("welcomeSound");
+
+        // Switch to inGameScreen
         showScreen(inGameScreen);
     }
     
     private void showScreen(JPanel panel) {
-        // Switching the content pane to display the specified screen
+        // Switch the screen display to the specified panel
         welcomeScreen.getContentPane().removeAll();
         welcomeScreen.revalidate();
         welcomeScreen.repaint();
@@ -138,7 +143,7 @@ public class Controller implements DrawActionListener{
     public void onCardDrawn(Player player) {
         SwingUtilities.invokeLater(() -> {
             if (player instanceof Computer) {
-                // Assuming you have a way to get the correct orientation for this computer player
+                // Update the computer's playerPanel
                 String orientation = inGameScreen.determineOrientation(player);
                 inGameScreen.refreshPlayerPanel(orientation);
             }
@@ -146,7 +151,7 @@ public class Controller implements DrawActionListener{
     }
 
     public void startNewGame() {
-        // Initialize or reinitialize game state
+        // Reinitialise a new game
         currentRound = new Round();
         currentRound.roundStart();
         for (Player player : currentRound.getListOfPlayers()) {
@@ -157,8 +162,9 @@ public class Controller implements DrawActionListener{
 
         // Setup InGameScreen for a new game
         if (inGameScreen != null) {
-            inGameScreen.setVisible(false); // Hide or dispose of the existing InGameScreen
-            inGameScreen = null; // Ensure the old instance is discarded
+            inGameScreen.setVisible(false);
+            // Ensure the old instance is discarded
+            inGameScreen = null;
         }
         inGameScreen = new InGameScreen(currentRound, this);
         showScreen(inGameScreen); // Method to switch the view to InGameScreen, if needed
