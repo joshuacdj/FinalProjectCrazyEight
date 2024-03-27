@@ -9,12 +9,19 @@ public class Round {
     private DiscardPile discardPile;
 
     public Round() {
+        // Creating a new array list to store the players of the game
         listOfPlayers = new ArrayList<>();
+
+        // Creating the 4 different players
         listOfPlayers.add(new Human("You"));
         listOfPlayers.add(new Computer("Comp 1"));
         listOfPlayers.add(new Computer("Comp 2"));
         listOfPlayers.add(new Computer("Comp 3"));
+
+        // Creating draw pile
         this.drawPile = new DrawPile();
+
+        // Creating discard pile
         this.discardPile = new DiscardPile();
     }
 
@@ -51,7 +58,7 @@ public class Round {
         // Set the first playing card of the game
         setFirstCard(drawPile, discardPile);
 
-        // Each player will draw 5 cards to start
+        // Give out 5 cards from the draw pile to each of the 4 players, one at a time
         for (int i = 0; i < STARTINGDRAWCOUNT; i++) {
             for (Player p : listOfPlayers) {
                 p.drawCard(drawPile.getTopCard());
@@ -59,4 +66,3 @@ public class Round {
         }
     }
 }
-

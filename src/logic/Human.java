@@ -8,6 +8,7 @@ public class Human extends Player {
     }
 
     public void drawCard(DrawPile drawPile) {
+        // Ensure that the Player has not drawn more than the maximum number of cards (5) allowed in one turn
         if (cardsDrawnThisTurn < MAXDRAWCOUNT) {
             Card drawnCard = drawPile.getTopCard();
             this.getHand().add(drawnCard);
@@ -16,10 +17,12 @@ public class Human extends Player {
     }
 
     public boolean canDrawCard() {
+        // Check if the Player can still draw a card this turn
         return cardsDrawnThisTurn < MAXDRAWCOUNT;
     }
 
     public void resetDrawCounter() {
+        // Reset the Player's per turn draw counter to 0
         cardsDrawnThisTurn = 0;
     }
 }

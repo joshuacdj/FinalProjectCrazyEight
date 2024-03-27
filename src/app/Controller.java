@@ -2,7 +2,6 @@ package app;
 
 import java.util.*;
 import javax.swing.*;
-
 import static gui.Sound.*;
 import gui.*;
 import logic.*;
