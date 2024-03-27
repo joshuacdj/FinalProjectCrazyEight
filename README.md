@@ -17,7 +17,7 @@ To ensure a smooth experience with this application, please make sure you have t
 
 ### Utilisation of compile.bat & run.bat
 
-For Mac users, open the terminal and run
+For Mac users, open the terminal and run:
 ```
 chmod +x compile.bat
 chmod +x run.bat
@@ -40,10 +40,14 @@ javac -d classes -cp src src/app/Main.java
 java -cp classes app.Main
 ```
 
-### How to play
+## How to play
+
+### Objective
 ```
-Objective: The goal of the game is to clear your hand! 
+The goal of the game is to clear your hand! 
 ```
+
+### Gameplay
 ```
 Each player takes turns playing a card.
 You can play any card that matches the SUIT or VALUE of the latest played card.
@@ -51,16 +55,20 @@ When a player plays an 8, he can set the suit of the following cards to be playe
 If a player doesn’t have a playable card, he will draw until he gets a playable card, or up to 5 cards, whichever comes first. 
 If after drawing 5 cards, the player still doesn’t have a playable card, his turn will end without playing a card. 
 ```
+
+### How to Win
 ```
-How to Win:
 The game ends when a player empties his/her hand. The rankings of the other players are determined by the number of points they have at the end of the game.
 Aces are 1 point. Jacks, Queens and Kings are 10 points each. Any 8 cards are worth 50 POINTS each, so clear them fast!
 ```
-HAVE FUN PLAYING!
 
-### Features: 
-```
-Play - to play the game
-Help - how to play
-Quit - quit the game
-```
+## Screenshots of the Game
+
+#### Welcome Screen
+![welcomeScreen](screenshots/welcomeScreen.png) <br>
+#### In-Game Screen
+![inGameScreen](screenshots/inGameScreen.png) <br>
+#### Suits button
+![suitsScreen](screenshots/suitsScreen.png) <br>
+#### End-Game Screen
+![endGameScreen](screenshots/endGameScreen.png) <br>
