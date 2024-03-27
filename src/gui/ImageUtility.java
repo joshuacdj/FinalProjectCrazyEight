@@ -70,16 +70,4 @@ public class ImageUtility {
         return tat;
     }
 
-    public static ImageIcon scaleIcon(String path, int width, int height) {
-        // Load the original image
-        ImageIcon originalIcon = new ImageIcon(path);
-        Image originalImage = originalIcon.getImage();
-
-        // Scale it to fit the UI
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-
-        // Return the new ImageIcon
-        return new ImageIcon(scaledImage);
-    }
-
 }
