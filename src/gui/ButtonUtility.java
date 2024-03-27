@@ -1,5 +1,7 @@
 package gui;
 
+import logic.Card;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -49,5 +51,20 @@ public class ButtonUtility {
         button.setOpaque(false); // Make the button non-opaque
 
         return button;
+    }
+
+    public static JButton createCardButton(Card card, int cardWidth, int cardHeight) {
+        JButton cardButton = new JButton();
+//         Set the icon for the card
+        ImageIcon icon = ImageUtility.loadAndScaleCardImage(card.getFilepath(), cardWidth, cardHeight, false);
+        cardButton.setIcon(icon);
+
+        cardButton.setName(card.getValue() + "_" + card.getSuit().toString());
+        cardButton.setBorderPainted(false);
+        cardButton.setContentAreaFilled(false);
+        cardButton.setFocusPainted(false);
+        cardButton.setOpaque(false);
+
+        return cardButton;
     }
 }

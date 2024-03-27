@@ -10,13 +10,16 @@ import java.util.List;
 import static gui.Sound.*;
 
 public class WinPanel {
+//    CONSTANTS
+    private static Color TITLE_COLOUR = new Color(255, 215, 0);
+    private static Font TITLE_FONT = new Font("Arial", Font.BOLD, 24);
     public static JPanel winPanel(int width, int height, List<Player> sortedPlayers) {
         JPanel winPanel = getjPanel(width, height);
 
         // Step 2: Create and style the title
         JLabel titleLabel = new JLabel("Game Over - Leaderboard");
-        titleLabel.setForeground(new Color(255, 215, 0)); // Gold color
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(TITLE_COLOUR);
+        titleLabel.setFont(TITLE_FONT);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
 
@@ -37,11 +40,11 @@ public class WinPanel {
             playerScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             playerScoreLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             if (i == 0) {
-                playerScoreLabel.setIcon(scaleIcon("images/gold_medal.png", iconWidth, iconHeight));
+                playerScoreLabel.setIcon(ImageUtility.scaleIcon("images/gold_medal.png", iconWidth, iconHeight));
             } else if (i == 1) {
-                playerScoreLabel.setIcon(scaleIcon("images/silver_medal.png", iconWidth, iconHeight));
+                playerScoreLabel.setIcon(ImageUtility.scaleIcon("images/silver_medal.png", iconWidth, iconHeight));
             } else if (i == 2) {
-                playerScoreLabel.setIcon(scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
+                playerScoreLabel.setIcon(ImageUtility.scaleIcon("images/bronze_medal.png", iconWidth, iconHeight));
             }
 
             // For the first player only, check if its a Human to decide the sound
@@ -87,17 +90,5 @@ public class WinPanel {
             case 3 -> "rd";
             default -> "th";
         };
-    }
-
-    private static ImageIcon scaleIcon(String path, int width, int height) {
-        // Load the original image
-        ImageIcon originalIcon = new ImageIcon(path);
-        Image originalImage = originalIcon.getImage();
-
-        // Scale it to fit the UI
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-
-        // Return the new ImageIcon
-        return new ImageIcon(scaledImage);
     }
 }

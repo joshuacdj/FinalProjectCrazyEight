@@ -203,7 +203,7 @@ public class InGameScreen extends JPanel {
 
             @Override
             public void doLayout() {
-                setupAndPositionCardLabels(this, orientation);
+                setupCardLabels(this, orientation);
             }
         };
         computerPanel.setOpaque(false);
@@ -212,7 +212,7 @@ public class InGameScreen extends JPanel {
         computerPanel.setBorder(roundedBorder);
 
         // Setup card labels or any other initial setup
-        setupAndPositionCardLabels(computerPanel, orientation);
+        setupCardLabels(computerPanel, orientation);
 
         return computerPanel;
     }
@@ -244,12 +244,12 @@ public class InGameScreen extends JPanel {
         humanPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                setupAndPositionCardButtons(humanPanel);
+                setupCardButtons(humanPanel);
             }
         });
 
         // Initial card buttons setup
-        setupAndPositionCardButtons(humanPanel);
+        setupCardButtons(humanPanel);
         updateDrawPileButton();
 
         return humanPanel;
@@ -259,7 +259,7 @@ public class InGameScreen extends JPanel {
         cardAlreadyPlayedByHuman = false;
     }
 
-    private void setupAndPositionCardButtons(JPanel panel) {
+    private void setupCardButtons(JPanel panel) {
 //        TODO: can remove panel argument since it will always be referring to south panel
         // Clear existing card buttons from the panel
         panel.removeAll();
@@ -277,7 +277,7 @@ public class InGameScreen extends JPanel {
         for(int i = 0; i < numCards; i++){
             int xOffset = CARD_XOFFSET * i;
             Card card = humanHand.get(i);
-            JButton cardButton = CardUtility.createCardButton(card, CARD_DIMENSION.width, CARD_DIMENSION.height);
+            JButton cardButton = ButtonUtility.createCardButton(card, CARD_DIMENSION.width, CARD_DIMENSION.height);
             addCardButtonListeners(cardButton, card, panel);
             cardButton.setBounds(xOffset, yOffset, CARD_DIMENSION.width, CARD_DIMENSION.height);
             panel.add(cardButton);
@@ -324,7 +324,7 @@ public class InGameScreen extends JPanel {
             discardPile.addCard(selectedCard);
             updateDiscardPileImage();
             dealCardSound();
-            setupAndPositionCardButtons(panel);
+            setupCardButtons(panel);
             if(currentPlayer.getHand().isEmpty()){
                 //win
                 controller.endGame();
@@ -414,7 +414,7 @@ public class InGameScreen extends JPanel {
         layeredPane.repaint();
     }
 
-    private void setupAndPositionCardLabels(JPanel panel, String orientation) {
+    private void setupCardLabels(JPanel panel, String orientation) {
         List<Card> computerHand = switch (orientation) {
             case "West" -> round.getListOfPlayers().get(1).getHand();
             case "North" -> round.getListOfPlayers().get(2).getHand();
@@ -443,7 +443,7 @@ public class InGameScreen extends JPanel {
 
         for (int i = 0; i < numCards; i++) {
             // create label method
-            JLabel cardLabel = CardUtility.createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
+            JLabel cardLabel = LabelUtility.createCardLabel(computerHand.get(i), cardWidth, cardHeight, isVertical);
 
             ImageIcon icon = ImageUtility.loadAndScaleCardImage("images/back_card.png", cardWidth, cardHeight, isVertical);
             cardLabel.setIcon(icon);
@@ -559,10 +559,10 @@ public class InGameScreen extends JPanel {
             // Utilize existing setup methods based on orientation
             if ("South".equals(orientation)) {
                 // Assuming South is always the human player in your game setup
-                setupAndPositionCardButtons(playerPanel);
+                setupCardButtons(playerPanel);
             } else {
                 // For computer players
-                setupAndPositionCardLabels(playerPanel, orientation);
+                setupCardLabels(playerPanel, orientation);
             }
 
             // Reposition labels or buttons as needed, potentially reusing existing logic
