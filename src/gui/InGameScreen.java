@@ -53,7 +53,6 @@ public class InGameScreen extends JPanel {
             public void componentResized(ComponentEvent e) {
                 // Ensure the CENTER_PANEL fills the entire layered Pane
                 CENTER_PANEL.setBounds(0, 0, LAYERED_PANE.getWidth(), LAYERED_PANE.getHeight());
-                // Adjust the "Play card?" button position dynamically
                 adjustSuitsButtonPosition();
             }
         });
